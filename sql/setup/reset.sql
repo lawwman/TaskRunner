@@ -10,7 +10,7 @@ CREATE TABLE Users (
 	occupation VARCHAR(50) NOT NULL,
 	birth_date DATE NOT NULL,
 
-    -- we can't have someone born later than today using this interface
+  -- we can't have someone born later than today using this interface
 	CHECK(birth_date < now())
 );
 
@@ -19,19 +19,20 @@ CREATE TABLE Tasks (
 	task_name VARCHAR(100), -- Task name should be short and sweet 
 	task_details VARCHAR(3000), -- Details of task 
 	
-	createdDateTime TIMESTAMP NOT NULL DEFAULT now(), -- date that task was created
-	
+	duration_minutes INT, 
+
 	creator VARCHAR(100) NOT NULL references Users,
 	runner VARCHAR(100) references Users,
 	
-	duration_minutes INT, 
+	reward DECIMAL NOT NULL DEFAULT 0.0,
 	status VARCHAR(100) DEFAULT 'not bidded',
-	reward DECIMAL NOT NULL DEFAULT 0.0,	
+
+	createdDateTime TIMESTAMP NOT NULL DEFAULT now(), -- date that task was created
 
 	UNIQUE (task_name, task_id),
 
-    CHECK ((runner IS DISTINCT FROM NULL AND status <> 'not bidded' AND status <> 'bidded') 
-           OR (runner IS NOT DISTINCT FROM NULL AND (status = 'not bidded' OR status = 'bidded'))),
+  CHECK ((runner IS DISTINCT FROM NULL AND status <> 'not bidded' AND status <> 'bidded') 
+           OR (runner IS NOT DISTINCT FROM NULL AND (status = 'not bidded' OR status = 'bidded' OR status = 'deleted'))),
            
 	-- 'pending completion' refers to tasks that have been accepted
 	-- 'not bidded' refers to instance when there is no bidders for the current task yet.  
@@ -41,17 +42,18 @@ CREATE TABLE Tasks (
 );
 
 CREATE TABLE Bids (
+	task_id BIGINT NOT NULL REFERENCES Tasks, 
 	bidder_name VARCHAR(20) NOT NULL REFERENCES Users,
 	creator_name VARCHAR(20) NOT NULL REFERENCES Users,
-    task_id BIGINT NOT NULL REFERENCES Tasks, 
 	
-    status VARCHAR(100) NOT NULL DEFAULT 'pending', 
+  status VARCHAR(100) NOT NULL DEFAULT 'pending', 
 	bidDateTime TIMESTAMP NOT NULL DEFAULT now(),
 
-    CONSTRAINT discrete_status CHECK(status in ('rejected', 'pending', 'accepted')),
+  CONSTRAINT discrete_status CHECK(status in ('rejected', 'pending', 'accepted')),
 	PRIMARY KEY(bidder_name, creator_name, task_id)
 );
 
 COPY Users FROM '..\..\apps\demo\htdocs\sql\setup\data\users.csv' DELIMITER ',' CSV HEADER;
---COPY Users FROM '..\..\apps\demo\htdocs\sql\setup\data\tasks.csv' DELIMITER ',' CSV HEADER;
---COPY Users FROM '..\..\apps\demo\htdocs\sql\setup\data\bids.csv' DELIMITER ',' CSV HEADER;
+COPY Tasks FROM '..\..\apps\demo\htdocs\sql\setup\data\tasks.csv' DELIMITER ',' CSV HEADER;
+COPY Bids FROM '..\..\apps\demo\htdocs\sql\setup\data\bids.csv' DELIMITER ',' CSV HEADER;
+
