@@ -1,0 +1,13 @@
+TaskID,Bidder Name,Creator Name,Status,bidDateTime
+123456,Johndoe10,Johndoe1,accepted,28/1/2016 12:30
+123456,Johndoe9,Johndoe1,rejected,29/1/2016 10:00
+123457,Johndoe9,Johndoe2,accepted,7/1/2016 13:00
+123458,Johndoe8,Johndoe3,accepted,30/1/2016 14:10
+123459,Johndoe7,Johndoe4,pending,31/1/2016 15:30
+123459,Johndoe2,Johndoe4,pending,31/1/2016 15:00
+123462,Johndoe4,Johndoe7,pending,4/2/2016 12:00
+123463,Johndoe1,Johndoe8,rejected,5/2/2018 13:00
+123463,Johndoe5,Johndoe9,rejected,6/2/2018 10:00
+123464,Johndoe2,Johndoe9,rejected,11/2/2018 15:00
+123464,Johndoe6,Johndoe9,rejected,28/2/2018 12:00
+123465,Johndoe1,Johndoe10,rejected,28/2/2018 16:00
