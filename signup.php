@@ -22,6 +22,7 @@
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/segment.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/form.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/input.css">
+    <link rel="stylesheet" type="text/css" href="semantic/dist/components/checkbox.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/button.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/list.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/message.css">
@@ -37,9 +38,6 @@
     }
     .image {
       margin-top: -100px;
-    }
-    .column {
-      max-width: 450px;
     }
   </style>
   <script>
@@ -75,46 +73,61 @@
               ]
             }
           }
-        })
-      ;
-    })
-  ;
+        });
+    });
   </script>
 </head>
-<body class='ui   inverted'>
+<body class='ui'>
 
-<div class="ui middle aligned center aligned grid">
-  <div class="column">
-    <h2 class="ui blue image header">
-      <img src="assets/images/logo.png" class="image">
-      <div class="content">
-        Log-in to your account
-      </div>
-    </h2>
-    <form class="ui large form">
-      <div class="ui stacked segment">
-        <div class="field">
-          <div class="ui left icon input">
-            <i class="user icon"></i>
-            <input type="text" name="email" placeholder="E-mail address">
+<div class="ui middle aligned center aligned grid inverted">
+  <div class="six wide column">
+    <form class="ui form">
+      <h2 class="ui dividing header">Sign Up Information</h2>
+
+      <div class="two field">
+        <label>Account Details</label>
+        <div class="fields">
+          <div class="nine wide field">
+            <input type="text" name="user[username]" placeholder="Username">
+          </div>
+          <div class="seven wide field">
+            <input type="text" name="user[password]" placeholder="Password">
           </div>
         </div>
-        <div class="field">
-          <div class="ui left icon input">
-            <i class="lock icon"></i>
-            <input type="password" name="password" placeholder="Password">
+
+      </div>    
+      <div class="field">
+        <label>Contact Details</label>
+        <div class="two fields">
+          <div class="field">
+            <input type="text" name="user[first-name]" placeholder="First Name">
+          </div>
+          <div class="field">
+            <input type="text" name="user[last-name]" placeholder="Last Name">
+          </div>
+        </div>        
+        <div class="fields">
+          <div class="seven wide field">
+            <input type="text" name="user[email]" placeholder="Email">
+          </div>
+          <div class="four wide field">
+            <input type="text" name="user[contact]" placeholder="Phone">
+          </div>
+          <div class="five wide field">
+            <input type="text" name="user[occupation]" placeholder="Occupation">
           </div>
         </div>
-        <div class="ui fluid large primary submit button">Login</div>
       </div>
-
-      <div class="ui error message"></div>
-
+       <div class="ui segment">
+        <div class="field">
+          <div class="ui checkbox">
+            <input type="checkbox" name="gift" tabindex="0" class="hidden">
+            <label>I agree to the <a href="#">Terms and Conditions</a></label>
+          </div>
+        </div>
+      </div>
+      <div class="ui button primary" tabindex="0">Register</div>
     </form>
-
-    <div class="ui message">
-      New to us? <a href="/demo/signup.php">Sign Up</a>
-    </div>
   </div>
 </div>
 
