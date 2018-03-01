@@ -81,7 +81,7 @@
   ;
   </script>
 </head>
-<body class='ui   inverted'>
+<body class='ui'>
 
 <div class="ui middle aligned center aligned grid">
   <div class="column">
