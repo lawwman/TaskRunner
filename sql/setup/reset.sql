@@ -3,10 +3,12 @@ DROP TABLE IF EXISTS Users CASCADE;
 DROP TABLE IF EXISTS Bids CASCADE;
 
 CREATE TABLE Users (
-	user_name VARCHAR(20) PRIMARY KEY,
+	username VARCHAR(20) PRIMARY KEY,
 	user_pw VARCHAR(20) NOT NULL,
+    user_firstname VARCHAR(50) NOT NULL,
+    user_lastname VARCHAR(50) NOT NULL,
 	email varchar(100) UNIQUE NOT NULL,
-	contact VARCHAR(22) UNIQUE,	
+	contact VARCHAR(22),	
 	occupation VARCHAR(50) NOT NULL,
 	birth_date DATE NOT NULL,
 
