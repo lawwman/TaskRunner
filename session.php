@@ -1,17 +1,17 @@
 <?php
-	session_start();
+  session_start();
 
-	function logout() {
-		if (session_status() == PHP_SESSION_ACTIVE) {
-			session_destroy();
-		}
-	}
+  function logout() {
+    if (session_status() == PHP_SESSION_ACTIVE) {
+      session_destroy();
+    }
+  }
 
-	function login($username) {
-		$_SESSION['user'] = $username;
-	}
+  function login($username) {
+    $_SESSION['user'] = $username;
+  }
 
-	function isLoggedIn() {
-		return isset($_SESSION['user']);
-	}
+  function isLoggedIn() {
+    return isset($_SESSION['user']);
+  }
 ?>
