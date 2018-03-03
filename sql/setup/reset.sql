@@ -5,8 +5,8 @@ DROP TABLE IF EXISTS Bids CASCADE;
 CREATE TABLE Users (
 	username VARCHAR(20) PRIMARY KEY,
 	user_pw VARCHAR(20) NOT NULL,
-  user_firstname VARCHAR(50) NOT NULL,
-  user_lastname VARCHAR(50) NOT NULL,
+	user_firstname VARCHAR(50) NOT NULL,
+	user_lastname VARCHAR(50) NOT NULL,
 	email VARCHAR(100) UNIQUE NOT NULL,
 	contact VARCHAR(22),	
 	occupation VARCHAR(50) NOT NULL,
