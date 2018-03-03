@@ -4,7 +4,7 @@
 <!-- PHP Portions -->
 <?php
   require('debugging.php');
-  
+
   function isUserUnique(&$nameError, &$emailError) {
     $username = "";
     $email = "";
@@ -27,25 +27,29 @@
       $emailError = "Sorry... email already taken";  
     }
 
-    consoleLog($username);
-    consoleLog($email);
-    return !(isset($nameError) or isset($emailError));
+    return empty($nameError) and empty($emailError);
   }
 
   if (isset($_POST['register'])) {
     $nameError = "";
     $emailError = "";
-
+    consoleLog(isUserUnique($nameError, $emailError));
     if (isUserUnique($nameError, $emailError)) {
       $username = $_POST['username'];
+      $password = $_POST['password'];
       $email = $_POST['email'];
       $firstName = $_POST['first-name'];
       $lastName = $_POST['last-name'];
-      $contact = $_POST['username'];
-      $occupation = $_POST['email'];
-    }
+      $contact = $_POST['contact'];
+      $occupation = $_POST['occupation'];
+      $birthdate = $_POST['birthdate'];
 
-    consoleLog("test2");
+      $db = pg_connect("host=127.0.0.1 port=5432 dbname=project1 user=postgres password=1234") or die('Could not connect: ' . pg_last_error()); 
+
+      $insertQuery = "INSERT INTO Users Values('$username', '$password', '$firstName', '$lastName', '$email', '$contact', '$occupation', '$birthdate')";
+      consoleLog($insertQuery);
+      $result = pg_query($db, $insertQuery); 
+    }
   }
 ?>
 
@@ -232,7 +236,7 @@
         </div>        
         <div class="fields">
           <div class="five wide field">
-            <input type="date" name="date" value='<?php echo isset($_POST['date']) ? $_POST['date'] : ''; ?>'>
+            <input type="date" name="birthdate" value='<?php echo isset($_POST['birthdate']) ? $_POST['birthdate'] : ''; ?>'>
           </div>
           <div class="six wide field">
             <input type="text" name="occupation" placeholder="Occupation" value='<?php echo isset($_POST['occupation']) ? $_POST['occupation'] : ''; ?>'>
