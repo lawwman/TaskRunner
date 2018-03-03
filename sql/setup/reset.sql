@@ -7,7 +7,7 @@ CREATE TABLE Users (
 	user_pw VARCHAR(20) NOT NULL,
     user_firstname VARCHAR(50) NOT NULL,
     user_lastname VARCHAR(50) NOT NULL,
-	email varchar(100) UNIQUE NOT NULL,
+	email VARCHAR(100) UNIQUE NOT NULL,
 	contact VARCHAR(22),	
 	occupation VARCHAR(50) NOT NULL,
 	birth_date DATE NOT NULL,
