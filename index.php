@@ -131,6 +131,7 @@
         <a class="active item">Home</a>
         <a class="item" href="/demo/viewtasks.php">My Tasks</a>
         <a class="item" href="/demo/viewbids.php">My Bids</a>
+        <a class="item" href="/demo/addtasks.php">Add Tasks</a>
         <div class="right item">
           <a class="ui inverted button" href="/demo/login.php">Log in</a>
           <a class="ui inverted button" href="/demo/signup.php">Sign Up</a>
