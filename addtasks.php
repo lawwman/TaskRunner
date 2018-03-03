@@ -5,7 +5,7 @@
   require('debugging.php');
 
   // Connect to the database. Please change the password in the following line accordingly
-  $db = pg_connect("host=localhost port=5432 dbname=project1 user=postgres password=A0156837R") or die('Could not connect ' . pg_last_error());  
+  $db = pg_connect("host=localhost port=5432 dbname=project1 user=postgres password=1234") or die('Could not connect ' . pg_last_error());  
 
   if (isset($_POST['addtask'])) {
     $task_id = rand(123465,123900);
@@ -142,37 +142,37 @@
           </div>
         </div>
       </div>
-  </div>
+    </div>
 
-  <!-- Form for task adding-->
-  <div class="ui middle aligned center aligned grid inverted">
-    <div class="six wide column">
-      <form class="ui form" action="/demo/addtasks.php" method="POST">
-        <h2 class="ui dividing header">Task Details</h2>
+    <!-- Form for task adding-->
+    <div class="ui middle aligned center aligned grid inverted">
+      <div class="six wide column">
+        <form class="ui form" action="/demo/addtasks.php" method="POST">
+          <h2 class="ui dividing header">Task Details</h2>
 
-        <div class="one field">
-          <label>Task Name</label>
-          <div class="fields">
-            <div class="sixteen wide field">
-              <input type="text" name="taskname" placeholder="Task Name">
+          <div class="one field">
+            <label>Task Name</label>
+            <div class="fields">
+              <div class="sixteen wide field">
+                <input type="text" name="taskname" placeholder="Task Name">
+              </div>
             </div>
+          </div>    
+          
+          <div class="field">
+            <label>Task Details</label>
+            <div class="fields">
+              <div class=" sixteen wide field">
+                <input style = "height: 300px;" type="text" name="description" placeholder="Description">
+              </div>
+            </div> 
           </div>
-
-        </div>    
-        
-        <div class="field">
-          <label>Task Details</label>
-          <div class="fields">
-            <div class=" sixteen wide field">
-              <input style = "height: 300px;" type="text" name="description" placeholder="Description">
-            </div>
-          </div> 
-
+            
           <div class="fields">
             <div class="eleven wide field">
               <input type="text" name="reward" placeholder="Reward">
-            </div>        
-
+            </div>                  
+              
             <div class="field">                
               <select class="ui dropdown" name="dropdown">
                 <option value="">Durations (hours)</option>
@@ -180,16 +180,15 @@
                 <option value="48">48</option>
                 <option value="72">72</option>
               </select>
-            </div>
-          </div>
-        </div>
-      
-        <input type="submit" name="addtask" value="Submit" class="ui button primary" tabindex="0" />
-      </form>
-          
+            </div>         
+          </div> 
+
+          <input type="submit" name="addtask" value="Submit" class="ui button primary" tabindex="0" />
+        </form>        
+      </div>
     </div>
   </div>
- 
+
 </body>
 
 </html>
