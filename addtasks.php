@@ -69,9 +69,9 @@
     .image {
       margin-top: -100px;
     }
-    </style>
+  </style>
 
-    <script>
+  <script>
   
   $(document).ready(function() {
     $('.ui.form').form({
@@ -117,60 +117,61 @@
       }
     });
   });
-  </script>
 
+  </script>
 </head>
+
 <body class='ui'>
 
   <!-- Top menu -->
   <div class="pusher">
-  <div class="ui inverted vertical masthead center aligned segment">
+    <div class="ui inverted vertical masthead center aligned segment">
 
-    <div class="ui container">
-      <div class="ui large secondary inverted pointing menu">
-        <a class="toc item">
-          <i class="sidebar icon"></i>
-        </a>
-        <a class="item" href="/demo/index.php">Home</a>
-        <a class="item" href="/demo/viewtasks.php">My Tasks</a>
-        <a class="item" href="/demo/viewbids.php">My Bids</a>
-        <a class="active item" href="/demo/addtasks.php">Add Tasks</a>
-        <div class="right item">
-          <a class="ui inverted button">Log in</a>
-          <a class="ui inverted button">Sign Up</a>
+      <div class="ui container">
+        <div class="ui large secondary inverted pointing menu">
+          <a class="toc item">
+            <i class="sidebar icon"></i>
+          </a>
+          <a class="item" href="/demo/index.php">Home</a>
+          <a class="item" href="/demo/viewtasks.php">My Tasks</a>
+          <a class="item" href="/demo/viewbids.php">My Bids</a>
+          <a class="active item" href="/demo/addtasks.php">Add Tasks</a>
+          <div class="right item">
+            <a class="ui inverted button">Log in</a>
+            <a class="ui inverted button">Sign Up</a>
+          </div>
         </div>
       </div>
-    </div>
   </div>
 
-<!-- Form for task adding-->
-<div class="ui middle aligned center aligned grid inverted">
-  <div class="six wide column">
-    <form class="ui form" action="/demo/addtasks.php" method="POST">
-      <h2 class="ui dividing header">Task Details</h2>
+  <!-- Form for task adding-->
+  <div class="ui middle aligned center aligned grid inverted">
+    <div class="six wide column">
+      <form class="ui form" action="/demo/addtasks.php" method="POST">
+        <h2 class="ui dividing header">Task Details</h2>
 
-      <div class="one field">
-        <label>Task Name</label>
-        <div class="fields">
-          <div class="sixteen wide field">
-            <input type="text" name="taskname" placeholder="Task Name">
+        <div class="one field">
+          <label>Task Name</label>
+          <div class="fields">
+            <div class="sixteen wide field">
+              <input type="text" name="taskname" placeholder="Task Name">
+            </div>
           </div>
-        </div>
 
-      </div>    
-      
-      <div class="field">
-        <label>Task Details</label>
-        <div class="fields">
-          <div class=" sixteen wide field">
-            <input style = "height: 300px;" type="text" name="description" placeholder="Description">
-          </div>
-        </div> 
+        </div>    
+        
+        <div class="field">
+          <label>Task Details</label>
+          <div class="fields">
+            <div class=" sixteen wide field">
+              <input style = "height: 300px;" type="text" name="description" placeholder="Description">
+            </div>
+          </div> 
 
-        <div class="fields">
-          <div class="eleven wide field">
-            <input type="text" name="reward" placeholder="Reward">
-          </div>        
+          <div class="fields">
+            <div class="eleven wide field">
+              <input type="text" name="reward" placeholder="Reward">
+            </div>        
 
             <div class="field">                
               <select class="ui dropdown" name="dropdown">
@@ -180,13 +181,14 @@
                 <option value="72">72</option>
               </select>
             </div>
+          </div>
         </div>
-      </div>
-      <input type="submit" name="addtask" value="Submit" class="ui button primary" tabindex="0" />
-    </form>
-        
+      
+        <input type="submit" name="addtask" value="Submit" class="ui button primary" tabindex="0" />
+      </form>
+          
+    </div>
   </div>
-</div>
  
 </body>
 
