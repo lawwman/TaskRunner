@@ -98,10 +98,8 @@
               ]
             }
           }
-        })
-      ;
-    })
-  ;
+        });
+    });
   </script>
 </head>
 <body class='ui'>

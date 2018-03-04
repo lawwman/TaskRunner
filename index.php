@@ -3,9 +3,24 @@
 
 <?php
   require('debugging.php');
+  require('session.php');
 
-  session_start();
-  consoleLog($_SESSION['user']);
+  if ($_GET["argument"]=='signOut'){
+    logout();
+  }
+  
+  function showUser() {
+    if (isLoggedIn()) {
+      echo '
+      <div class="ui dropdown inverted button">Hello, '. $_SESSION['user'] . '</div>
+      <div class="ui dropdown inverted button" id="signOut" formaction="/demo/signup.php">Sign Out</div>
+      ';
+    } else {
+      echo "<a class='ui inverted button' href='/demo/login.php'>Log in</a>
+      <a class='ui inverted button' href='/demo/signup.php'>Sign Up</a>";
+    }
+  }
+  
 ?>
 
 <html>
@@ -22,7 +37,7 @@
 
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/container.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/grid.css">
-  <link rel="stylesheet" type="text/css" href=".semantic/dist/components/header.css">
+  <link rel="stylesheet" type="text/css" href="semantic/dist/components/header.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/image.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/menu.css">
 
@@ -38,6 +53,21 @@
   <script src="assets/jquery-3.3.1.min"></script>
   <script src="semantic/dist/components/transition.js"></script>
   <script src="semantic/dist/components/dropdown.js"></script>
+
+  <script>
+    // performs sign out functionality.
+    $(document).ready(function() {
+      $('#signOut').click(function() {
+        $.ajax({
+          url: '/demo/index.php?argument=signOut',
+          success: function(html){
+            location.reload();
+          }
+        });
+      });
+    })
+  </script>
+
 
   <style type="text/css">
 
@@ -151,8 +181,7 @@
         </div>
         <a class="item" href="/demo/viewbids.php">My Bids</a>
         <div class="right item">
-          <a class="ui inverted button" href="/demo/login.php">Log in</a>
-          <a class="ui inverted button" href="/demo/signup.php">Sign Up</a>
+          <?php showUser(); ?> 
         </div>
       </div>
     </div>
