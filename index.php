@@ -35,6 +35,10 @@
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/sidebar.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/transition.css">
 
+  <script src="assets/jquery-3.3.1.min"></script>
+  <script src="semantic/dist/components/transition.js"></script>
+  <script src="semantic/dist/components/dropdown.js"></script>
+
   <style type="text/css">
 
     .hidden.menu {
@@ -137,9 +141,15 @@
           <i class="sidebar icon"></i>
         </a>
         <a class="active item">Home</a>
-        <a class="item" href="/demo/viewtasks.php">My Tasks</a>
+        <div class="ui simple dropdown item">
+          <span class = "text">My Tasks</span>
+          <i class = "dropdown icon"></i>
+          <div class = "menu">
+            <a class ="item" href="/demo/viewtasks.php"> View My Tasks</a>
+            <a class ="item" href="/demo/addtasks.php"> Add a Task</a>
+          </div>
+        </div>
         <a class="item" href="/demo/viewbids.php">My Bids</a>
-        <a class="item" href="/demo/addtasks.php">Add Tasks</a>
         <div class="right item">
           <a class="ui inverted button" href="/demo/login.php">Log in</a>
           <a class="ui inverted button" href="/demo/signup.php">Sign Up</a>
