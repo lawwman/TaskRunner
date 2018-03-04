@@ -5,14 +5,15 @@
   require('debugging.php');
   require('session.php');
 
-  session_start();
-  consoleLog($_SESSION['user']);
+  if ($_GET["argument"]=='signOut'){
+    logout();
+  }
   
   function showUser() {
     if (isLoggedIn()) {
       echo '
       <div class="ui dropdown inverted button">Hello, '. $_SESSION['user'] . '</div>
-      <div class="ui dropdown inverted button" formaction="/demo/signup.php">Sign Out</div>
+      <div class="ui dropdown inverted button" id="signOut" formaction="/demo/signup.php">Sign Out</div>
       ';
     } else {
       echo "<a class='ui inverted button' href='/demo/login.php'>Log in</a>
@@ -54,6 +55,17 @@
   <script src="semantic/dist/components/dropdown.js"></script>
 
   <script>
+    // performs sign out functionality.
+    $(document).ready(function() {
+      $('#signOut').click(function() {
+        $.ajax({
+          url: '/demo/index.php?argument=signOut',
+          success: function(html){
+            location.reload();
+          }
+        });
+      });
+    })
   </script>
 
 
