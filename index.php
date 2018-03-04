@@ -3,9 +3,20 @@
 
 <?php
   require('debugging.php');
+  require('session.php');
 
   session_start();
   consoleLog($_SESSION['user']);
+  
+  function showUser() {
+    if (isLoggedIn()) {
+      echo "<a class='ui inverted button'>Hello, ". $_SESSION['user'] . "</a>";
+    } else {
+      echo "<a class='ui inverted button' href='/demo/login.php'>Log in</a>
+      <a class='ui inverted button' href='/demo/signup.php'>Sign Up</a>";
+    }
+  }
+  
 ?>
 
 <html>
@@ -151,8 +162,7 @@
         </div>
         <a class="item" href="/demo/viewbids.php">My Bids</a>
         <div class="right item">
-          <a class="ui inverted button" href="/demo/login.php">Log in</a>
-          <a class="ui inverted button" href="/demo/signup.php">Sign Up</a>
+          <?php showUser(); ?> 
         </div>
       </div>
     </div>
