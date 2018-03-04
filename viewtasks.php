@@ -1,5 +1,30 @@
 <!DOCTYPE html>  
 
+<?php 
+  function showTasks() {
+      // Connect to the database. Please change the password in the following line accordingly
+    $db     = pg_connect("host=localhost port=5432 dbname=project1 user=postgres password=1234"); 
+    $result = pg_query($db, "SELECT * FROM tasks");
+    while ($row = pg_fetch_assoc($result)) {
+      echo "<div class='card'>
+              <div class='content'>
+                <a class='header'>$row[task_name]</a>
+                <div class='meta'>
+                  <p class='description'>Created by $row[creator]</p>
+                </div>
+                <br>
+                <div class='description'>$row[task_details]</div>
+                <br>
+                <div class='meta'>
+                 <span class='date'>Created in $row[createddatetime]</span>
+                </div>
+              </div>
+            </div>";
+    }
+  }
+
+?>
+
 <html>
 <head>
   <!-- Standard Meta -->
@@ -145,30 +170,10 @@
 
 <div class="my_container">
   <div class="ui link three cards">
-    <?php
-    // Connect to the database. Please change the password in the following line accordingly
-      $db     = pg_connect("host=localhost port=5432 dbname=project1 user=postgres password=lawgres95"); 
-      $result = pg_query($db, "SELECT * FROM tasks");
-      while ($row = pg_fetch_assoc($result)) {
-        echo "<div class='card'>
-                <div class='content'>
-                  <a class='header'>$row[task_name]</a>
-                  <div class='meta'>
-                    <p class='description'>Created by $row[creator]</p>
-                  </div>
-                  <br>
-                  <div class='description'>$row[task_details]</div>
-                  <br>
-                  <div class='meta'>
-                   <span class='date'>Created in $row[createddatetime]</span>
-                  </div>
-                </div>
-              </div>";
-      }
-    ?> 
+    <?php showTasks(); ?> 
 
+    </div>
   </div>
-</div>
 
 
 
