@@ -10,7 +10,10 @@
   
   function showUser() {
     if (isLoggedIn()) {
-      echo "<a class='ui inverted button'>Hello, ". $_SESSION['user'] . "</a>";
+      echo '
+      <div class="ui dropdown inverted button">Hello, '. $_SESSION['user'] . '</div>
+      <div class="ui dropdown inverted button" formaction="/demo/signup.php">Sign Out</div>
+      ';
     } else {
       echo "<a class='ui inverted button' href='/demo/login.php'>Log in</a>
       <a class='ui inverted button' href='/demo/signup.php'>Sign Up</a>";
@@ -33,7 +36,7 @@
 
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/container.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/grid.css">
-  <link rel="stylesheet" type="text/css" href=".semantic/dist/components/header.css">
+  <link rel="stylesheet" type="text/css" href="semantic/dist/components/header.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/image.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/menu.css">
 
@@ -49,6 +52,10 @@
   <script src="assets/jquery-3.3.1.min"></script>
   <script src="semantic/dist/components/transition.js"></script>
   <script src="semantic/dist/components/dropdown.js"></script>
+
+  <script>
+  </script>
+
 
   <style type="text/css">
 
