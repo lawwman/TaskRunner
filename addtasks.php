@@ -3,6 +3,23 @@
 <!-- PHP Portions -->
 <?php
   require('debugging.php');
+  require('session.php');
+
+  if ($_GET["argument"]=='signOut'){
+    logout();
+  }
+
+  function showUser() {
+    if (isLoggedIn()) {
+      echo '
+      <div class="ui dropdown inverted button">Hello, '. $_SESSION['user'] . '</div>
+      <div class="ui dropdown inverted button" id="signOut" formaction="/demo/signup.php">Sign Out</div>
+      ';
+    } else {
+      echo "<a class='ui inverted button' href='/demo/login.php'>Log in</a>
+      <a class='ui inverted button' href='/demo/signup.php'>Sign Up</a>";
+    }
+  }
 
   // Connect to the database. Please change the password in the following line accordingly
   $db = pg_connect("host=localhost port=5432 dbname=project1 user=postgres password=1234") or die('Could not connect ' . pg_last_error());  
@@ -19,11 +36,16 @@
     date_default_timezone_set('Asia/Singapore');
     $createddatetime = date('Y-m-d H:i:s');
 
-    $result = "INSERT INTO tasks VALUES($task_id, '$task_name', '$task_details', $duration_minutes, '$creator', null, $reward, '$status', '$createddatetime')";    
-    $addTaskResult = pg_query($db, $result);
+    $insertQuery = "INSERT INTO tasks VALUES($task_id, '$task_name', '$task_details', $duration_minutes, '$creator', null, $reward, '$status', '$createddatetime')";    
+    $add_task_result = pg_query($db, $insertQuery);
     
-    header('Location: /demo/index.php');
-  }
+    if($add_task_result){
+//      echo 'Task Added Successfully!';
+      header('Location: /demo/index.php');  
+    }
+
+  }  
+
 ?> 
 
 <!-- HTML Portions -->
@@ -72,9 +94,21 @@
   </style>
 
   <script>
-  
+    // performs sign out functionality.
+    $(document).ready(function() {
+      $('#signOut').click(function() {
+        $.ajax({
+          url: '/demo/index.php?argument=signOut',
+          success: function(html){
+            location.reload();
+          }
+        });
+      });
+    })  
+
   $(document).ready(function() {
     $('.ui.form').form({
+      on: 'blur',      
       fields: {
         taskname: {
           identifier  : 'taskname',
@@ -133,12 +167,17 @@
             <i class="sidebar icon"></i>
           </a>
           <a class="item" href="/demo/index.php">Home</a>
-          <a class="item" href="/demo/viewtasks.php">My Tasks</a>
-          <a class="item" href="/demo/viewbids.php">My Bids</a>
-          <a class="active item" href="/demo/addtasks.php">Add Tasks</a>
+          <div class="ui simple dropdown item">
+            <span class = "text">My Tasks</span>
+            <i class = "dropdown icon"></i>
+            <div class = "menu">
+              <a class ="item" href="/demo/viewtasks.php"> View My Tasks</a>
+              <a class ="item" href="/demo/addtasks.php"> Add a Task</a>
+            </div>
+          </div>          
+          <a class="item" href="/demo/viewbids.php">My Bids</a>          
           <div class="right item">
-            <a class="ui inverted button" href="/demo/login.php">Log in</a>
-            <a class="ui inverted button" href="/demo/signup.php">Sign Up</a>
+            <?php showUser(); ?>
           </div>
         </div>
       </div>
