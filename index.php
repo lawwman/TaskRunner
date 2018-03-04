@@ -1,5 +1,13 @@
 
 <!DOCTYPE html>
+
+<?php
+  require('debugging.php');
+
+  session_start();
+  consoleLog($_SESSION['user']);
+?>
+
 <html>
 <head>
   <!-- Standard Meta -->

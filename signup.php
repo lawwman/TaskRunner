@@ -4,6 +4,7 @@
 <!-- PHP Portions -->
 <?php
   require('debugging.php');
+  require('session.php');
 
   function isUserUnique(&$nameError, &$emailError) {
     $username = "";
@@ -33,7 +34,6 @@
   if (isset($_POST['register'])) {
     $nameError = "";
     $emailError = "";
-    consoleLog(isUserUnique($nameError, $emailError));
     if (isUserUnique($nameError, $emailError)) {
       $username = $_POST['username'];
       $password = $_POST['password'];
@@ -48,7 +48,12 @@
 
       $insertQuery = "INSERT INTO Users Values('$username', '$password', '$firstName', '$lastName', '$email', '$contact', '$occupation', '$birthdate')";
       consoleLog($insertQuery);
-      $result = pg_query($db, $insertQuery); 
+      $result = pg_query($db, $insertQuery);
+      
+      if ($result) {
+        login($username);
+        header('Location: /demo/index.php');
+      }
     }
   }
 ?>

@@ -1,5 +1,28 @@
-
 <!DOCTYPE html>
+
+<?php
+  require('debugging.php');
+  require('session.php');
+  
+  if (isset($_POST['login'])) {
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+
+    $db = pg_connect("host=127.0.0.1 port=5432 dbname=project1 user=postgres password=1234") or die('Could not connect: ' . pg_last_error()); 
+
+    $insertQuery = "SELECT username FROM Users WHERE email='$email' AND user_pw='$password'";
+    $result = pg_query($db, $insertQuery);
+
+    if ($result) {
+      $row = pg_fetch_row($result);
+      $username = "$row[0]";
+      login($username);
+      header('Location: /demo/index.php');
+    }
+  }
+?>
+
+
 <html>
 <head>
   <!-- Standard Meta -->
@@ -18,7 +41,7 @@
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/image.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/menu.css">
 
-  <link rel="stylesheet" type="text/css" href=".semantic/dist/components/divider.css">
+  <link rel="stylesheet" type="text/css" href="semantic/dist/components/divider.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/segment.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/form.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/input.css">
@@ -91,7 +114,7 @@
         Log-in to your account
       </div>
     </h2>
-    <form class="ui large form">
+    <form class="ui large form" action="/demo/login.php" method="POST">
       <div class="ui stacked segment">
         <div class="field">
           <div class="ui left icon input">
@@ -105,7 +128,7 @@
             <input type="password" name="password" placeholder="Password">
           </div>
         </div>
-        <div class="ui fluid large primary submit button">Login</div>
+        <input type="submit" name="login" value="Login" class="ui fluid large button primary" tabindex="0" />
       </div>
 
       <div class="ui error message"></div>
