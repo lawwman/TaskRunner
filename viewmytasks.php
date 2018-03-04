@@ -9,8 +9,9 @@
   
   function showTasks() {
       // Connect to the database. Please change the password in the following line accordingly
-    $db     = pg_connect("host=localhost port=5432 dbname=project1 user=postgres password=1234"); 
-    $result = pg_query($db, "SELECT * FROM tasks");
+    $db     = pg_connect("host=localhost port=5432 dbname=project1 user=postgres password=1234");
+    $userName = $_SESSION['user'];
+    $result = pg_query($db, "SELECT * FROM tasks WHERE runner='$userName'");
     while ($row = pg_fetch_assoc($result)) {
       echo "<div class='card'>
               <div class='content'>
@@ -58,6 +59,10 @@
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/icon.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/sidebar.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/transition.css">
+
+  <script src="assets/jquery-3.3.1.min"></script>
+  <script src="semantic/dist/components/transition.js"></script>
+  <script src="semantic/dist/components/dropdown.js"></script>
 
   <style type="text/css">
 
@@ -164,11 +169,18 @@
           <i class="sidebar icon"></i>
         </a>
         <a class="item" href="/demo/index.php">Home</a>
-        <a class="active item" href="/demo/viewtasks.php">My Tasks</a>
+        <div class="ui simple dropdown item">
+          <span class = "text">My Tasks</span>
+          <i class = "dropdown icon"></i>
+          <div class = "menu">
+            <a class ="item" href="/demo/viewmytasks.php"> View My Tasks</a>
+            <a class ="item" href="/demo/addtasks.php"> Add a Task</a>
+          </div>
+        </div>
         <a class="item" href="/demo/viewbids.php">My Bids</a>
         <div class="right item">
-          <a class="ui inverted button">Log in</a>
-          <a class="ui inverted button">Sign Up</a>
+          <a class="ui inverted button" href="/demo/login.php">Log in</a>
+          <a class="ui inverted button" href="/demo/signup.php">Sign Up</a>
         </div>
       </div>
     </div>

@@ -6,7 +6,7 @@
 
   session_start();
   consoleLog($_SESSION['user']);
-  
+
   function showTasks() {
       // Connect to the database. Please change the password in the following line accordingly
     $db     = pg_connect("host=localhost port=5432 dbname=project1 user=postgres password=1234"); 
@@ -58,6 +58,10 @@
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/icon.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/sidebar.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/transition.css">
+
+  <script src="assets/jquery-3.3.1.min"></script>
+  <script src="semantic/dist/components/transition.js"></script>
+  <script src="semantic/dist/components/dropdown.js"></script>
 
   <style type="text/css">
 
