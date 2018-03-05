@@ -36,7 +36,7 @@
     $emailError = "";
     if (isUserUnique($nameError, $emailError)) {
       $username = $_POST['username'];
-      $password = $_POST['password'];
+      $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
       $email = $_POST['email'];
       $firstName = $_POST['first-name'];
       $lastName = $_POST['last-name'];
