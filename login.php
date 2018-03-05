@@ -13,11 +13,15 @@
     $insertQuery = "SELECT username FROM Users WHERE email='$email' AND user_pw='$password'";
     $result = pg_query($db, $insertQuery);
 
-    if ($result) {
+    consoleLog($result);
+
+    if (pg_num_rows($result) > 0) {
       $row = pg_fetch_row($result);
       $username = "$row[0]";
       login($username);
       header('Location: /demo/index.php');
+    } else {
+      echo '<script type="text/javascript">alert(\Enter valid data ! \')</script>';
     }
   }
 ?>

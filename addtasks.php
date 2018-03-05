@@ -3,16 +3,17 @@
 <!-- PHP Portions -->
 <?php
   require('debugging.php');
+  require('session.php');
 
   // Connect to the database. Please change the password in the following line accordingly
-  $db = pg_connect("host=localhost port=5432 dbname=project1 user=postgres password=1234") or die('Could not connect ' . pg_last_error());  
+  $db = pg_connect("host=127.0.0.1 port=5432 dbname=project1 user=postgres password=1234") or die('Could not connect ' . pg_last_error());  
 
   if (isset($_POST['addtask'])) {
     $task_id = rand(123465,123900);
     $task_name = $_POST['taskname'];
     $task_details = $_POST['description'];
     $duration_minutes = $_POST['dropdown'];
-    $creator = 'Johndoe1';
+    $creator = $_SESSION['user'];
     $runner = null;
     $reward = $_POST['reward'];
     $status = 'not bidded';
