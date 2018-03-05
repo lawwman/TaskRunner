@@ -1,10 +1,16 @@
 <!DOCTYPE html>  
 
 <?php 
+
+  require('debugging.php');
+
+  session_start();
+  consoleLog($_SESSION['user']);
+
   function showTasks() {
       // Connect to the database. Please change the password in the following line accordingly
     $db     = pg_connect("host=localhost port=5432 dbname=project1 user=postgres password=1234"); 
-    $result = pg_query($db, "SELECT * FROM tasks");
+    $result = pg_query($db, "SELECT * FROM tasks WHERE status='not bidded' OR status='bidded'");
     while ($row = pg_fetch_assoc($result)) {
       echo "<div class='card'>
               <div class='content'>
@@ -52,6 +58,10 @@
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/icon.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/sidebar.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/transition.css">
+
+  <script src="assets/jquery-3.3.1.min"></script>
+  <script src="semantic/dist/components/transition.js"></script>
+  <script src="semantic/dist/components/dropdown.js"></script>
 
   <style type="text/css">
 
@@ -158,7 +168,7 @@
           <i class="sidebar icon"></i>
         </a>
         <a class="item" href="/demo/index.php">Home</a>
-        <a class="active item" href="/demo/viewtasks.php">My Tasks</a>
+        <a class="active item" href="/demo/viewmytasks.php">My Tasks</a>
         <a class="item" href="/demo/viewbids.php">My Bids</a>
         <div class="right item">
           <a class="ui inverted button">Log in</a>
