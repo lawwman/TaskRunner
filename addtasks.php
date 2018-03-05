@@ -133,7 +133,7 @@
             <i class="sidebar icon"></i>
           </a>
           <a class="item" href="/demo/index.php">Home</a>
-          <a class="item" href="/demo/viewtasks.php">My Tasks</a>
+          <a class="item" href="/demo/viewmytasks.php">My Tasks</a>
           <a class="item" href="/demo/viewbids.php">My Bids</a>
           <a class="active item" href="/demo/addtasks.php">Add Tasks</a>
           <div class="right item">

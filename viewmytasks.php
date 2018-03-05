@@ -1,26 +1,35 @@
+<!DOCTYPE html>  
 
-<!DOCTYPE html>
+<?php 
 
-<?php
   require('debugging.php');
-  require('session.php');
 
-  if ($_GET["argument"]=='signOut'){
-    logout();
-  }
+  session_start();
+  consoleLog($_SESSION['user']);
   
-  function showUser() {
-    if (isLoggedIn()) {
-      echo '
-      <div class="ui dropdown inverted button">Hello, '. $_SESSION['user'] . '</div>
-      <div class="ui dropdown inverted button" id="signOut" formaction="/demo/signup.php">Sign Out</div>
-      ';
-    } else {
-      echo "<a class='ui inverted button' href='/demo/login.php'>Log in</a>
-      <a class='ui inverted button' href='/demo/signup.php'>Sign Up</a>";
+  function showTasks() {
+      // Connect to the database. Please change the password in the following line accordingly
+    $db     = pg_connect("host=localhost port=5432 dbname=project1 user=postgres password=1234");
+    $userName = $_SESSION['user'];
+    $result = pg_query($db, "SELECT * FROM tasks WHERE runner='$userName'");
+    while ($row = pg_fetch_assoc($result)) {
+      echo "<div class='card'>
+              <div class='content'>
+                <a class='header'>$row[task_name]</a>
+                <div class='meta'>
+                  <p class='description'>Created by $row[creator]</p>
+                </div>
+                <br>
+                <div class='description'>$row[task_details]</div>
+                <br>
+                <div class='meta'>
+                 <span class='date'>Created in $row[createddatetime]</span>
+                </div>
+              </div>
+            </div>";
     }
   }
-  
+
 ?>
 
 <html>
@@ -31,15 +40,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
   <!-- Site Properties -->
-  <title>Homepage - Semantic</title>
+  <title>View Tasks - Semantic</title>
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/reset.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/site.css">
 
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/container.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/grid.css">
-  <link rel="stylesheet" type="text/css" href="semantic/dist/components/header.css">
+  <link rel="stylesheet" type="text/css" href=".semantic/dist/components/header.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/image.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/menu.css">
+  <link rel="stylesheet" type="text/css" href="semantic/dist/components/card.css">
 
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/divider.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/dropdown.css">
@@ -54,29 +64,14 @@
   <script src="semantic/dist/components/transition.js"></script>
   <script src="semantic/dist/components/dropdown.js"></script>
 
-  <script>
-    // performs sign out functionality.
-    $(document).ready(function() {
-      $('#signOut').click(function() {
-        $.ajax({
-          url: '/demo/index.php?argument=signOut',
-          success: function(html){
-            location.reload();
-          }
-        });
-      });
-    })
-  </script>
-
-
   <style type="text/css">
 
-    .hidden.menu {
-      display: none;
+    .my_container {
+      margin: 50px;
     }
 
     .masthead.segment {
-      min-height: 700px;
+      min-height: 200px;
       padding: 1em 0em;
     }
     .masthead .logo.item img {
@@ -159,10 +154,13 @@
 
   </style>
 </head>
+
+
+
 <body>
 
-<!-- Page Contents -->
-<div class="pusher">
+  <!-- Top menu -->
+  <div class="pusher">
   <div class="ui inverted vertical masthead center aligned segment">
 
     <div class="ui container">
@@ -170,7 +168,7 @@
         <a class="toc item">
           <i class="sidebar icon"></i>
         </a>
-        <a class="active item">Home</a>
+        <a class="item" href="/demo/index.php">Home</a>
         <div class="ui simple dropdown item">
           <span class = "text">My Tasks</span>
           <i class = "dropdown icon"></i>
@@ -181,48 +179,23 @@
         </div>
         <a class="item" href="/demo/viewbids.php">My Bids</a>
         <div class="right item">
-          <?php showUser(); ?> 
-        </div>
-      </div>
-    </div>
-
-    <div class="ui text container">
-      <h1 class="ui inverted header">
-        Task Sourcing
-      </h1>
-      <h2>Do whatever you want when you want to.</h2>
-      <a href="/demo/viewtasks.php"><div class="ui huge primary button">Get Started <i class="right arrow icon"></i></div></a>
-    </div>
-
-  </div>
-
-  <div class="ui vertical stripe segment">
-    <div class="ui center aligned stackable grid container">
-      <div class="row">
-        <div class="eight wide column">
-          <h3 class="ui header">We Help Companies and Companions</h3>
-          <p>We can give your company superpowers to do things that they never thought possible. Let us delight your customers and empower your needs...through pure data analytics.</p>
-          <h3 class="ui header">We Make Bananas That Can Dance</h3>
-          <p>Yes that's right, you thought it was the stuff of dreams, but even bananas can be bioengineered.</p>
-        </div>
-      </div>
-      <div class="row">
-        <div class="center aligned column">
-          <a class="ui huge button">Check Them Out</a>
+          <a class="ui inverted button" href="/demo/login.php">Log in</a>
+          <a class="ui inverted button" href="/demo/signup.php">Sign Up</a>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="ui vertical stripe segment">
-    <div class="ui text container">
-      <h3 class="ui header">Breaking The Grid, Grabs Your Attention</h3>
-      <p>Instead of focusing on content creation and hard work, we have learned how to master the art of doing nothing by providing massive amounts of whitespace and generic content that can seem massive, monolithic and worth your attention.</p>
-      <a class="ui large button">Read More</a>
+<div class="my_container">
+  <div class="ui link three cards">
+    <?php showTasks(); ?> 
+
     </div>
   </div>
 
 
+
+  <!-- Footer -->
   <div class="ui inverted vertical footer segment">
     <div class="ui container">
       <div class="ui stackable inverted divided equal height stackable grid">
@@ -247,8 +220,6 @@
       </div>
     </div>
   </div>
-</div>
 
 </body>
-
 </html>
