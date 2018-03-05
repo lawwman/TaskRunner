@@ -20,11 +20,12 @@
       <a class='ui inverted button' href='/demo/signup.php'>Sign Up</a>";
     }
   }
-
+  
   function showTasks() {
       // Connect to the database. Please change the password in the following line accordingly
-    $db     = pg_connect("host=127.0.0.1 port=5432 dbname=project1 user=postgres password=1234"); 
-    $result = pg_query($db, "SELECT * FROM tasks WHERE status='not bidded' OR status='bidded'");
+    $db     = pg_connect("host=127.0.0.1 port=5432 dbname=project1 user=postgres password=1234");
+    $userName = $_SESSION['user'];
+    $result = pg_query($db, "SELECT * FROM tasks WHERE runner='$userName'");
     while ($row = pg_fetch_assoc($result)) {
       echo "<div class='card'>
               <div class='content'>
@@ -82,7 +83,7 @@
     $(document).ready(function() {
       $('#signOut').click(function() {
         $.ajax({
-          url: '/demo/viewtasks.php?argument=signOut',
+          url: '/demo/viewrunningtasks.php?argument=signOut',
           success: function(html){
             window.location.replace("/demo/index.php");
           }
@@ -196,8 +197,15 @@
           <i class="sidebar icon"></i>
         </a>
         <a class="item" href="/demo/index.php">Home</a>
-          <a class ="item" href="/demo/viewcreatedtasks.php"> View Created Tasks</a>
-          <a class ="item" href="/demo/viewrunningtasks.php"> View tasks I am running</a>
+        <div class="ui simple dropdown item">
+          <span class = "text">My Tasks</span>
+          <i class = "dropdown icon"></i>
+          <div class = "menu">
+            <a class ="item" href="/demo/viewcreatedtasks.php"> View Created Tasks</a>
+            <a class ="item" href="/demo/viewrunningtasks.php"> View tasks I am running</a>
+          </div>
+        </div>
+        <a class="item" href="/demo/viewbids.php">My Bids</a>
         <div class="right item">
           <?php showUser(); ?> 
         </div>

@@ -175,8 +175,8 @@
           <span class = "text">My Tasks</span>
           <i class = "dropdown icon"></i>
           <div class = "menu">
-            <a class ="item" href="/demo/viewmytasks.php"> View My Tasks</a>
-            <a class ="item" href="/demo/addtasks.php"> Add a Task</a>
+            <a class ="item" href="/demo/viewcreatedtasks.php"> View Created Tasks</a>
+            <a class ="item" href="/demo/viewrunningtasks.php"> View tasks I am running</a>
           </div>
         </div>
         <a class="item" href="/demo/viewbids.php">My Bids</a>
