@@ -36,7 +36,7 @@
     $emailError = "";
     if (isUserUnique($nameError, $emailError)) {
       $username = $_POST['username'];
-      $password = $_POST['password'];
+      $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
       $email = $_POST['email'];
       $firstName = $_POST['first-name'];
       $lastName = $_POST['last-name'];
@@ -47,13 +47,13 @@
       $db = pg_connect("host=127.0.0.1 port=5432 dbname=project1 user=postgres password=1234") or die('Could not connect: ' . pg_last_error()); 
 
       $insertQuery = "INSERT INTO Users Values('$username', '$password', '$firstName', '$lastName', '$email', '$contact', '$occupation', '$birthdate')";
-      consoleLog($insertQuery);
       $result = pg_query($db, $insertQuery);
       
       if ($result) {
         login($username);
         header('Location: /demo/index.php');
       }
+      
     }
   }
 ?>

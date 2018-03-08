@@ -5,6 +5,8 @@
   require('debugging.php');
   require('session.php');
 
+  redirectToLogin();
+
   // Connect to the database. Please change the password in the following line accordingly
   $db = pg_connect("host=127.0.0.1 port=5432 dbname=project1 user=postgres password=1234") or die('Could not connect ' . pg_last_error());  
 
