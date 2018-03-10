@@ -37,8 +37,6 @@
 
 
   <script>
-    var names = ["johndoe1"];
-
     $(document).ready(function(){
         $('#taskAutocompelete').autocomplete({
       source: 'suggestSkill.php', 
