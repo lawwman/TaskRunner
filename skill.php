@@ -28,24 +28,29 @@
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/transition.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/search.css">
 
+  <link rel="stylesheet" type="text/css" href="assets/jquery-ui/jquery-ui.css">
+
   <script src="assets/jquery-3.3.1.min"></script>
 
-<script src="assets/jquery-ui/jquery.ui.autocomplete.html.js" />
-<script src="http://code.jquery.com/ui/1.10.4/jquery-ui.min.js"</script>
+<script src="assets/jquery-ui/jquery.js"></script>
+<script src="assets/jquery-ui/jquery-ui.min.js"></script>
+
 
   <script>
-$(document).ready(function($){
-    $('#userAutocomplte').autocomplete({
-  source:'skill.php', 
-  minLength:2
+    var names = ["johndoe1"];
+
+    $(document).ready(function(){
+        $('#taskAutocompelete').autocomplete({
+      source: 'suggestSkill.php', 
+      minLength:2
+        });
     });
-});
   </script>
 
 </head>
 <body>
 <form action="" method="post">
-    <input type="text" placeholder="Name" id="userAutocomplte" class="ui-autocomplete-input" autocomplete="off" />
+    <input type="text" placeholder="Name" id="taskAutocompelete" class="ui-autocomplete-input" autocomplete="off" />
 </form>
 
 
