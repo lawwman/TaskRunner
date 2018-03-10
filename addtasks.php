@@ -187,6 +187,8 @@
           </div> 
 
           <input type="submit" name="addtask" value="Submit" class="ui button primary" tabindex="0" />
+          
+          <div class="ui error message"></div>
         </form>        
       </div>
     </div>
