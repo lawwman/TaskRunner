@@ -1,11 +1,12 @@
 Username,Password,First Name,Last Name,Email,Contact,Occupation,Date of Birth
-Johndoe1,johndoe1,john,doe,johndoe1@gmail.com,111111,Student,1/1/1980
-Johndoe2,johndoe2,john,doe,johndoe2@gmail.com,111112,Lawyer,1/1/1981
-Johndoe3,johndoe3,john,doe,johndoe3@gmail.com,111113,Broker,1/1/1982
-Johndoe4,johndoe4,john,doe,johndoe4@gmail.com,111114,Lorry Driver,1/1/1983
-Johndoe5,johndoe5,john,doe,johndoe5@gmail.com,111115,Teacher,1/1/1984
-Johndoe6,johndoe6,john,doe,johndoe6@gmail.com,111116,Taxi Driver,1/1/1985
-Johndoe7,johndoe7,john,doe,johndoe7@gmail.com,,Unemployed,1/1/1986
-Johndoe8,johndoe8,john,doe,johndoe8@gmail.com,111118,Freelance,1/1/1987
-Johndoe9,johndoe9,john,doe,johndoe9@gmail.com,111119,Minister,1/1/1988
-Johndoe10,johndoe10,john,doe,johndoe10@gmail.com,,Banker,1/1/1989
+Johndoe1,$2y$10$MAVCsX.5Fa9iTtfIkjHMdOny1qx8ci.7KlCgjzJBq4vYgCzXmZYXG,john,doe,johndoe1@gmail.com,111111,Student,1/1/1980
+Johndoe2,$2y$10$0kEcBbmo9jwtxtVQlipC4OAKjHUYeDlrI8p01Oc5oaqLGzVJ9bgDm,john,doe,johndoe2@gmail.com,111112,Lawyer,1/1/1981
+Johndoe3,$2y$10$8IR33fwiXvyH3vgG8aaz5O382IFdiU77MuNARFqYeXcIwo43fo1Sa,john,doe,johndoe3@gmail.com,111113,Broker,1/1/1982
+Johndoe4,$2y$10$mGwTfK/nMTJIbz.wAjNQP.y3nO.wFGhGiumMSpxruRiJyS6sEyDg.,john,doe,johndoe4@gmail.com,111114,Lorry Driver,1/1/1983
+Johndoe5,$2y$10$Q1sJbF6o6Qyq5oH69ykDyeQu90LqLp0F/sI5.cGtWX20c8qOPJzy6,john,doe,johndoe5@gmail.com,111115,Teacher,1/1/1984
+Johndoe6,$2y$10$ZAf8GSVZmTkFOPjLZ/mKu.LRpHCm1p9GCdprfx7m8bBSAqXMfF1j6,john,doe,johndoe6@gmail.com,111116,Taxi Driver,1/1/1985
+Johndoe7,$2y$10$7mgM6aV2f..bUSOMOVknvuHQGzubc7aC8V4Nie6icOOctJdCl2D5q,john,doe,johndoe7@gmail.com,,Unemployed,1/1/1986
+Johndoe8,$2y$10$xXO6Fm5IdOM2jvdKimKJZ.H6VoTs4wagmt/4GL8ZXzsjBSSVSeM/G,john,doe,johndoe8@gmail.com,111118,Freelance,1/1/1987
+Johndoe9,$2y$10$/.ykju3JmQ53k2zNXIACCeGfHh4nhmBVejcOaH5zfLXc6zbBw/1Iq,john,doe,johndoe9@gmail.com,111119,Minister,1/1/1988
+Johndoe10,"$2y$10$YfHQ2onxOWdw6Lq1fixs.OOQtSeZQQ2nIqD9OjXHz7s8z75jE/5aa
+",john,doe,johndoe10@gmail.com,,Banker,1/1/1989

@@ -266,7 +266,7 @@
       </div>
       <input type="submit" name="register" value="Register" class="ui button primary" tabindex="0" />
 
-      <div class = "ui error message"></div>
+      <div class="ui error message"></div>
     </form>
 
   </div>
