@@ -165,13 +165,18 @@
         },
 
         date: {
-          identifier  : 'date',
+          identifier  : 'birthdate',
           rules: []
         }, 
 
         contact: {
           identifier  : 'contact',
-          rules: []
+          rules: [
+            {
+              type   : 'empty',
+              prompt : 'Please enter your contact number'
+            },
+          ]
         }, 
 
         occupation: {
@@ -189,7 +194,7 @@
           rules: [
             {
               type   : 'checked',
-              prompt : 'Please enter your occupation'
+              prompt : 'Please accept the Terms and Conditions'
             },
           ]
         }
@@ -260,6 +265,8 @@
         </div>
       </div>
       <input type="submit" name="register" value="Register" class="ui button primary" tabindex="0" />
+
+      <div class = "ui error message"></div>
     </form>
 
   </div>
