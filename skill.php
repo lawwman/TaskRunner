@@ -32,10 +32,8 @@
 
   <script src="assets/jquery-3.3.1.min"></script>
 
-<script src="assets/jquery-ui/jquery.js"></script>
-<script src="assets/jquery-ui/jquery-ui.min.js"></script>
-
-
+  <script src="assets/jquery-ui/jquery.js"></script>
+  <script src="assets/jquery-ui/jquery-ui.min.js"></script>
   <script>
     $(document).ready(function(){
         $('#taskAutocompelete').autocomplete({
