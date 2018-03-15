@@ -27,7 +27,8 @@
     $.ajax({ type: 'GET', url: "suggestSkill.php", success: function(data) {
       suggestions = JSON.parse(data);
       $('#suggestionFromDB').autocomplete({
-        source: suggestions
+        source: suggestions,
+        minLength: 2
       });
     }
     });
@@ -39,7 +40,11 @@
     var availableTags = getList(); //getList() function is a function from "list.js". Returns an array of string
    $(document).ready(function() {
       $('#suggestionFromLocalSource').autocomplete({
-        source: availableTags
+        source: availableTags,
+        minLength: 2,
+        select: function(select, ui) {
+          console.log(ui.item.label);
+        }
     });
    });
   </script>
