@@ -9,6 +9,17 @@
 
   <!-- Site Properties -->
   <title>Homepage - Semantic</title>
+  <link rel="stylesheet" type="text/css" href="semantic/dist/components/container.css">
+  <link rel="stylesheet" type="text/css" href="semantic/dist/components/image.css">
+
+  <link rel="stylesheet" type="text/css" href="semantic/dist/components/divider.css">
+  <link rel="stylesheet" type="text/css" href="semantic/dist/components/segment.css">
+  <link rel="stylesheet" type="text/css" href="semantic/dist/components/form.css">
+  <link rel="stylesheet" type="text/css" href="semantic/dist/components/input.css">
+  <link rel="stylesheet" type="text/css" href="semantic/dist/components/button.css">
+  <link rel="stylesheet" type="text/css" href="semantic/dist/components/list.css">
+  <link rel="stylesheet" type="text/css" href="semantic/dist/components/label.css">
+  <link rel="stylesheet" type="text/css" href="semantic/dist/components/icon.css">
 
   <!-- Following 4 links are needed for auto-complete to work. Auto-complete uses jQuery-UI-->
   <link rel="stylesheet" type="text/css" href="assets/jquery-ui/jquery-ui.css">
@@ -30,8 +41,7 @@
         source: suggestions,
         minLength: 2
       });
-    }
-    });
+    }});
   });
   </script>
 
@@ -44,9 +54,14 @@
         minLength: 2,
         select: function(select, ui) {
           console.log(ui.item.label);
+          var label = ui.item.label;
+          $('#tags').append('<div class="ui image label">'+ label + '<i class="delete icon removeTag"></i></div>');
+          $(".removeTag").click(function() {
+            $(this).parent().remove();  
+          });
         }
+      });
     });
-   });
   </script>
 
 </head>
@@ -68,6 +83,7 @@
   <input id="suggestionFromLocalSource">
   </form>
 </div>
+<div id="tags"></div>
 
 </body>
 
