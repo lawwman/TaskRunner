@@ -63,7 +63,7 @@
 
 <!-- Input HTML for suggestions from a local source-->
 <div class="ui-widget">
-  <form>
+  <form id="localForm" action="#">
   <label >Local Source: </label>
   <input id="suggestionFromLocalSource">
   </form>
