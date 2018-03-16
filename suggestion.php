@@ -56,15 +56,22 @@
   <!-- Following script block shows how to get implement autocomplete with suggestions from a local js file-->
   <script>
     var availableTags = getList(); //getList() function is a function from "list.js". Returns an array of string
+    var selectedOptions = [];
    $(document).ready(function() {
       $('#suggestionFromLocalSource').autocomplete({
         source: availableTags,
         select: function(select, ui) {
-          console.log(ui.item.label);
           var label = ui.item.label;
+          selectedOptions.push(label);
+          console.log(selectedOptions);
           $('#tags').append('<div class="ui image label">'+ label + '<i class="delete icon removeTag"></i></div>');
           $(".removeTag").click(function() {
-            $(this).parent().remove();  
+            var toRemove = $(this).parent().text();
+            selectedOptions = selectedOptions.filter(function(item) {
+              return item != toRemove;
+            });
+            console.log(selectedOptions);
+            $(this).parent().remove(); 
           });
         }
       });
