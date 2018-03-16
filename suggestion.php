@@ -30,6 +30,15 @@
   <!-- list.js is a js file that stores a list of suggestions for the autocomplete function. Needed only if suggestions are from a local source-->
   <script src="list.js"></script>
 
+  <style>
+    .ui-autocomplete {
+      max-height: 200px;
+      overflow-y: auto;
+      /* prevent horizontal scrollbar */
+      overflow-x: hidden;
+    }
+  </style>
+
   <!-- Following script block shows how to get implement autocomplete with suggestions from DB-->
   <script>
   $(document).ready(function(){
@@ -38,8 +47,7 @@
     $.ajax({ type: 'GET', url: "suggestSkill.php", success: function(data) {
       suggestions = JSON.parse(data);
       $('#suggestionFromDB').autocomplete({
-        source: suggestions,
-        minLength: 2
+        source: suggestions
       });
     }});
   });
@@ -51,7 +59,6 @@
    $(document).ready(function() {
       $('#suggestionFromLocalSource').autocomplete({
         source: availableTags,
-        minLength: 2,
         select: function(select, ui) {
           console.log(ui.item.label);
           var label = ui.item.label;
