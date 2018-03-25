@@ -9,17 +9,26 @@
 
   <!-- Site Properties -->
   <title>Homepage - Semantic</title>
+  <link rel="stylesheet" type="text/css" href="semantic/dist/components/reset.css">
+  <link rel="stylesheet" type="text/css" href="semantic/dist/components/site.css">
+
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/container.css">
+  <link rel="stylesheet" type="text/css" href="semantic/dist/components/grid.css">
+  <link rel="stylesheet" type="text/css" href="semantic/dist/components/header.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/image.css">
+  <link rel="stylesheet" type="text/css" href="semantic/dist/components/menu.css">
 
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/divider.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/segment.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/form.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/input.css">
+  <link rel="stylesheet" type="text/css" href="semantic/dist/components/checkbox.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/button.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/list.css">
-  <link rel="stylesheet" type="text/css" href="semantic/dist/components/label.css">
+  <link rel="stylesheet" type="text/css" href="semantic/dist/components/message.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/icon.css">
+  <link rel="stylesheet" type="text/css" href="semantic/dist/components/label.css">
+  <link rel="stylesheet" type="text/css" href="semantic/dist/components/dropdown.css">  
 
   <!-- Following 4 links are needed for auto-complete to work. Auto-complete uses jQuery-UI-->
   <link rel="stylesheet" type="text/css" href="assets/jquery-ui/jquery-ui.css">
@@ -59,49 +68,77 @@
     var selectedOptions = []; //To store the selected options
     var count = 0;
     var id = "removeTag";
+    var validateMsg = false; //boolean variation if validation message is showing
    $(document).ready(function() {
       $('#suggestionFromLocalSource').autocomplete({
         source: availableTags,
+
+        //when an option is selected
         select: function(select, ui) {
           var label = ui.item.label;
-          selectedOptions.push(label);
+          selectedOptions.push(label); //store selected function
           console.log(selectedOptions);
-          count++;
+          count++; //increment count to give unique id to each tag!
           $('#tags').append('<div class="ui image label">'+ label + '<i id="' + id + count + '" class="delete icon removeTag"></i></div>');
+
+          //function when option tag is clicked
           $("#" + id+ count).click(function() {
-            var toRemove = $(this).parent().text();
+            var toRemove = $(this).parent().text(); //get option
             selectedOptions = selectedOptions.filter(function(item) {
               return item != toRemove;
             });
             console.log(selectedOptions);
+
+            //finally, remove tag.
             $(this).parent().remove(); 
           });
         }
+      });
+      // do not submit form. Manually insert link.
+    $('#localForm').on('submit', function(){
+      event.preventDefault();
+      if (selectedOptions.length === 0 && !validateMsg) {
+        $('#autocompleteValidation').append('<div class="ui pointing red basic label"><p>Please select an option</p></div>');
+        validateMsg = true;
+      }
+      return false;
       });
     });
   </script>
 
 </head>
-<!--Input HTML for suggestions from a database-->
+
 <body>
-  <div class="ui-widget">
-    <form>
-    <label >From Database: </label>
-    <input id="suggestionFromDB">
-    </form>
+  <div class="ui middle aligned center aligned grid inverted">
+    <div class="six wide column">
+
+      <!--Input HTML for suggestions from a database-->
+      <div class="ui-widget">
+        <form>
+          <label >From Database: </label>
+          <input id="suggestionFromDB">
+        </form>
+      </div>
+
+      <br>
+
+      <!-- Input HTML for suggestions from a local source-->
+      <div class="ui-widget">
+        <form id="localForm">
+          <label >Local Source: </label>
+          <input id="suggestionFromLocalSource">
+        </form>
+
+        <br>
+        <!--Tags for skills selected--> 
+        <div id="tags"></div>
+
+        <!--validation for autocorrect-->
+        <div id="autocompleteValidation"></div>
+      </div>
+
+    </div>
   </div>
-
-  <br>
-
-  <!-- Input HTML for suggestions from a local source-->
-  <div class="ui-widget">
-    <form id="localForm" action="#">
-    <label >Local Source: </label>
-    <input id="suggestionFromLocalSource">
-    </form>
-  </div>
-  <div id="tags"></div>
-
 </body>
 
 </html>
