@@ -164,11 +164,30 @@
       });
     })  
 
+    //add drop down functionality
     $(document).ready(function() {      
       $(".1-120").append('<option>Duration (Hours)</option>')
       for (i=1;i<=120;i++){
         $(".1-120").append($('<option></option>').val(i).html(i))
       }
+    })
+
+    //script to ensure lower sequences not shown yet
+    $(document).ready(function() {
+      $('#toggleDetail').hide();
+    })
+
+    //script to toggle
+    $(document).ready(function() {
+      $('#nextSeq').click(function() {
+        if (selectedOptions.length === 0 && !validateMsg) {
+          $('#autocompleteValidation').append('<div class="ui pointing red basic label"><p>Please select an option</p></div>');
+          validateMsg = true;
+        } else {
+          $('#toggleTask').slideUp(1000);
+          $('#toggleDetail').slideDown(1000);
+        }
+      });
     })
   </script>
 </head>
@@ -206,7 +225,7 @@
         <br><br>
         <h2 class="ui dividing header">Tasks to Create</h2>
         <!-- Input HTML for suggestions from a local source-->
-        <div class="ui-widget">
+        <div id="toggleTask" class="ui-widget">
           <form id="localForm">
             <label >Choose your tasks: </label>
             <input id="suggestionFromLocalSource">
@@ -218,28 +237,30 @@
 
           <!--validation for autocorrect-->
           <div id="autocompleteValidation"></div>
+          <button id="nextSeq" class="ui button">Next</button>
         </div>
-
       </div>
     </div>
 
     <!-- Form for task adding-->
     <div class="ui middle aligned center aligned grid inverted">
       <div class="six wide column">
-        <form class="ui form" action="/demo/addtasks.php" method="POST">
-          <h2 class="ui dividing header">Task Details</h2>
+        <h2 class="ui dividing header">Task Details</h2>
+        <div id="toggleDetail">
+          <form class="ui form" action="/demo/addtasks.php" method="POST">
 
-          <div class="field">
-            <textarea rows="2"></textarea>
-          </div>
+            <div class="field">
+              <textarea rows="2"></textarea>
+            </div>
 
-          <div class="field">                
-            <select class="1-120" name="dropdown">
-            </select>
-          </div>
+            <div class="field">                
+              <select class="1-120" name="dropdown">
+              </select>
+            </div>
 
-          <div class="ui error message"></div>
-        </form>
+            <div class="ui error message"></div>
+          </form>
+        </div>
 
         <br><br>     
       </div>
