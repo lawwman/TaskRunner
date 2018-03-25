@@ -20,33 +20,6 @@
       <a class='ui inverted button' href='/demo/signup.php'>Sign Up</a>";
     }
   }
-
-  // Connect to the database. Please change the password in the following line accordingly
-  $db = pg_connect("host=127.0.0.1 port=5432 dbname=project1 user=postgres password=1234") or die('Could not connect ' . pg_last_error());  
-
-  if (isset($_POST['addtask'])) {
-    //$task_id = uniqid (rand (),true);
-    $task_id = rand();
-    $task_name = $_POST['taskname'];
-    $task_details = $_POST['description'];
-    $duration_minutes = $_POST['dropdown'];
-    $runner = null;
-    $reward = $_POST['reward'];
-    $creator = $_SESSION['user'];
-    $status = 'not bidded';
-    date_default_timezone_set('Asia/Singapore');
-    $createddatetime = date('Y-m-d H:i:s');
-
-    $insertQuery = "INSERT INTO tasks VALUES($task_id, '$task_name', '$task_details', $duration_minutes, '$creator', null, $reward, '$status', '$createddatetime')";    
-    $add_task_result = pg_query($db, $insertQuery);
-    
-    if($add_task_result){
-//      echo 'Task Added Successfully!';
-      header('Location: /demo/index.php');  
-    }
-
-  }  
-
 ?> 
 
 <!-- HTML Portions -->
@@ -113,9 +86,12 @@
   <script>
     var availableTags = getList(); //getList() function is a function from "list.js". Returns an array of string
     var selectedOptions = []; //To store the selected options
+    var detailsOfTask = ""; //To store the selected options
     var count = 0;
     var id = "removeTag";
-    var validateMsg = false; //boolean variation if validation message is showing
+
+
+    var validateTask = false; //boolean variation if validation message is showing
    $(document).ready(function() {
       $('#suggestionFromLocalSource').autocomplete({
         source: availableTags,
@@ -144,9 +120,9 @@
       // do not submit form. Manually insert link.
     $('#localForm').on('submit', function(){
       event.preventDefault();
-      if (selectedOptions.length === 0 && !validateMsg) {
+      if (selectedOptions.length === 0 && !validateTask) {
         $('#autocompleteValidation').append('<div class="ui pointing red basic label"><p>Please select an option</p></div>');
-        validateMsg = true;
+        validateTask = true;
       }
       return false;
       });
@@ -172,7 +148,7 @@
       }
     })
 
-    //script to ensure lower sequences not shown yet
+    //script to ensure lower sequence not shown yet
     $(document).ready(function() {
       $('#toggleDetail').hide();
     })
@@ -180,9 +156,9 @@
     //script to toggle
     $(document).ready(function() {
       $('#nextSeq').click(function() {
-        if (selectedOptions.length === 0 && !validateMsg) {
+        if (selectedOptions.length === 0 && !validateTask) {
           $('#autocompleteValidation').append('<div class="ui pointing red basic label"><p>Please select an option</p></div>');
-          validateMsg = true;
+          validateTask = true;
         } else {
           $('#toggleTask').slideUp(1000);
           $('#toggleDetail').slideDown(1000);
@@ -237,6 +213,7 @@
 
           <!--validation for autocorrect-->
           <div id="autocompleteValidation"></div>
+          <br>
           <button id="nextSeq" class="ui button">Next</button>
         </div>
       </div>
@@ -260,6 +237,7 @@
 
             <div class="ui error message"></div>
           </form>
+          <button id="finalSeq" class="ui button">Next</button>
         </div>
 
         <br><br>     
