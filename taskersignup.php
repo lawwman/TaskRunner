@@ -14,22 +14,16 @@
     $email = $_POST['email'];
       
     $db = pg_connect("host=127.0.0.1 port=5432 dbname=project1 user=postgres password=1234") or die('Could not connect: ' . pg_last_error()); 
-
-    $usernameQuery = "SELECT username FROM Users WHERE username='$username'";
+    
     $emailQuery = "SELECT username FROM Users WHERE email='$email'";
-    $usernameResult = pg_query($db, $usernameQuery);
     $emailResult = pg_query($db, $emailQuery);
-
-    if (pg_num_rows($usernameResult) > 0) {
-      $nameError = "Sorry... username already taken";  
-    }
 
     if (pg_num_rows($emailResult) > 0) {
       $emailError = "Sorry... email already taken";  
     }
 
     return empty($nameError) and empty($emailError);
-  }
+  } 
 
   if (isset($_POST['register'])) {
     $nameError = "";
@@ -46,7 +40,7 @@
 
       $db = pg_connect("host=127.0.0.1 port=5432 dbname=project1 user=postgres password=1234") or die('Could not connect: ' . pg_last_error()); 
 
-      $insertQuery = "INSERT INTO Users Values('$username', '$password', '$firstName', '$lastName', '$email', '$contact', '$occupation', '$birthdate')";
+      $insertQuery = "INSERT INTO Users Values('$email', '$firstName', '$lastName', '$password','$birthdate', '$contact', '$streetAddr', '$zipcode')";
       $result = pg_query($db, $insertQuery);
       
       if ($result) {
@@ -77,7 +71,7 @@
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/image.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/menu.css">
 
-  <link rel="stylesheet" type="text/css" href=".semantic/dist/components/divider.css">
+  <link rel="stylesheet" type="text/css" href="semantic/dist/components/divider.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/segment.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/form.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/input.css">
@@ -86,10 +80,12 @@
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/list.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/message.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/icon.css">
+  <link rel="stylesheet" type="text/css" href="semantic/dist/components/dropdown.css">  
 
   <script src="assets/jquery-3.3.1.min"></script>
   <script src="semantic/dist/components/form.js"></script>
   <script src="semantic/dist/components/transition.js"></script>
+  <script src="semantic/dist/components/dropdown.js"></script>  
 
   <style type="text/css">
     body > .grid {
@@ -210,33 +206,28 @@
 
 <div class="ui middle aligned center aligned grid inverted">
   <div class="six wide column">
-    <form class="ui form" action="/demo/signup.php" method="POST" >
-      <h2 class="ui dividing header">Sign Up To Create Tasks!</h2>
+    <form class="ui form" action="/demo/taskersignup.php" method="POST" >
+      <h2 class="ui dividing header">Sign Up To Become a Tasker!</h2>
 
-      <div class="three field">
+      <div class="two field">
         <label>Account Details</label>
         <div class="fields">
-          <div class="seven wide field">
+          <div class="eight wide field">
             <input type="text" name="email" placeholder="Email" value='<?php echo isset($_POST['email']) ? $_POST['email'] : ''; ?>'>
               <?php if (!empty($emailError)): ?>
                 <span><?php echo $emailError; ?></span>
               <?php endif ?>
           </div>          
-          <div class="five wide field">
-            <input type="text" id='username' name="username" placeholder="Username" value='<?php echo isset($_POST['username']) ? $_POST['username'] : ''; ?>'>
-              <?php if (!empty($nameError)): ?>
-                <span><?php echo $nameError; ?></span>
-              <?php endif ?>
-          </div>
-          <div class="four wide field">
+
+          <div class="eight wide field">
             <input type="password" name="password" placeholder="Password" value='<?php echo isset($_POST['password']) ? $_POST['password'] : ''; ?>'>
           </div>
         </div>
       </div>
 
       <div class="field">
-        <label>Profile Details</label>
-        <div class="two fields">
+        <label>Contact Details</label>
+        <div class="four fields">
           <div class="field">
             <input type="text" name="first-name" placeholder="First Name" value='<?php echo isset($_POST['first-name']) ? $_POST['first-name'] : ''; ?>'>
           </div>
@@ -244,18 +235,77 @@
             <input type="text" name="last-name" placeholder="Last Name" value='<?php echo isset($_POST['last-name']) ? $_POST['last-name'] : ''; ?>'>
           </div>
         </div>        
+        
         <div class="fields">
-          <div class="five wide field">
+          <div class="eight wide field">
             <input type="date" name="birthdate" value='<?php echo isset($_POST['birthdate']) ? $_POST['birthdate'] : ''; ?>'>
-          </div>
-          <div class="six wide field">
-            <input type="text" name="occupation" placeholder="Occupation" value='<?php echo isset($_POST['occupation']) ? $_POST['occupation'] : ''; ?>'>
-          </div>          
-          <div class="five wide field">
+          </div>                          
+                    
+          <div class="eight wide field">
             <input type="text" name="contact" placeholder="Phone" value='<?php echo isset($_POST['contact']) ? $_POST['contact'] : ''; ?>'>
           </div>
         </div>
       </div>
+
+      <div class="field">
+        <label>Address</label>
+        <div class="two fields">
+          <div class="eleven wide field">
+            <input type="text" name="streetAddr" placeholder="Street Address" value='<?php echo isset($_POST['streetAddr']) ? $_POST['streetAddr'] : ''; ?>'>
+          </div>  
+          <div class="five wide field">
+            <input type="text" name="unitNum" placeholder="Unit #" value='<?php echo isset($_POST['unitNum']) ? $_POST['unitNum'] : ''; ?>'>
+          </div>          
+        </div>        
+        
+        <div class="fields">
+          <div class="field">
+            <input type="text" name="zipcode" placeholder="Zipcode" value='<?php echo isset($_POST['zipcode']) ? $_POST['zipcode'] : ''; ?>'>
+          </div>
+                    
+          <div class="four wide field">            
+          </div>
+                              
+        </div>
+      </div>
+
+      <h4 class="ui dividing header">Billing Information</h4>
+      <div class="fields">
+        <div class="seven wide field">
+          <label>Card Number</label>
+          <input type="text" name="card[number]" maxlength="16" placeholder="Card #">
+        </div>
+        <div class="three wide field">
+          <label>CVC</label>
+          <input type="text" name="card[cvc]" maxlength="3" placeholder="CVC">
+        </div>
+        <div class="six wide field">
+          <label>Expiration</label>
+          <div class="two fields">
+            <div class="field">
+              <select class="ui fluid search dropdown" name="card[expire-month]">
+                <option value="">Month</option>
+                <option value="1">January</option>
+                <option value="2">February</option>
+                <option value="3">March</option>
+                <option value="4">April</option>
+                <option value="5">May</option>
+                <option value="6">June</option>
+                <option value="7">July</option>
+                <option value="8">August</option>
+                <option value="9">September</option>
+                <option value="10">October</option>
+                <option value="11">November</option>
+                <option value="12">December</option>
+              </select>
+            </div>
+            <div class="field">
+              <input type="text" name="card[expire-year]" maxlength="4" placeholder="Year">
+            </div>
+          </div>
+        </div>
+      </div>
+
        <div class="ui segment">
         <div class="field">
           <div class="ui checkbox">

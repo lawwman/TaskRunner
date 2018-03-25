@@ -17,7 +17,7 @@
       ';
     } else {
       echo "<a class='ui inverted button' href='/demo/login.php'>Log in</a>
-      <a class='ui inverted button' href='/demo/signup.php'>Sign Up</a>";
+      <a class='ui inverted button' href='/demo/taskersignup.php'>Become a Tasker</a>";
     }
   }
   
