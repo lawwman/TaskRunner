@@ -29,25 +29,28 @@
     $nameError = "";
     $emailError = "";
     if (isUserUnique($nameError, $emailError)) {
-      $username = $_POST['username'];
-      $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
       $email = $_POST['email'];
       $firstName = $_POST['first-name'];
       $lastName = $_POST['last-name'];
-      $contact = $_POST['contact'];
-      $occupation = $_POST['occupation'];
+      $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
       $birthdate = $_POST['birthdate'];
+      $contact = $_POST['contact'];
+      $creditNum = $_POST['creditNum'];
+      $creditSecurity = $_POST['creditSecurity'];
+      $creditExpiry = date($_POST['expiryYear'] . '-' . $_POST['expiryMonth'] . '-01');
+      $unitNum = $_POST['unitNum'];
+      $streetAddr = $_POST['streetAddr'];
+      $zipcode = $_POST['zipcode'];      
 
       $db = pg_connect("host=127.0.0.1 port=5432 dbname=project1 user=postgres password=1234") or die('Could not connect: ' . pg_last_error()); 
 
-      $insertQuery = "INSERT INTO Users Values('$email', '$firstName', '$lastName', '$password','$birthdate', '$contact', '$streetAddr', '$zipcode')";
+      $insertQuery = "INSERT INTO Taskers Values('$email', '$firstName', '$lastName', '$password','$birthdate', '$contact', $creditNum, $creditSecurity, '$creditExpiry', '$streetAddr', '$unitNum', $zipcode)";      
       $result = pg_query($db, $insertQuery);
       
       if ($result) {
         login($username);
         header('Location: /demo/index.php');
-      }
-      
+      }     
     }
   }
 ?>
@@ -227,7 +230,7 @@
 
       <div class="field">
         <label>Contact Details</label>
-        <div class="four fields">
+        <div class="two fields">
           <div class="field">
             <input type="text" name="first-name" placeholder="First Name" value='<?php echo isset($_POST['first-name']) ? $_POST['first-name'] : ''; ?>'>
           </div>
@@ -273,17 +276,17 @@
       <div class="fields">
         <div class="seven wide field">
           <label>Card Number</label>
-          <input type="text" name="card[number]" maxlength="16" placeholder="Card #">
+          <input type="text" name="creditNum" maxlength="16" placeholder="Card #" value='<?php echo isset($_POST['creditNum']) ? $_POST['creditNum'] : ''; ?>'>
         </div>
         <div class="three wide field">
           <label>CVC</label>
-          <input type="text" name="card[cvc]" maxlength="3" placeholder="CVC">
+          <input type="text" name="creditSecurity" maxlength="3" placeholder="CVC" value='<?php echo isset($_POST['creditSecurity']) ? $_POST['creditSecurity'] : ''; ?>'>
         </div>
         <div class="six wide field">
           <label>Expiration</label>
           <div class="two fields">
             <div class="field">
-              <select class="ui fluid search dropdown" name="card[expire-month]">
+              <select class="ui fluid search dropdown" name="expiryMonth" value='<?php echo isset($_POST['expiryMonth']) ? $_POST['expiryMonth'] : ''; ?>'>
                 <option value="">Month</option>
                 <option value="1">January</option>
                 <option value="2">February</option>
@@ -300,13 +303,13 @@
               </select>
             </div>
             <div class="field">
-              <input type="text" name="card[expire-year]" maxlength="4" placeholder="Year">
+              <input type="text" name="expiryYear" maxlength="4" placeholder="Year" value='<?php echo isset($_POST['expiryYear']) ? $_POST['expiryYear'] : ''; ?>'>
             </div>
           </div>
         </div>
       </div>
 
-       <div class="ui segment">
+      <div class="ui segment">
         <div class="field">
           <div class="ui checkbox">
             <input type="checkbox" name="tnc" tabindex="0">
