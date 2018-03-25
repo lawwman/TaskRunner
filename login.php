@@ -23,9 +23,11 @@
         header('Location: /demo/index.php');
       }
     } else {
-      echo '<script type="text/javascript">alert(\Enter valid data ! \')</script>';
-    }
-  }
+      echo '<script language="javascript">';
+      echo 'alert("Login failed. Please re-enter your details.")';   
+      echo '</script>';  
+    } 
+  } 
 ?>
 
 
