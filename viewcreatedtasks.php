@@ -23,9 +23,9 @@
   
   function showTasks() {
       // Connect to the database. Please change the password in the following line accordingly
-    $db     = pg_connect("host=127.0.0.1 port=5432 dbname=project1 user=postgres password=1234");
+    $db     = pg_connect("host=localhost port=5432 dbname=project1 user=postgres password=1234");
     $userName = $_SESSION['user'];
-    $result = pg_query($db, "SELECT * FROM tasks WHERE creator='$userName'");
+    $result = pg_query($db, "SELECT * FROM tasks WHERE runner='$userName'");
     while ($row = pg_fetch_assoc($result)) {
       echo "<div class='card'>
               <div class='content'>
