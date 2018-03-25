@@ -92,6 +92,9 @@
 
 
     var validateTask = false; //boolean variation if validation message is showing
+    var validateTaskDetail = false;
+    var validateDropdown = false;
+
    $(document).ready(function() {
       $('#suggestionFromLocalSource').autocomplete({
         source: availableTags,
@@ -159,11 +162,27 @@
         if (selectedOptions.length === 0 && !validateTask) {
           $('#autocompleteValidation').append('<div class="ui pointing red basic label"><p>Please select an option</p></div>');
           validateTask = true;
-        } else {
+        } else if (selectedOptions.length > 0) {
           $('#toggleTask').slideUp(1000);
           $('#toggleDetail').slideDown(1000);
         }
       });
+    })
+
+    $(document).ready(function() {
+      $('#finalSeq').click(function() {
+        if ($('#taskDetailTextBox').val() === "" && !validateTaskDetail) {
+          $('#taskDetailValidation').append('<div class="ui pointing red basic label"><p>Please fill in task detail</p></div>');
+          validateTaskDetail = true;
+        }
+        if ($(".1-120").val() === "Duration (Hours)" && !validateDropdown) {
+          $('#dropdownValidation').append('<div class="ui pointing red basic label"><p>Please select a duration</p></div>');
+          validateDropdown = true;
+        }
+        console.log($('#taskDetailTextBox').val());
+        console.log($(".1-120").val());
+
+      })
     })
   </script>
 </head>
@@ -227,15 +246,18 @@
           <form class="ui form" action="/demo/addtasks.php" method="POST">
 
             <div class="field">
-              <textarea rows="2"></textarea>
+              <textarea id="taskDetailTextBox" rows="2"></textarea> 
             </div>
+            <!--validation for taskDetail-->
+            <div id="taskDetailValidation"></div>
 
             <div class="field">                
               <select class="1-120" name="dropdown">
               </select>
             </div>
+            <!--validation for dropdown-->
+            <div id="dropdownValidation"></div>
 
-            <div class="ui error message"></div>
           </form>
           <button id="finalSeq" class="ui button">Next</button>
         </div>
