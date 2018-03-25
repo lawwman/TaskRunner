@@ -28,11 +28,26 @@
   }
 
   /**
-   * Redirects to login page if user is not logged in.
+   * Redirects user if does nto fulfil $pageCondition
    */
-  function redirectToLogin() {
-    if (!isLoggedIn()) {
-      header('Location: /demo/login.php');
+  function redirectIfNot($pageCondition) {
+    // if user is not logged in and the page requires login
+    if (!is_null($pageCondition) && !isLoggedIn()) {
+      if ($_SESSION['userType'] == 'taskee') {
+        header('Location: /demo/taskeelogin.php');
+      } else if ($_SESSION['userType'] == 'tasker') {
+        header('Location: /demo/taskerlogin.php');
+      } else {
+        header('Location: /demo/index.php');
+      }
+    }
+
+    if (is_null($pageCondition) && isLoggedIn()) {
+      if ($_SESSION['userType'] == 'taskee') {
+        header('Location: /demo/taskeedashboard.php');
+      } else {
+        header('Location: /demo/taskerdashboard.php');
+      }
     }
   }
 ?>

@@ -23,7 +23,7 @@
 
       if (password_verify($password, $hash)) {
         login($firstName, 'taskee', $email);
-        header('Location: /demo/taskeedashboard.php');
+        header('Location: /demo/index.php');
       }
 
     } else {
