@@ -21,7 +21,7 @@
     }
 
     return empty($emailError);
-  }
+  } 
 
   if (isset($_POST['register'])) {
     $nameError = "";
@@ -206,7 +206,7 @@
 <body class='ui'>
 
 <div class="ui middle aligned center aligned grid inverted">
-  <div class="six wide column">
+  <div class="nine wide column">
     <form class="ui form" action="/demo/taskersignup.php" method="POST" >
       <h2 class="ui dividing header">Sign Up To Become a Tasker!</h2>
 
