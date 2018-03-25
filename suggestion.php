@@ -56,7 +56,9 @@
   <!-- Following script block shows how to get implement autocomplete with suggestions from a local js file-->
   <script>
     var availableTags = getList(); //getList() function is a function from "list.js". Returns an array of string
-    var selectedOptions = [];
+    var selectedOptions = []; //To store the selected options
+    var count = 0;
+    var id = "removeTag";
    $(document).ready(function() {
       $('#suggestionFromLocalSource').autocomplete({
         source: availableTags,
@@ -64,8 +66,9 @@
           var label = ui.item.label;
           selectedOptions.push(label);
           console.log(selectedOptions);
-          $('#tags').append('<div class="ui image label">'+ label + '<i class="delete icon removeTag"></i></div>');
-          $(".removeTag").click(function() {
+          count++;
+          $('#tags').append('<div class="ui image label">'+ label + '<i id="' + id + count + '" class="delete icon removeTag"></i></div>');
+          $("#" + id+ count).click(function() {
             var toRemove = $(this).parent().text();
             selectedOptions = selectedOptions.filter(function(item) {
               return item != toRemove;
@@ -81,23 +84,23 @@
 </head>
 <!--Input HTML for suggestions from a database-->
 <body>
-<div class="ui-widget">
-  <form>
-  <label >From Database: </label>
-  <input id="suggestionFromDB">
-  </form>
-</div>
+  <div class="ui-widget">
+    <form>
+    <label >From Database: </label>
+    <input id="suggestionFromDB">
+    </form>
+  </div>
 
-<br>
+  <br>
 
-<!-- Input HTML for suggestions from a local source-->
-<div class="ui-widget">
-  <form id="localForm" action="#">
-  <label >Local Source: </label>
-  <input id="suggestionFromLocalSource">
-  </form>
-</div>
-<div id="tags"></div>
+  <!-- Input HTML for suggestions from a local source-->
+  <div class="ui-widget">
+    <form id="localForm" action="#">
+    <label >Local Source: </label>
+    <input id="suggestionFromLocalSource">
+    </form>
+  </div>
+  <div id="tags"></div>
 
 </body>
 
