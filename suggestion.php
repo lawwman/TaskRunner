@@ -68,6 +68,7 @@
     var selectedOptions = []; //To store the selected options
     var count = 0;
     var id = "removeTag";
+    var validateMsg = false; //boolean variation if validation message is showing
    $(document).ready(function() {
       $('#suggestionFromLocalSource').autocomplete({
         source: availableTags,
@@ -96,8 +97,9 @@
       // do not submit form. Manually insert link.
     $('#localForm').on('submit', function(){
       event.preventDefault();
-      if (selectedOptions.length === 0) {
+      if (selectedOptions.length === 0 && !validateMsg) {
         $('#autocompleteValidation').append('<div class="ui pointing red basic label"><p>Please select an option</p></div>');
+        validateMsg = true;
       }
       return false;
       });
@@ -107,8 +109,6 @@
 </head>
 
 <body>
-
-
   <div class="ui middle aligned center aligned grid inverted">
     <div class="six wide column">
 
@@ -129,6 +129,7 @@
           <input id="suggestionFromLocalSource">
         </form>
 
+        <br>
         <!--Tags for skills selected--> 
         <div id="tags"></div>
 
@@ -138,8 +139,6 @@
 
     </div>
   </div>
-
-
 </body>
 
 </html>
