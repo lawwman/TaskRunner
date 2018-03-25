@@ -12,17 +12,19 @@
   }
 
   /**
-   * Logs into param $username account. 
+   * Logs into param $email account. 
    */
-  function login($username) {
-    $_SESSION['user'] = $username;
+  function login($userName, $userType, $email) {
+    $_SESSION['userName'] = $userName;
+    $_SESSION['userType'] = $userType;
+    $_SESSION['userEmail'] = $email;
   }
 
   /**
    * Returns true if user is logged in.
    */
   function isLoggedIn() {
-    return isset($_SESSION['user']);
+    return isset($_SESSION['userEmail']);
   }
 
   /**

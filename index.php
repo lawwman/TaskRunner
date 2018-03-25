@@ -12,9 +12,11 @@
   function showUser() {
     if (isLoggedIn()) {
       echo '
-      <div class="ui dropdown inverted button">Hello, '. $_SESSION['user'] . '</div>
+      <div class="ui dropdown inverted button">Hello, '. $_SESSION['userName'] . '</div>
       <div class="ui dropdown inverted button" id="signOut" formaction="/demo/signup.php">Sign Out</div>
       ';
+      consoleLog($_SESSION['email']);
+      consoleLog($_SESSION['userType']);
     } else {
       echo "<a class='ui inverted button' href='/demo/login.php'>Log in</a>
       <a class='ui inverted button' href='/demo/taskersignup.php'>Become a Tasker</a>";

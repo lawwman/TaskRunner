@@ -10,18 +10,20 @@
 
     $db = pg_connect("host=127.0.0.1 port=5432 dbname=project1 user=postgres password=1234") or die('Could not connect: ' . pg_last_error()); 
 
-    $insertQuery = "SELECT username, user_pw FROM Users WHERE email='$email'";
+    $insertQuery = "SELECT email, pword, firstName FROM Taskees WHERE email='$email'";
     $result = pg_query($db, $insertQuery);
 
     if (pg_num_rows($result) > 0) {
       $row = pg_fetch_row($result);
-      $username = $row[0];
+      $email = $row[0];
       $hash = $row[1];
+      $firstName = $row[2];
 
       if (password_verify($password, $hash)) {
-        login($username);
+        login($firstName, 'taskee', $email);
         header('Location: /demo/index.php');
       }
+
     } else {
       echo '<script language="javascript">';
       echo 'alert("Login failed. Please re-enter your details.")';   
