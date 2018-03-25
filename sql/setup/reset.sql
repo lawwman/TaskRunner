@@ -11,11 +11,13 @@ DROP TABLE IF EXISTS Taskss CASCADE;
 CREATE TABLE Taskees (
     email VARCHAR(100) PRIMARY KEY,
     
-    firstName VARCHAR(30),
-   	lastName VARCHAR(30),
+    firstName VARCHAR(30) NOT NULL,
+   	lastName VARCHAR(30) NOT NULL,
     pword TEXT NOT NULL,
     
-    creditNum INT NOT NULL,
+    phone VARCHAR(22),
+    
+    creditNum BIGINT NOT NULL,
     creditSecurity INT NOT NULL,
     creditExpiry DATE NOT NULL,
     
@@ -30,12 +32,14 @@ CREATE TABLE Taskers (
     pword TEXT NOT NULL,
     
     birthDate DATE NOT NULL,
-    phone VARCHAR(22) NOT NULL,
+    phone VARCHAR(22),
     
-    creditNum INT NOT NULL,
+    creditNum BIGINT NOT NULL,
     creditSecurity INT NOT NULL,
     creditExpiry DATE NOT NULL,
+    
     streetAddr VARCHAR(100),
+    unitNum VARCHAR(20),
     zipcode INT NOT NULL,
     
     -- we can't have someone born later than today using this interface
@@ -44,14 +48,17 @@ CREATE TABLE Taskers (
 
 CREATE TABLE Skills (
 	sname VARCHAR(50) PRIMARY KEY,
-    sdesc TEXT UNIQUE NOT NULL
+    sdesc TEXT NOT NULL
 );
 
 CREATE TABLE HasSkills (
     tEmail VARCHAR(100) REFERENCES Taskers,
     sname VARCHAR(50) REFERENCES Skills,
+    
     hrate INT NOT NULL,
 	profLevel INT NOT NULL,
+    pitch TEXT NOT NULL, 
+    
     PRIMARY KEY (tEmail, sname)
 );
 
@@ -61,6 +68,8 @@ CREATE TABLE Taskss (
     taskerEmail VARCHAR(100) REFERENCES Taskers,
    	
     ttype VARCHAR(50) REFERENCES Skills,
+    startDate DATE NOT NULL,
+    startTime TIME NOT NULL,
     details TEXT NOT NULL,
     loc VARCHAR(100) NOT NULL,
     duration VARCHAR(100) NOT NULL 
@@ -118,6 +127,16 @@ CREATE TABLE Bids (
   CONSTRAINT discrete_status CHECK(status in ('rejected', 'pending', 'accepted')),
 	PRIMARY KEY(bidder_name, creator_name, task_id)
 );
+
+COPY Skills FROM '..\..\apps\demo\htdocs\sql\setup\data\skills.csv' DELIMITER ',' CSV HEADER;
+COPY Taskees FROM '..\..\apps\demo\htdocs\sql\setup\data\taskees.csv' DELIMITER ',' CSV HEADER;
+COPY Taskers FROM '..\..\apps\demo\htdocs\sql\setup\data\taskers.csv' DELIMITER ',' CSV HEADER;
+COPY HasSkills FROM '..\..\apps\demo\htdocs\sql\setup\data\hasskills.csv' DELIMITER ',' CSV HEADER;
+COPY Taskss FROM '..\..\apps\demo\htdocs\sql\setup\data\taskss.csv' DELIMITER ',' CSV HEADER;
+
+
+
+
 
 COPY Users FROM '..\..\apps\demo\htdocs\sql\setup\data\users.csv' DELIMITER ',' CSV HEADER;
 COPY Tasks FROM '..\..\apps\demo\htdocs\sql\setup\data\tasks.csv' DELIMITER ',' CSV HEADER;
