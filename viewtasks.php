@@ -23,7 +23,7 @@
 
   function showTasks() {
       // Connect to the database. Please change the password in the following line accordingly
-    $db     = pg_connect("host=127.0.0.1 port=5432 dbname=project1 user=postgres password=1234"); 
+    $db     = pg_connect("host=localhost port=5432 dbname=project1 user=postgres password=1234"); 
     $result = pg_query($db, "SELECT * FROM tasks WHERE status='not bidded' OR status='bidded'");
     while ($row = pg_fetch_assoc($result)) {
       echo "<div class='card'>

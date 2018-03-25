@@ -115,51 +115,51 @@
       }
     })     
     
-  $(document).ready(function() {
-    $('.ui.form').form({
-      on: 'blur',      
-      fields: {
-        taskname: {
-          identifier  : 'taskname',
-          rules: [
-            {
-              type   : 'empty',
-              prompt : 'Please enter your task name'
-            },
-          ] 
-        },             
+    $(document).ready(function() {
+      $('.ui.form').form({
+        on: 'blur',      
+        fields: {
+          taskname: {
+            identifier  : 'taskname',
+            rules: [
+              {
+                type   : 'empty',
+                prompt : 'Please enter your task name'
+              },
+            ] 
+          },             
 
-        description: {
-          identifier  : 'description',
-          rules: [
-            {
-              type   : 'empty',
-              prompt : 'Please enter your task description'
-            },
-            {
-              type   : 'length[10]',
-              prompt : 'Your description must be at least 10 characters'
-            }
-          ]
-        },
+          description: {
+            identifier  : 'description',
+            rules: [
+              {
+                type   : 'empty',
+                prompt : 'Please enter your task description'
+              },
+              {
+                type   : 'length[10]',
+                prompt : 'Your description must be at least 10 characters'
+              }
+            ]
+          },
       
-        reward: {
-          identifier  : 'reward',
-          rules: [
-            {
-             type    : 'empty',
-             promt   : 'Please enter your reward amount'  
-            },
-            {
-             type    : 'integer',
-             prompt  : 'Please enter only integers'
-            }
-          ] 
-        }
+          reward: {
+            identifier  : 'reward',
+            rules: [
+              {
+                type    : 'empty',
+                prompt   : 'Please enter your reward amount'  
+              },
+              {
+                type    : 'integer',
+                prompt  : 'Please enter only integers'
+              }
+            ] 
+          }
 
-      }
+        }
+      });
     });
-  });
 
 
 
