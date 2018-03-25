@@ -201,33 +201,37 @@
       </div>
     </div>
 
-  <div class="ui middle aligned center aligned grid inverted">
-    <div class="six wide column">
-      <br><br>
-      <h2 class="ui dividing header">Tasks to Create</h2>
-      <!-- Input HTML for suggestions from a local source-->
-      <div class="ui-widget">
-        <form id="localForm">
-          <label >Choose your tasks: </label>
-          <input id="suggestionFromLocalSource">
-        </form>
+    <div class="ui middle aligned center aligned grid inverted">
+      <div class="six wide column">
+        <br><br>
+        <h2 class="ui dividing header">Tasks to Create</h2>
+        <!-- Input HTML for suggestions from a local source-->
+        <div class="ui-widget">
+          <form id="localForm">
+            <label >Choose your tasks: </label>
+            <input id="suggestionFromLocalSource">
+          </form>
 
-        <br>
-        <!--Tags for skills selected--> 
-        <div id="tags"></div>
+          <br>
+          <!--Tags for skills selected--> 
+          <div id="tags"></div>
 
-        <!--validation for autocorrect-->
-        <div id="autocompleteValidation"></div>
+          <!--validation for autocorrect-->
+          <div id="autocompleteValidation"></div>
+        </div>
+
       </div>
-
     </div>
-  </div>
 
     <!-- Form for task adding-->
     <div class="ui middle aligned center aligned grid inverted">
       <div class="six wide column">
         <form class="ui form" action="/demo/addtasks.php" method="POST">
           <h2 class="ui dividing header">Task Details</h2>
+
+          <div class="field">
+            <textarea rows="2"></textarea>
+          </div>
 
           <div class="field">                
             <select class="1-120" name="dropdown">
@@ -240,6 +244,7 @@
         <br><br>     
       </div>
     </div>
+
   </div>
 
   <!-- Footer -->
