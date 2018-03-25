@@ -208,6 +208,7 @@
 <div class="ui middle aligned center aligned grid inverted">
   <div class="six wide column">
     <form class="ui form" action="/demo/taskersignup.php" method="POST" >
+      </br></br>
       <h2 class="ui dividing header">Sign Up To Become a Tasker!</h2>
 
       <div class="two field">
@@ -274,7 +275,7 @@
       <div class="fields">
         <div class="seven wide field">
           <label>Card Number</label>
-          <input type="text" name="creditNum" maxlength="16" placeholder="Card #" value='<?php echo isset($_POST['creditNum']) ? $_POST['creditNum'] : ''; ?>'>
+          <input type="text" name="creditNum" maxlength="16" placeholder="Card Number" value='<?php echo isset($_POST['creditNum']) ? $_POST['creditNum'] : ''; ?>'>
         </div>
         <div class="three wide field">
           <label>CVC</label>
