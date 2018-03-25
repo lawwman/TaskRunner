@@ -2,6 +2,70 @@ DROP TABLE IF EXISTS Tasks CASCADE;
 DROP TABLE IF EXISTS Users CASCADE;
 DROP TABLE IF EXISTS Bids CASCADE;
 
+DROP TABLE IF EXISTS Taskees CASCADE;
+DROP TABLE IF EXISTS Taskers CASCADE;
+DROP TABLE IF EXISTS Skills CASCADE;
+DROP TABLE IF EXISTS HasSkills CASCADE;
+DROP TABLE IF EXISTS Taskss CASCADE;
+
+CREATE TABLE Taskees (
+    email VARCHAR(100) PRIMARY KEY,
+    
+    firstName VARCHAR(30),
+   	lastName VARCHAR(30),
+    pword TEXT NOT NULL,
+    
+    creditNum INT NOT NULL,
+    creditSecurity INT NOT NULL,
+    creditExpiry DATE NOT NULL,
+    
+    zipcode INT NOT NULL
+);
+
+CREATE TABLE Taskers (
+	email VARCHAR(100) PRIMARY KEY,
+    
+    firstName VARCHAR(30),
+   	lastName VARCHAR(30),
+    pword TEXT NOT NULL,
+    
+    birthDate DATE NOT NULL,
+    phone VARCHAR(22) NOT NULL,
+    
+    creditNum INT NOT NULL,
+    creditSecurity INT NOT NULL,
+    creditExpiry DATE NOT NULL,
+    streetAddr VARCHAR(100),
+    zipcode INT NOT NULL,
+    
+    -- we can't have someone born later than today using this interface
+	CHECK(birthDate < now())
+);
+
+CREATE TABLE Skills (
+	sname VARCHAR(50) PRIMARY KEY,
+    sdesc TEXT UNIQUE NOT NULL
+);
+
+CREATE TABLE HasSkills (
+    tEmail VARCHAR(100) REFERENCES Taskers,
+    sname VARCHAR(50) REFERENCES Skills,
+    hrate INT NOT NULL,
+	profLevel INT NOT NULL,
+    PRIMARY KEY (tEmail, sname)
+);
+
+CREATE TABLE Taskss (
+    createdAt DATE,
+    taskeeEmail VARCHAR(100) REFERENCES Taskees,
+    taskerEmail VARCHAR(100) REFERENCES Taskers,
+   	
+    ttype VARCHAR(50) REFERENCES Skills,
+    details TEXT NOT NULL,
+    loc VARCHAR(100) NOT NULL,
+    duration VARCHAR(100) NOT NULL 
+);
+
 CREATE TABLE Users (
 	username VARCHAR(20) PRIMARY KEY,
 	user_pw TEXT NOT NULL,
