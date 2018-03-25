@@ -4,24 +4,28 @@
   require('debugging.php');
   require('session.php');
   
+  redirectIfNot(null);
+
   if (isset($_POST['login'])) {
     $email = $_POST['email'];
     $password = $_POST['password'];
 
     $db = pg_connect("host=127.0.0.1 port=5432 dbname=project1 user=postgres password=1234") or die('Could not connect: ' . pg_last_error()); 
 
-    $insertQuery = "SELECT username, user_pw FROM Users WHERE email='$email'";
+    $insertQuery = "SELECT email, pword, firstName FROM Taskees WHERE email='$email'";
     $result = pg_query($db, $insertQuery);
 
     if (pg_num_rows($result) > 0) {
       $row = pg_fetch_row($result);
-      $username = $row[0];
+      $email = $row[0];
       $hash = $row[1];
+      $firstName = $row[2];
 
       if (password_verify($password, $hash)) {
-        login($username);
+        login($firstName, 'taskee', $email);
         header('Location: /demo/index.php');
       }
+
     } else {
       echo '<script language="javascript">';
       echo 'alert("Login failed. Please re-enter your details.")';   
@@ -115,12 +119,11 @@
 <div class="ui middle aligned center aligned grid">
   <div class="column">
     <h2 class="ui blue image header">
-      <img src="assets/images/logo.png" class="image">
       <div class="content">
-        Log-in to your account
+        Welcome Back, Taskee
       </div>
     </h2>
-    <form class="ui large form" action="/demo/login.php" method="POST">
+    <form class="ui large form" action="/demo/logintaskee.php" method="POST">
       <div class="ui stacked segment">
         <div class="field">
           <div class="ui left icon input">

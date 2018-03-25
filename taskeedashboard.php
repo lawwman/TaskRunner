@@ -7,16 +7,16 @@
 
   if ($_GET["argument"]=='signOut'){
     logout();
+    consoleLog('hi');
   }
+
+  redirectIfNot('taskee');
   
-  redirectIfNot(null);
-
-
   function showUser() {
     if (isLoggedIn()) {
       echo '
       <div class="ui dropdown inverted button">Hello, '. $_SESSION['userName'] . '</div>
-      <div class="ui dropdown inverted button" id="signOut" formaction="/demo/signup.php">Sign Out</div>
+      <div class="ui dropdown inverted button" id="signOut">Sign Out</div>
       ';
       consoleLog($_SESSION['email']);
       consoleLog($_SESSION['userType']);
@@ -64,7 +64,7 @@
     $(document).ready(function() {
       $('#signOut').click(function() {
         $.ajax({
-          url: '/demo/index.php?argument=signOut',
+          url: '/demo/taskeedashboard.php?argument=signOut',
           success: function(html){
             location.reload();
           }
