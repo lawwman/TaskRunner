@@ -13,7 +13,7 @@
       
     $db = pg_connect("host=127.0.0.1 port=5432 dbname=project1 user=postgres password=1234") or die('Could not connect: ' . pg_last_error()); 
     
-    $emailQuery = "SELECT email FROM Taskers WHERE email='$email'";
+    $emailQuery = "SELECT email FROM Taskees WHERE email='$email'";
     $emailResult = pg_query($db, $emailQuery);
 
     if (pg_num_rows($emailResult) > 0) {
