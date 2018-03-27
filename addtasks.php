@@ -181,7 +181,21 @@
         }
         console.log($('#taskDetailTextBox').val());
         console.log($(".1-120").val());
+        if ($(".1-120").val() != "Duration (Hours)" && $('#taskDetailTextBox').val() != "") {
+          var selectedOptionsJSON = JSON.stringify(selectedOptions);
+          var taskDetailJSON = JSON.stringify($('#taskDetailTextBox').val());
+          var durationJSON = JSON.stringify($(".1-120").val());
+          $.ajax({
+            url: "/demo/testing.php",
+            type: "POST",
+            dataType: 'json',
+            data: {options: selectedOptionsJSON, detail: taskDetailJSON, duration: durationJSON},
+            success : function(result){
 
+             console.log(result.abc);
+           }
+          });
+        }
       })
     })
   </script>
