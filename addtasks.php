@@ -20,33 +20,6 @@
       <a class='ui inverted button' href='/demo/signup.php'>Sign Up</a>";
     }
   }
-
-  // Connect to the database. Please change the password in the following line accordingly
-  $db = pg_connect("host=127.0.0.1 port=5432 dbname=project1 user=postgres password=1234") or die('Could not connect ' . pg_last_error());  
-
-  if (isset($_POST['addtask'])) {
-    //$task_id = uniqid (rand (),true);
-    $task_id = rand();
-    $task_name = $_POST['taskname'];
-    $task_details = $_POST['description'];
-    $duration_minutes = $_POST['dropdown'];
-    $runner = null;
-    $reward = $_POST['reward'];
-    $creator = $_SESSION['user'];
-    $status = 'not bidded';
-    date_default_timezone_set('Asia/Singapore');
-    $createddatetime = date('Y-m-d H:i:s');
-
-    $insertQuery = "INSERT INTO tasks VALUES($task_id, '$task_name', '$task_details', $duration_minutes, '$creator', null, $reward, '$status', '$createddatetime')";    
-    $add_task_result = pg_query($db, $insertQuery);
-    
-    if($add_task_result){
-//      echo 'Task Added Successfully!';
-      header('Location: /demo/index.php');  
-    }
-
-  }  
-
 ?> 
 
 <!-- HTML Portions -->
@@ -77,13 +50,22 @@
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/list.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/message.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/icon.css">
+  <link rel="stylesheet" type="text/css" href="semantic/dist/components/label.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/dropdown.css">  
 
   <script src="assets/jquery-3.3.1.min"></script>
   <script src="semantic/dist/components/form.js"></script>
   <script src="semantic/dist/components/checkbox.js"></script>
   <script src="semantic/dist/components/transition.js"></script>
-  <script src="semantic/dist/components/dropdown.js"></script>  
+  <script src="semantic/dist/components/dropdown.js"></script>
+
+  <!-- Following 3 links are needed for auto-complete to work. Auto-complete uses jQuery-UI-->
+  <link rel="stylesheet" type="text/css" href="assets/jquery-ui/jquery-ui.css">
+  <script src="assets/jquery-ui/jquery.js"></script>
+  <script src="assets/jquery-ui/jquery-ui.min.js"></script>
+
+  <!-- list.js is a js file that stores a list of suggestions for the autocomplete function. Needed only if suggestions are from a local source-->
+  <script src="list.js"></script>
 
   <style type="text/css">
     body > .grid {
@@ -92,9 +74,63 @@
     .image {
       margin-top: -100px;
     }
+    .ui-autocomplete {
+      max-height: 200px;
+      overflow-y: auto;
+      /* prevent horizontal scrollbar */
+      overflow-x: hidden;
+    }
   </style>
 
+  <!-- Following script block shows how to get implement autocomplete with suggestions from a local js file-->
   <script>
+    var availableTags = getList(); //getList() function is a function from "list.js". Returns an array of string
+    var selectedOptions = []; //To store the selected options
+    var detailsOfTask = ""; //To store the selected options
+    var count = 0;
+    var id = "removeTag";
+
+
+    var validateTask = false; //boolean variation if validation message is showing
+    var validateTaskDetail = false;
+    var validateDropdown = false;
+
+   $(document).ready(function() {
+      $('#suggestionFromLocalSource').autocomplete({
+        source: availableTags,
+
+        //when an option is selected
+        select: function(select, ui) {
+          var label = ui.item.label;
+          selectedOptions.push(label); //store selected function
+          console.log(selectedOptions);
+          count++; //increment count to give unique id to each tag!
+          $('#tags').append('<div class="ui image label">'+ label + '<i id="' + id + count + '" class="delete icon removeTag"></i></div>');
+
+          //function when option tag is clicked
+          $("#" + id+ count).click(function() {
+            var toRemove = $(this).parent().text(); //get option
+            selectedOptions = selectedOptions.filter(function(item) {
+              return item != toRemove;
+            });
+            console.log(selectedOptions);
+
+            //finally, remove tag.
+            $(this).parent().remove(); 
+          });
+        }
+      });
+      // do not submit form. Manually insert link.
+    $('#localForm').on('submit', function(){
+      event.preventDefault();
+      if (selectedOptions.length === 0 && !validateTask) {
+        $('#autocompleteValidation').append('<div class="ui pointing red basic label"><p>Please select an option</p></div>');
+        validateTask = true;
+      }
+      return false;
+      });
+    });
+
     // performs sign out functionality.
     $(document).ready(function() {
       $('#signOut').click(function() {
@@ -107,62 +143,63 @@
       });
     })  
 
+    //add drop down functionality
     $(document).ready(function() {      
-      var $select = $(".1-120");
-      $select.append('<option>Duration (Hours)</option>')
+      $(".1-120").append('<option>Duration (Hours)</option>')
       for (i=1;i<=120;i++){
-        $select.append($('<option></option>').val(i).html(i))
+        $(".1-120").append($('<option></option>').val(i).html(i))
       }
-    })     
-    
+    })
+
+    //script to ensure lower sequence not shown yet
     $(document).ready(function() {
-      $('.ui.form').form({
-        on: 'blur',      
-        fields: {
-          taskname: {
-            identifier  : 'taskname',
-            rules: [
-              {
-                type   : 'empty',
-                prompt : 'Please enter your task name'
-              },
-            ] 
-          },             
+      $('#toggleDetail').hide();
+    })
 
-          description: {
-            identifier  : 'description',
-            rules: [
-              {
-                type   : 'empty',
-                prompt : 'Please enter your task description'
-              },
-              {
-                type   : 'length[10]',
-                prompt : 'Your description must be at least 10 characters'
-              }
-            ]
-          },
-      
-          reward: {
-            identifier  : 'reward',
-            rules: [
-              {
-                type    : 'empty',
-                prompt   : 'Please enter your reward amount'  
-              },
-              {
-                type    : 'integer',
-                prompt  : 'Please enter only integers'
-              }
-            ] 
-          }
-
+    //script to toggle
+    $(document).ready(function() {
+      $('#nextSeq').click(function() {
+        if (selectedOptions.length === 0 && !validateTask) {
+          $('#autocompleteValidation').append('<div class="ui pointing red basic label"><p>Please select an option</p></div>');
+          validateTask = true;
+        } else if (selectedOptions.length > 0) {
+          $('#toggleTask').slideUp(1000);
+          $('#toggleDetail').slideDown(1000);
         }
       });
-    });
+    })
 
+    $(document).ready(function() {
+      $('#finalSeq').click(function() {
+        if ($('#taskDetailTextBox').val() === "" && !validateTaskDetail) {
+          $('#taskDetailValidation').append('<div class="ui pointing red basic label"><p>Please fill in task detail</p></div>');
+          validateTaskDetail = true;
+        }
+        if ($(".1-120").val() === "Duration (Hours)" && !validateDropdown) {
+          $('#dropdownValidation').append('<div class="ui pointing red basic label"><p>Please select a duration</p></div>');
+          validateDropdown = true;
+        }
+        console.log($('#taskDetailTextBox').val());
+        console.log($(".1-120").val());
+        if ($(".1-120").val() != "Duration (Hours)" && $('#taskDetailTextBox').val() != "") {
+          //information to send
+          var selectedOptionsJSON = JSON.stringify(selectedOptions);
+          var taskDetailJSON = JSON.stringify($('#taskDetailTextBox').val());
+          var durationJSON = JSON.stringify($(".1-120").val());
 
-
+          console.log('sending');
+          $.ajax({
+            url: '/demo/testing.php',
+            type: 'POST',
+            data: { options: selectedOptionsJSON },
+            dataType: 'json',
+            success: function(data) {
+              window.location.replace("/demo/testReceive.php");
+            }
+          });
+        }
+      })
+    })
   </script>
 </head>
 
@@ -194,46 +231,57 @@
       </div>
     </div>
 
+    <div class="ui middle aligned center aligned grid inverted">
+      <div class="six wide column">
+        <br><br>
+        <h2 class="ui dividing header">Tasks to Create</h2>
+        <!-- Input HTML for suggestions from a local source-->
+        <div id="toggleTask" class="ui-widget">
+          <form id="localForm">
+            <label >Choose your tasks: </label>
+            <input id="suggestionFromLocalSource">
+          </form>
+
+          <br>
+          <!--Tags for skills selected--> 
+          <div id="tags"></div>
+
+          <!--validation for autocorrect-->
+          <div id="autocompleteValidation"></div>
+          <br>
+          <button id="nextSeq" class="ui button">Next</button>
+        </div>
+      </div>
+    </div>
+
     <!-- Form for task adding-->
     <div class="ui middle aligned center aligned grid inverted">
       <div class="six wide column">
-        <form class="ui form" action="/demo/addtasks.php" method="POST">
-          <h2 class="ui dividing header">Task Details</h2>
+        <h2 class="ui dividing header">Task Details</h2>
+        <div id="toggleDetail">
+          <form class="ui form" action="/demo/addtasks.php" method="POST">
 
-          <div class="one field">
-            <label>Task Name</label>
-            <div class="fields">
-              <div class="sixteen wide field">
-                <input type="text" name="taskname" placeholder="Task Name">
-              </div>
+            <div class="field">
+              <textarea id="taskDetailTextBox" rows="2"></textarea> 
             </div>
-          </div>    
-          
-          <div class="field">
-            <label>Task Details</label>
-            <div class="fields">
-              <div class=" sixteen wide field">
-                <input style = "height: 300px;" type="text" name="description" placeholder="Description">
-              </div>
-            </div> 
-          </div>
-            
-          <div class="fields">
-            <div class="ten wide field">
-              <input type="text" name="reward" placeholder="Reward">
-            </div>                  
-              
+            <!--validation for taskDetail-->
+            <div id="taskDetailValidation"></div>
+
             <div class="field">                
               <select class="1-120" name="dropdown">
               </select>
-            </div>         
-          </div>           
-          <input type="submit" name="addtask" value="Submit" class="ui button primary" tabindex="0" />
-          
-          <div class="ui error message"></div>
-        </form>        
+            </div>
+            <!--validation for dropdown-->
+            <div id="dropdownValidation"></div>
+
+          </form>
+          <button id="finalSeq" class="ui button">Next</button>
+        </div>
+
+        <br><br>     
       </div>
     </div>
+
   </div>
 
   <!-- Footer -->
