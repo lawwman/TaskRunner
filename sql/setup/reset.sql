@@ -100,8 +100,8 @@ CREATE TABLE Bids (
 );
 
 COPY Skills FROM '..\..\apps\demo\htdocs\sql\setup\data\skills.csv' DELIMITER ',' CSV HEADER;
-COPY Taskees FROM '..\..\apps\demo\htdocs\sql\setup\data\taskees2.csv' DELIMITER ',' CSV HEADER;
-COPY Taskers FROM '..\..\apps\demo\htdocs\sql\setup\data\taskers2.csv' DELIMITER ',' CSV HEADER;
+COPY Taskees FROM '..\..\apps\demo\htdocs\sql\setup\data\taskees.csv' DELIMITER ',' CSV HEADER;
+COPY Taskers FROM '..\..\apps\demo\htdocs\sql\setup\data\taskers.csv' DELIMITER ',' CSV HEADER;
 COPY HasSkills FROM '..\..\apps\demo\htdocs\sql\setup\data\hasskills.csv' DELIMITER ',' CSV HEADER;
 COPY Tasks FROM '..\..\apps\demo\htdocs\sql\setup\data\tasks.csv' DELIMITER ',' CSV HEADER;
 COPY Bids FROM '..\..\apps\demo\htdocs\sql\setup\data\bids.csv' DELIMITER ',' CSV HEADER;
