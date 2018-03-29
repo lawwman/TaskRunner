@@ -1,11 +1,16 @@
 <?php
 	session_start();
 	require('debugging.php');
-	consoleLog('yo');
 	if (isset($_SESSION['options'])) {
-		consoleLog('yoyo');
 		consoleLog($_SESSION['options']);
+		unset($_SESSION['options']); //remove the session variable from $SESSION once it is obtained
 	}
+	if (isset($_SESSION['options'])) {
+		consoleLog('options still set');
+	} else {
+		consoleLog('it works');
+	}
+
 ?>
 
 <html>

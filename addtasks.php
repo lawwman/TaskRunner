@@ -194,8 +194,7 @@
             data: { options: selectedOptionsJSON },
             dataType: 'json',
             success: function(data) {
-              console.log("yay");
-              window.location.replace("/demo/testerboy95.php");
+              window.location.replace("/demo/testReceive.php");
             }
           });
         }
