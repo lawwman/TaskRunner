@@ -13,7 +13,7 @@
       
     $db = pg_connect("host=127.0.0.1 port=5432 dbname=project1 user=postgres password=1234") or die('Could not connect: ' . pg_last_error()); 
     
-    $emailQuery = "SELECT email FROM Taskers WHERE email='$email'";
+    $emailQuery = "SELECT email FROM Taskees WHERE email='$email'";
     $emailResult = pg_query($db, $emailQuery);
 
     if (pg_num_rows($emailResult) > 0) {
@@ -30,19 +30,16 @@
       $email = $_POST['email'];
       $firstName = $_POST['first-name'];
       $lastName = $_POST['last-name'];
-      $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
-      $birthdate = $_POST['birthdate'];
+      $password = password_hash($_POST['password'], PASSWORD_DEFAULT);    
       $contact = $_POST['contact'];
       $creditNum = $_POST['creditNum'];
       $creditSecurity = $_POST['creditSecurity'];
       $creditExpiry = date($_POST['expiryYear'] . '-' . $_POST['expiryMonth'] . '-01');
-      $unitNum = $_POST['unitNum'];
-      $streetAddr = $_POST['streetAddr'];
       $zipcode = $_POST['zipcode'];      
 
       $db = pg_connect("host=127.0.0.1 port=5432 dbname=project1 user=postgres password=1234") or die('Could not connect: ' . pg_last_error()); 
 
-      $insertQuery = "INSERT INTO Taskers Values('$email', '$firstName', '$lastName', '$password','$birthdate', '$contact', $creditNum, $creditSecurity, '$creditExpiry', '$streetAddr', '$unitNum', $zipcode)";      
+      $insertQuery = "INSERT INTO Taskees Values('$email', '$firstName', '$lastName', '$password', '$contact', $creditNum, $creditSecurity, '$creditExpiry', $zipcode)";      
       $result = pg_query($db, $insertQuery);
       
       if ($result) {
@@ -207,9 +204,9 @@
 
 <div class="ui middle aligned center aligned grid inverted">
   <div class="six wide column">
-    <form class="ui form" action="/demo/taskersignup.php" method="POST" >
+    <form class="ui form" action="/demo/taskeesignup.php" method="POST" >
       </br></br>
-      <h2 class="ui dividing header">Sign Up To Become a Tasker!</h2>
+      <h2 class="ui dividing header">Sign Up To Create Tasks!</h2>
 
       <div class="two field">
         <label>Account Details</label>
@@ -238,38 +235,17 @@
           </div>
         </div>        
         
-        <div class="fields">
-          <div class="eight wide field">
-            <input type="date" name="birthdate" value='<?php echo isset($_POST['birthdate']) ? $_POST['birthdate'] : ''; ?>'>
-          </div>                          
+        <div class="fields">                       
                     
           <div class="eight wide field">
             <input type="text" name="contact" placeholder="Phone" value='<?php echo isset($_POST['contact']) ? $_POST['contact'] : ''; ?>'>
-          </div>
-        </div>
-      </div>
-
-      <div class="field">
-        <label>Address</label>
-        <div class="two fields">
-          <div class="eleven wide field">
-            <input type="text" name="streetAddr" placeholder="Street Address" value='<?php echo isset($_POST['streetAddr']) ? $_POST['streetAddr'] : ''; ?>'>
+          </div>        
+      
+          <div class="eight wide field">
+            <input type="text" name="zipcode" placeholder="Address Zipcode" value='<?php echo isset($_POST['zipcode']) ? $_POST['zipcode'] : ''; ?>'>
           </div>  
-          <div class="five wide field">
-            <input type="text" name="unitNum" placeholder="Unit #" value='<?php echo isset($_POST['unitNum']) ? $_POST['unitNum'] : ''; ?>'>
-          </div>          
-        </div>        
-        
-        <div class="fields">
-          <div class="field">
-            <input type="text" name="zipcode" placeholder="Zipcode" value='<?php echo isset($_POST['zipcode']) ? $_POST['zipcode'] : ''; ?>'>
-          </div>
-                    
-          <div class="four wide field">            
-          </div>
-                              
-        </div>
-      </div>
+        </div>                                        
+      </div>      
 
       <h4 class="ui dividing header">Billing Information</h4>
       <div class="fields">
