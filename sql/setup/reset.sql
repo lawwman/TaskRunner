@@ -66,8 +66,8 @@ CREATE TABLE Tasks (
     ttype VARCHAR(50) NOT NULL REFERENCES Skills,
 	task_details VARCHAR(3000), -- Details of task 
 	
-    taskeeEmail VARCHAR(100) REFERENCES Taskees,
-    taskerEmail VARCHAR(100) NOT NULL REFERENCES Taskers,
+    taskeeEmail VARCHAR(100) NOT NULL REFERENCES Taskees,
+    taskerEmail VARCHAR(100) REFERENCES Taskers,
 
 	status VARCHAR(100) DEFAULT 'not bidded',
 
@@ -77,8 +77,8 @@ CREATE TABLE Tasks (
 
     loc VARCHAR(100) NOT NULL,
 
-  CHECK ((taskeeEmail IS DISTINCT FROM NULL AND status <> 'not bidded' AND status <> 'bidded') 
-           OR (taskeeEmail IS NOT DISTINCT FROM NULL AND (status = 'not bidded' OR status = 'bidded' OR status = 'deleted'))),
+  CHECK ((taskerEmail IS DISTINCT FROM NULL AND status <> 'not bidded' AND status <> 'bidded') 
+           OR (taskerEmail IS NOT DISTINCT FROM NULL AND (status = 'not bidded' OR status = 'bidded' OR status = 'deleted'))),
            
 	-- 'pending completion' refers to tasks that have been accepted
 	-- 'not bidded' refers to instance when there is no bidders for the current task yet.  
@@ -100,8 +100,8 @@ CREATE TABLE Bids (
 );
 
 COPY Skills FROM '..\..\apps\demo\htdocs\sql\setup\data\skills.csv' DELIMITER ',' CSV HEADER;
-COPY Taskees FROM '..\..\apps\demo\htdocs\sql\setup\data\taskees.csv' DELIMITER ',' CSV HEADER;
-COPY Taskers FROM '..\..\apps\demo\htdocs\sql\setup\data\taskers.csv' DELIMITER ',' CSV HEADER;
+COPY Taskees FROM '..\..\apps\demo\htdocs\sql\setup\data\taskees2.csv' DELIMITER ',' CSV HEADER;
+COPY Taskers FROM '..\..\apps\demo\htdocs\sql\setup\data\taskers2.csv' DELIMITER ',' CSV HEADER;
 COPY HasSkills FROM '..\..\apps\demo\htdocs\sql\setup\data\hasskills.csv' DELIMITER ',' CSV HEADER;
 COPY Tasks FROM '..\..\apps\demo\htdocs\sql\setup\data\tasks.csv' DELIMITER ',' CSV HEADER;
 COPY Bids FROM '..\..\apps\demo\htdocs\sql\setup\data\bids.csv' DELIMITER ',' CSV HEADER;
