@@ -2,15 +2,19 @@
 	session_start();
 	require('debugging.php');
 	if (isset($_SESSION['options'])) {
-		consoleLog($_SESSION['options']);
-		unset($_SESSION['options']); //remove the session variable from $SESSION once it is obtained
-	}
-	if (isset($_SESSION['options'])) {
-		consoleLog('options still set');
-	} else {
-		consoleLog('it works');
-	}
+    $selectedSkills = $_SESSION['options'];
+    $taskDetails = $_SESSION['details'];
+    $duration = $_SESSION['dur'];
 
+		consoleLog($selectedSkills);
+    consoleLog($taskDetails);
+    consoleLog($duration);
+
+    //remove the session variable from $SESSION once it is obtained
+		unset($_SESSION['options']);
+    unset($_SESSION['details']);
+    unset($_SESSION['dur']);
+	}
 ?>
 
 <html>

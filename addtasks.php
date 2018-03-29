@@ -191,7 +191,7 @@
           $.ajax({
             url: '/demo/testing.php',
             type: 'POST',
-            data: { options: selectedOptionsJSON },
+            data: { options: selectedOptionsJSON, details: taskDetailJSON, dur: durationJSON},
             dataType: 'json',
             success: function(data) {
               window.location.replace("/demo/testReceive.php");
