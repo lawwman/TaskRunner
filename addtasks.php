@@ -194,7 +194,7 @@
             data: { options: selectedOptionsJSON, details: taskDetailJSON, dur: durationJSON},
             dataType: 'json',
             success: function(data) {
-              window.location.replace("/demo/testReceive.php");
+              window.location.replace("/demo/dummyreceive.php");
             }
           });
         }
