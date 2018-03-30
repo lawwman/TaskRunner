@@ -84,6 +84,9 @@
     var dateEndInput;
     var timeEndInput;
 
+    var startValidFlag = false;
+    var endValidFlag = false;
+
     $(document).ready(function() {
       $('#calendarDate').calendar({
         type: 'date',
@@ -258,29 +261,32 @@
 
 <body>
 
-  <!-- Top menu -->
-  <div class="pusher">
-  
-  <div class="ui inverted vertical masthead center aligned segment">
-    <div class="ui container">
-      <div class="ui large secondary inverted pointing menu">
-        <a class="toc item">
-          <i class="sidebar icon"></i>
-        </a>
-        <a class="item" href="/demo/index.php">Home</a>
-          <a class ="item" href="/demo/viewcreatedtasks.php"> View Created Tasks</a>
-          <a class ="item" href="/demo/viewrunningtasks.php"> View tasks I am running</a>
-        <div class="right item">
-          <?php showUser(); ?> 
-        </div>
+<!-- Top menu -->
+<div class="pusher">
+
+<div class="ui inverted vertical masthead center aligned segment">
+  <div class="ui container">
+    <div class="ui large secondary inverted pointing menu">
+      <a class="toc item">
+        <i class="sidebar icon"></i>
+      </a>
+      <a class="item" href="/demo/index.php">Home</a>
+        <a class ="item" href="/demo/viewcreatedtasks.php"> View Created Tasks</a>
+        <a class ="item" href="/demo/viewrunningtasks.php"> View tasks I am running</a>
+      <div class="right item">
+        <?php showUser(); ?> 
       </div>
     </div>
   </div>
+</div>
 
-<h2 class = 'ui center aligned dividing header'> Pick a Time and Date </h2>
+<br>
 
 <form class="ui form" action="/demo/taskfinalise.php" method = "post">
+
+  <h2 class = 'ui center aligned dividing header'> Pick a Start Time and Date </h2>
   <div class="ui justified container">
+
     <div class="fields">
       <!--Start date and time-->
       <div class="seven wide field">
@@ -290,17 +296,23 @@
             <input type="text" placeholder="Start Date">
           </div>
         </div>
-      </div>
-      <div class="seven wide field">
-        <div class="ui calendar" id="calendarTime">
-          <div class="ui input left icon">
-            <i class="clock icon"></i>
-            <input type="text" placeholder="Start Time">
+        </div>
+        <div class="seven wide field">
+          <div class="ui calendar" id="calendarTime">
+            <div class="ui input left icon">
+              <i class="clock icon"></i>
+              <input type="text" placeholder="Start Time">
+            </div>
           </div>
+        </div>
+        <div id="startValidationTag">
+          <div class="ui left pointing red basic label"><p>Please fill in the date values</p></div>
         </div>
       </div>
 
+    <h2 class = 'ui center aligned dividing header'> Pick a End Time and Date </h2>
       <!--End date and time-->
+      <div class="fields">
       <div class="seven wide field">
         <div class="ui calendar" id="calendarEndDate">
           <div class="ui input left icon">
@@ -317,7 +329,11 @@
           </div>
         </div>
       </div>
+      <div id="endValidationTag">
+        <div class="ui left pointing red basic label"><p>Please fill in the date values</p></div>
+      </div>
     </div>
+
     <br>
   </div>
   <div class="ui error message"></div>
