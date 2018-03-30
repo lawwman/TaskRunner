@@ -189,7 +189,7 @@
 
           console.log('sending');
           $.ajax({
-            url: '/demo/testing.php',
+            url: '/demo/storetaskdetail.php',
             type: 'POST',
             data: { options: selectedOptionsJSON },
             dataType: 'json',
