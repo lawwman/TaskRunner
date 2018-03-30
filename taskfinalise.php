@@ -4,7 +4,6 @@
   require('debugging.php');
   require('session.php');
 
-
   if ($_GET["argument"]=='signOut'){
     logout();
   }
@@ -116,7 +115,6 @@
       });
 
       $('#manualButton').click(function() {
-        console.log("here");
 
          $.ajax({
           url: '/demo/submitquery.php',
@@ -124,7 +122,7 @@
           dataType: 'json',
           data: {date: dateInput, time: timeInput},
           success: function(data){
-            console.log('sent');
+            console.log(data.abc);
           }
         });
       });
