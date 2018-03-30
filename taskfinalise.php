@@ -249,11 +249,12 @@
 <form class="ui form" action="/demo/taskfinalise.php" method = "post">
   <div class="ui justified container">
     <div class="fields">
+      <!--Start date and time-->
       <div class="seven wide field">
         <div class="ui calendar" id="calendarDate">
           <div class="ui input left icon">
             <i class="calendar icon"></i>
-            <input type="text" placeholder="Date">
+            <input type="text" placeholder="Start Date">
           </div>
         </div>
       </div>
@@ -261,7 +262,25 @@
         <div class="ui calendar" id="calendarTime">
           <div class="ui input left icon">
             <i class="clock icon"></i>
-            <input type="text" placeholder="Time">
+            <input type="text" placeholder="Start Time">
+          </div>
+        </div>
+      </div>
+
+      <!--End date and time-->
+      <div class="seven wide field">
+        <div class="ui calendar" id="calendarEndDate">
+          <div class="ui input left icon">
+            <i class="calendar icon"></i>
+            <input type="text" placeholder="End Date">
+          </div>
+        </div>
+      </div>
+      <div class="seven wide field">
+        <div class="ui calendar" id="calendarEndTime">
+          <div class="ui input left icon">
+            <i class="clock icon"></i>
+            <input type="text" placeholder="End Time">
           </div>
         </div>
       </div>
