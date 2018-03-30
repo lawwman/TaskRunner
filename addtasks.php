@@ -217,7 +217,7 @@
           $.ajax({
             url: '/demo/storetaskdetail.php',
             type: 'POST',
-            data: { options: selectedOptionsJSON },
+            data: { options: selectedOptionsJSON, details: taskDetailJSON, locs: selectedLocJSON },
             dataType: 'json',
             success: function(data) {
               window.location.replace("/demo/taskfinalise.php");

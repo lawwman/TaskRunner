@@ -3,6 +3,8 @@
 	//For future implementation, aim to integrate it with session.php.
 	session_start();
 	if (isset($_POST['options'])) {
+		$_SESSION['locs'] = $_POST['locs'];
+		$_SESSION['details'] = $_POST['details'];
 		$_SESSION['options'] = $_POST['options'];
 		echo json_encode($_POST['options']);
 	}
