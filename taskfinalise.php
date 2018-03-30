@@ -81,6 +81,8 @@
   <script>
     var dateInput;
     var timeInput;
+    var dateEndInput;
+    var timeEndInput;
 
     $(document).ready(function() {
       $('#calendarDate').calendar({
@@ -114,13 +116,44 @@
         }
       });
 
+      $('#calendarEndDate').calendar({
+        type: 'date',
+        onChange: function(date) {
+            var year = date.getFullYear();
+            var month = date.getMonth() + 1;
+            var day = date.getDate();
+            if (month < 10) {
+                month = '0' + month;
+            }
+            if (day < 10) {
+                day = '0' + day;
+            }
+
+            // everything combined
+            var combined = year + '-' + month + '-' + day;
+            dateEndInput = JSON.stringify(combined);
+
+            console.log(dateEndInput);
+          }
+      });
+
+      $('#calendarEndTime').calendar({
+        type: 'time',
+        ampm: false,
+        disableMinute: true,
+        onChange: function(time,text){
+          timeEndInput = JSON.stringify(text);
+          console.log(timeEndInput);
+        }
+      });
+
       $('#manualButton').click(function() {
 
          $.ajax({
           url: '/demo/submitquery.php',
           type: 'POST',
           dataType: 'json',
-          data: {date: dateInput, time: timeInput},
+          data: {date: dateInput, time: timeInput, endDate: dateEndInput, endTime: timeEndInput},
           success: function(data){
             console.log(data.abc);
           }
