@@ -91,6 +91,7 @@
     var locations = getLocList(); //getLocList() function is a function from "locationlist.js". Returns an array of string
     var selectedOptions = []; //To store the selected options
     var detailsOfTask = ""; //To store the selected options
+    var selectedLoc = "";
     var count = 0;
     var id = "removeTag";
 
@@ -132,6 +133,28 @@
       }
       return false;
       });
+    });
+
+   $(document).ready(function() {
+      $('#suggestionForLocation').autocomplete({
+        source: locations,
+
+        //when an option is selected
+        select: function(select, ui) {
+          var label = ui.item.label;
+          console.log(label);
+          selectedLoc = label;
+        }
+      });
+      // do not submit form. Manually insert link.
+    // $('#localSkillsForm').on('submit', function(){
+    //   event.preventDefault();
+    //   if (selectedOptions.length === 0 && !validateTask) {
+    //     $('#skillsValidation').append('<div class="ui pointing red basic label"><p>Please select an option</p></div>');
+    //     validateTask = true;
+    //   }
+    //   return false;
+    //   });
     });
 
     // performs sign out functionality.
@@ -270,9 +293,7 @@
             <label >Choose your task's location: </label>
             <input id="suggestionForLocation">
           </form>
-
           <br>
-
           <!--validation for autocorrect-->
           <div id="locationValidation"></div>
         </div>
