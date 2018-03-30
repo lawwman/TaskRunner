@@ -1,11 +1,11 @@
-TaskID,Tasks Name,Tasks Details,Tasks Duration (Hours),Creator,Runner,Reward,Status,Created Date Time
-123456,Clean House,Help clean my house,24,Johndoe1,Johndoe10,50,pending,28/1/2016 12:00
-123457,Wash Car,Help wash my car,24,Johndoe2,Johndoe9,45,pending,7/1/2016 12:05
-123458,Do laundry,Help me do my laundry,24,Johndoe3,Johndoe8,40,completed,30/1/2016 14:00
-123459,Deliver parcel,Help deliver parcel to ABC street,24,Johndoe4,,35,bidded,31/1/2016 12:30
-123460,Buy Food,Help buy food from DEF store,24,Johndoe5,,30,not bidded,1/2/2017 12:50
-123461,Transport goods,Help deliver goods to 123 street,48,Johndoe6,,25,not bidded,20/2/2018 12:00
-123462,Wash Car,Help wash my car,48,Johndoe7,,20,bidded,3/2/2016 12:00
-123463,Deliver parcel,Help deliver parcel to ABC street,48,Johndoe8,,15,deleted,4/2/2018 13:00
-123464,Clean House,Help clean my house,72,Johndoe9,Johndoe2,10,deleted,11/2/2018 12:00
-123465,Buy Food,Help buy chicken rice from 21 street,72,Johndoe10,Johndoe1,5,terminated,26/2/2018 12:00
+TaskID,ttype,Tasks Details,taskeeEmail,taskerEmail,Status,Created Date Time,startDateTime,endDateTime,location
+123456,Accounting,detailz,johndoe1@gmail.com,johndoe10@gmail.com,pending,28/1/2016 12:00,1/2/2016 12:00,1/2/2016 13:00,serangoon ave 3
+123457,Admin Work,detailz,johndoe1@gmail.com,johndoe9@gmail.com,pending,7/1/2016 12:05,9/1/2016 12:00,10/1/2016 14:00,serangoon ave 4
+123458,Accounting,detailz,johndoe1@gmail.com,johndoe10@gmail.com,completed,30/1/2016 14:00,1/2/2016 12:00,1/2/2016 13:00,serangoon ave 3
+123459,Admin Work,detailz,johndoe1@gmail.com,,bidded,31/1/2016 12:30,2/2/2016 14:00,3/2/2016 14:00,serangoon ave 3
+123460,Accounting,detailz,johndoe1@gmail.com,,not bidded,1/2/2017 12:50,2/2/2017 14:00,3/2/2017 14:00,serangoon ave 3
+123461,Admin Work,detailz,johndoe1@gmail.com,,not bidded,20/2/2018 12:00,20/3/2018 15:00,21/3/2018 15:00,serangoon ave 3
+123462,Reception,detailz,johndoe2@gmail.com,,bidded,3/2/2016 12:00,20/3/2018 15:00,21/3/2018 15:00,serangoon ave 3
+123463,Reception,detailz,johndoe2@gmail.com,,deleted,4/2/2018 13:00,20/3/2018 15:00,21/3/2018 15:00,serangoon ave 3
+123464,Reception,detailz,johndoe2@gmail.com,johndoe10@gmail.com,deleted,11/2/2018 12:00,20/3/2018 15:00,21/3/2018 15:00,serangoon ave 3
+123465,Reception,detailz,johndoe2@gmail.com,johndoe10@gmail.com,terminated,26/2/2018 12:00,20/3/2018 15:00,21/3/2018 15:00,serangoon ave 31

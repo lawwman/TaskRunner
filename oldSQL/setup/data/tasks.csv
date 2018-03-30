@@ -1,0 +1,11 @@
+TaskID,Tasks Name,Tasks Details,Tasks Duration (Hours),Creator,Runner,Reward,Status,Created Date Time
+123456,Clean House,Help clean my house,24,Johndoe1,Johndoe10,50,pending,28/1/2016 12:00
+123457,Wash Car,Help wash my car,24,Johndoe2,Johndoe9,45,pending,7/1/2016 12:05
+123458,Do laundry,Help me do my laundry,24,Johndoe3,Johndoe8,40,completed,30/1/2016 14:00
+123459,Deliver parcel,Help deliver parcel to ABC street,24,Johndoe4,,35,bidded,31/1/2016 12:30
+123460,Buy Food,Help buy food from DEF store,24,Johndoe5,,30,not bidded,1/2/2017 12:50
+123461,Transport goods,Help deliver goods to 123 street,48,Johndoe6,,25,not bidded,20/2/2018 12:00
+123462,Wash Car,Help wash my car,48,Johndoe7,,20,bidded,3/2/2016 12:00
+123463,Deliver parcel,Help deliver parcel to ABC street,48,Johndoe8,,15,deleted,4/2/2018 13:00
+123464,Clean House,Help clean my house,72,Johndoe9,Johndoe2,10,deleted,11/2/2018 12:00
+123465,Buy Food,Help buy chicken rice from 21 street,72,Johndoe10,Johndoe1,5,terminated,26/2/2018 12:00
