@@ -93,7 +93,6 @@
 
     var validateTask = false; //boolean variation if validation message is showing
     var validateTaskDetail = false;
-    var validateDropdown = false;
 
    $(document).ready(function() {
       $('#suggestionFromLocalSource').autocomplete({
@@ -175,17 +174,11 @@
           $('#taskDetailValidation').append('<div class="ui pointing red basic label"><p>Please fill in task detail</p></div>');
           validateTaskDetail = true;
         }
-        if ($(".1-120").val() === "Duration (Hours)" && !validateDropdown) {
-          $('#dropdownValidation').append('<div class="ui pointing red basic label"><p>Please select a duration</p></div>');
-          validateDropdown = true;
-        }
         console.log($('#taskDetailTextBox').val());
-        console.log($(".1-120").val());
-        if ($(".1-120").val() != "Duration (Hours)" && $('#taskDetailTextBox').val() != "") {
+        if ($('#taskDetailTextBox').val() != "") {
           //information to send
           var selectedOptionsJSON = JSON.stringify(selectedOptions);
           var taskDetailJSON = JSON.stringify($('#taskDetailTextBox').val());
-          var durationJSON = JSON.stringify($(".1-120").val());
 
           console.log('sending');
           $.ajax({
@@ -266,13 +259,6 @@
             </div>
             <!--validation for taskDetail-->
             <div id="taskDetailValidation"></div>
-
-            <div class="field">                
-              <select class="1-120" name="dropdown">
-              </select>
-            </div>
-            <!--validation for dropdown-->
-            <div id="dropdownValidation"></div>
 
           </form>
           <button id="finalSeq" class="ui button">Next</button>
