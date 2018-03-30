@@ -79,19 +79,85 @@
   </script>
 
   <script>
-    var dateInput;
-    var timeInput;
-    var dateEndInput;
-    var timeEndInput;
+    var dateInputJSON;
+    var timeInputJSON;
+    var dateEndInputJSON;
+    var timeEndInputJSON;
 
-    var startValidFlag = false;
-    var endValidFlag = false;
+    var startDay = 0;
+    var startMnth = 0;
+    var startYear = 0;
+    var startTime = 25; //dummy values
+
+    var endDay = 0;
+    var endMnth = 0;;
+    var endYear = 0;
+    var endTime = 25; //dummy values
+
+    var startNotValidFlag = false; // false indicates no flag raised. Valid
+    var endNotValidFlag = false;
+    var compareFlag = false;
+
+    //check if values are selected
+    function checkStartValidation() {
+      if (startDay == 0 || startMnth == 0 || startYear == 0 || startTime == 25) {
+        startNotValidFlag = true; // if any of the fields not set, set flag to true.
+      } else {
+        startNotValidFlag = false; // set back to valid
+      }
+    }
+    //check if values are selected
+    function checkEndValidation() {
+      if (endDay == 0 || endMnth == 0 || endYear == 0 || endTime == 25) {
+        startNotValidFlag = true;
+      } else {
+        endNotValidFlag = false;
+      }
+    }
+    //check if start date is before end date
+    function compareDateValidation() {
+      //check the year
+      if (startYear > endYear) {
+        compareFlag = true;
+        return;
+      } else {
+        compareFlag = false;
+      }
+
+      //check month. Year is correct if code reaches this point
+      if (startMnth > endMnth) {
+        compareFlag = true;
+        return;
+      } else {
+        compareFlag = false;
+      }
+
+      //check day. Year and month is correct if code reaches this point
+      if (startDay > endDay) {
+        compareFlag = true;
+        return;
+      } else {
+        compareFlag = false;
+      }
+
+      //check Time. Year and Month and Day is correct if code reaches this point
+      var sHour = startTime.substring(0,2);
+      var eHour = endTime.substring(0,2);
+      console.log("start hour " + sHour);
+      console.log("end hour " + eHour);
+      if (sHour > eHour) {
+        compareFlag = true;
+        return;
+      } else {
+        compareFlag = false;
+      }
+    }
 
     $(document).ready(function() {
       $('#calendarDate').calendar({
         type: 'date',
         onChange: function(date) {
-            var year = date.getFullYear();
+            startYear = date.getFullYear();
             var month = date.getMonth() + 1;
             var day = date.getDate();
             if (month < 10) {
@@ -100,12 +166,8 @@
             if (day < 10) {
                 day = '0' + day;
             }
-
-            // everything combined
-            var combined = year + '-' + month + '-' + day;
-            dateInput = JSON.stringify(combined);
-
-            console.log(dateInput);
+            startDay = day;
+            startMnth = month;
           }
       });
 
@@ -114,15 +176,18 @@
         ampm: false,
         disableMinute: true,
         onChange: function(time,text){
-          timeInput = JSON.stringify(text);
-          console.log(timeInput);
+          startTime = text;
+          if (startTime.charAt(1) == ":") {
+            var zeroHour = "0";
+            startTime = zeroHour + startTime;
+          }
         }
       });
 
       $('#calendarEndDate').calendar({
         type: 'date',
         onChange: function(date) {
-            var year = date.getFullYear();
+            endYear = date.getFullYear();
             var month = date.getMonth() + 1;
             var day = date.getDate();
             if (month < 10) {
@@ -131,12 +196,8 @@
             if (day < 10) {
                 day = '0' + day;
             }
-
-            // everything combined
-            var combined = year + '-' + month + '-' + day;
-            dateEndInput = JSON.stringify(combined);
-
-            console.log(dateEndInput);
+            endDay = day;
+            endMnth = month;
           }
       });
 
@@ -145,22 +206,37 @@
         ampm: false,
         disableMinute: true,
         onChange: function(time,text){
-          timeEndInput = JSON.stringify(text);
-          console.log(timeEndInput);
+          endTime = text;
+          if (endTime.charAt(1) == ":") {
+            var zeroHour = "0";
+            endTime = zeroHour + endTime;
+          }
         }
       });
 
       $('#manualButton').click(function() {
-
-         $.ajax({
-          url: '/demo/submitquery.php',
-          type: 'POST',
-          dataType: 'json',
-          data: {date: dateInput, time: timeInput, endDate: dateEndInput, endTime: timeEndInput},
-          success: function(data){
-            console.log(data.abc);
-          }
-        });
+        checkStartValidation();
+        checkEndValidation();
+        compareDateValidation();
+        var combine = startDay + '-' + startMnth + '-' + startYear + " " + startTime;
+        var endCombine = endDay + '-' + endMnth + '-' + endYear + " " + endTime;
+        console.log(combine);
+        console.log(endCombine);
+        if (!startNotValidFlag && !endNotValidFlag && !compareFlag) {
+          console.log("valid");
+          //  $.ajax({
+          //   url: '/demo/submitquery.php',
+          //   type: 'POST',
+          //   dataType: 'json',
+          //   data: {date: dateInputJSON, time: timeInputJSON, endDate: dateEndInputJSON, endTime: timeEndInputJSON},
+          //   success: function(data){
+          //     console.log(data.abc);
+          //   }
+          // });
+        }
+        if (startNotValidFlag || endNotValidFlag || compareFlag) {
+          console.log("not valid");
+        }
       });
     
     });
