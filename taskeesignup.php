@@ -39,11 +39,16 @@
 
       $db = pg_connect("host=127.0.0.1 port=5432 dbname=project1 user=postgres password=1234") or die('Could not connect: ' . pg_last_error()); 
 
-      $insertQuery = "INSERT INTO Taskees Values('$email', '$firstName', '$lastName', '$password', '$contact', $creditNum, $creditSecurity, '$creditExpiry', $zipcode)";      
+      $insertQuery = "INSERT INTO Taskees Values('$email', '$firstName', '$lastName', '$password', '$contact', $creditNum, $creditSecurity, '$creditExpiry', $zipcode)";     
+      consoleLog($insertQuery);
       $result = pg_query($db, $insertQuery);
-      
+      consoleLog($result);
+      consoleLog($firstName);
+
       if ($result) {
-        login($username);
+        consoleLog($firstName);
+        $taskee = 'taskee';
+        login($firstName, $taskee, $email);
         header('Location: /demo/index.php');
       }     
     }

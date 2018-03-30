@@ -46,8 +46,9 @@
       $result = pg_query($db, $insertQuery);
       
       if ($result) {
-        login($username);
-        header('Location: /demo/index.php');
+        $tasker = 'tasker';
+        login($firstName, $tasker, $email);        
+        header('Location: /demo/taskerdashboard.php');
       }     
     }
   }
@@ -206,9 +207,9 @@
 <body class='ui'>
 
 <div class="ui middle aligned center aligned grid inverted">
+  <div class="ui container"></div> <br>
   <div class="six wide column">
     <form class="ui form" action="/demo/taskersignup.php" method="POST" >
-      </br></br>
       <h2 class="ui dividing header">Sign Up To Become a Tasker!</h2>
 
       <div class="two field">

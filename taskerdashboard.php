@@ -7,16 +7,16 @@
 
   if ($_GET["argument"]=='signOut'){
     logout();
+    consoleLog('hi');
   }
+
+  redirectIfNot('taskee');
   
-  redirectIfNot(null);
-
-
   function showUser() {
     if (isLoggedIn()) {
       echo '
       <div class="ui dropdown inverted button">Hello, '. $_SESSION['userName'] . '</div>
-      <div class="ui dropdown inverted button" id="signOut" formaction="/demo/taskeesignup.php">Sign Out</div>
+      <div class="ui dropdown inverted button" id="signOut">Sign Out</div>
       ';
       consoleLog($_SESSION['userEmail']);
       consoleLog($_SESSION['userType']);
@@ -36,7 +36,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
   <!-- Site Properties -->
-  <title>Homepage - Semantic</title>
+  <title>Homepage - Tasker</title>
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/reset.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/site.css">
 
@@ -65,7 +65,7 @@
     $(document).ready(function() {
       $('#signOut').click(function() {
         $.ajax({
-          url: '/demo/index.php?argument=signOut',
+          url: '/demo/taskeedashboard.php?argument=signOut',
           success: function(html){
             location.reload();
           }
@@ -168,15 +168,17 @@
 <body>
 
 <!-- Page Contents -->
-<div class="pusher">  
+<div class="pusher">
   <div class="ui inverted vertical masthead center aligned segment">
-    
+
     <div class="ui container">
       <div class="ui large secondary inverted pointing menu">
         <a class="toc item">
           <i class="sidebar icon"></i>
         </a>
         <a class="active item">Home</a>        
+        <a class="item" href="/demo/bidtasks.php">View Available Tasks to Bid</a>
+        <a class="item" href="/demo/viewrunningtasks.php">View Bidded Tasks</a>
         <div class="right item">
           <?php showUser(); ?> 
         </div>
@@ -188,54 +190,51 @@
         Task Sourcing
       </h1>
       <h2>Do whatever you want when you want to.</h2>
-      <a href="/demo/taskersignup.php"><div class="ui huge primary button">Become a Tasker <i class="right arrow icon"></i></div></a>
+      <a href="/demo/viewtasks.php"><div class="ui huge primary button">Get Started <i class="right arrow icon"></i></div></a>
     </div>
 
   </div>
 
-  <!-- How to Get Started -->
   <div class="ui vertical stripe segment">
     <div class="ui left aligned stackable fourteen column grid container">
       
-    	<div class="two wide column"></div>
+      <div class="two wide column"></div>
       <div class="five wide column">
         <h3 class="ui header" style="color: grey;">How to Get Started</h3>          
-	    </div>	      		
-			
-		  <div class="seven wide column">					        
+      </div>            
+      
+      <div class="seven wide column">         
         <h2>
           <div class="ui big grey circular label">1</div> 
-          Become a Tasker
-        </h2>				
-        <p> Create a Task and Match a Tasker to complete the job for you</p> 			  	
-        <div class="row">
-          <div class="center aligned column">
-            <a class="ui huge button" href='/demo/taskersignup.php'>Sign up to become a Tasker</a> 
-          </div>
-        </div>      
-        
-        <br><br>
+          Bid for a Task
+        </h2>       
+        <p> View a list of Tasks and select one to bid for </p> <br>       
+        <h2>      
+          <div class="ui big grey circular label aligned left ">2</div> 
+          Wait to be Matched
+        </h2>
+        <p> A Taskee will match you for the task if your skills are deemed fit </p> <br>
+        <h2> 
+          <div class="ui big grey circular label">3</div> 
+          Get it Done 
+        </h2>         
+        <p> You complete the job for your Taskee and get paid </p> <br>
 
-        <h2>			
-  			  <div class="ui big grey circular label aligned left ">2</div> 
-  			  Become a Taskee
-  			</h2>
-  			<p> You'll be able to select from Tasks to bid for and wait to be Matched </p>   			
         <div class="row">
           <div class="center aligned column">
-            <a class="ui huge button" href='/demo/taskeesignup.php'>Sign up to become a Taskee</a>
+            <a class="ui huge button" href='/demo/addtasks.php'>Create a Task</a>
           </div>
-      	</div>                    
+        </div>
       </div>
-
+              
     </div>
-  </div>  
+  </div>
 
   <div class="ui vertical stripe segment">  
     <div class="ui text container">
-      <h3 class="ui header">Easily book and manage tasks with Task Sourcing</h3>
-      <p>Instead of worrying about the lack of time or inadequate skills to complete a task, why not choose someone qualified enough to do it for you?</p>
-      <a class="ui large button" href='/demo/taskeesignup'>Sign up now!</a>
+      <h3 class="ui header">Need to find a way to pass time?</h3>
+      <p>How about make use of your skills and earn extra cash by completing tasks! Select a task at any time of your preference to bid for!</p>
+      <a class="ui large button" href='/demo/bidtasks.php'>Bid for tasks now!</a>
     </div>    
   </div>
 
@@ -246,8 +245,9 @@
         <div class="three wide column">
           <h4 class="ui inverted header">Discover</h4>
           <div class="ui inverted link list">
+            <a href='/demo/taskeesignup.php' class="item">Sign up to Create Tasks
             <a href='/demo/taskersignup.php' class="item">Become a Tasker</a>
-            <a href='/demo/taskeesignup.php' class="item">Sign up to Create Tasks</a>
+            </a>
           </div>
         </div>
         <div class="three wide column">
@@ -256,8 +256,8 @@
         <div class="seven wide column">          
           <h4 class="ui inverted header">Navigate</h4>
           <div class="ui inverted link list">
-            <a href='/demo/viewbids.php' class="item">My Bids</a>            
-            <a href='/demo/viewcreatedtasks.php' class="item">My Tasks</a>            
+            <a href='/demo/bidtasks.php' class="item">List of Available Tasks</a>            
+            <a href='/demo/viewrunningtasks.php' class="item">My Running Tasks</a>            
           </div>
         </div>
       </div>
