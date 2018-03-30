@@ -87,20 +87,24 @@
     var startDay = 0;
     var startMnth = 0;
     var startYear = 0;
-    var startTime = 25; //dummy values
+    var startTime = "250"; //dummy values
 
     var endDay = 0;
     var endMnth = 0;;
     var endYear = 0;
-    var endTime = 25; //dummy values
+    var endTime = "250"; //dummy values
 
     var startNotValidFlag = false; // false indicates no flag raised. Valid
     var endNotValidFlag = false;
     var compareFlag = false;
 
+    var startErrorShowing = 0;
+    var endErrorShowing = 0;
+    var compareErrorShowing = 0;
+
     //check if values are selected
     function checkStartValidation() {
-      if (startDay == 0 || startMnth == 0 || startYear == 0 || startTime == 25) {
+      if (startDay == 0 || startMnth == 0 || startYear == 0 || startTime == "250") {
         startNotValidFlag = true; // if any of the fields not set, set flag to true.
       } else {
         startNotValidFlag = false; // set back to valid
@@ -108,7 +112,7 @@
     }
     //check if values are selected
     function checkEndValidation() {
-      if (endDay == 0 || endMnth == 0 || endYear == 0 || endTime == 25) {
+      if (endDay == 0 || endMnth == 0 || endYear == 0 || endTime == "250") {
         startNotValidFlag = true;
       } else {
         endNotValidFlag = false;
@@ -141,15 +145,30 @@
       }
 
       //check Time. Year and Month and Day is correct if code reaches this point
-      var sHour = startTime.substring(0,2);
-      var eHour = endTime.substring(0,2);
-      console.log("start hour " + sHour);
-      console.log("end hour " + eHour);
-      if (sHour > eHour) {
-        compareFlag = true;
-        return;
-      } else {
-        compareFlag = false;
+      //corner case: startDay and endDay is the same day. Time matters.
+      if (startDay == endDay) {
+        var sHour = startTime.substring(0,2);
+        var eHour = endTime.substring(0,2);
+        console.log("start hour " + sHour);
+        console.log("end hour " + eHour);
+        if (sHour >= eHour) {
+          compareFlag = true;
+          return;
+        } else {
+          compareFlag = false;
+        }
+      }
+    }
+
+    function createValidationMsg() {
+      if (startNotValidFlag && startErrorShowing == 0) {
+        startErrorShowing = 1;
+        $('#startValidationTag').append('<div class="ui left pointing red basic label"><p>Please fill in the date values</p></div>');
+      }
+
+      if (endNotValidFlag&& endErrorShowing == 0) {
+        endErrorShowing = 1;
+        $('#endValidationTag').append('<div class="ui left pointing red basic label"><p>Please fill in the date values</p></div>');
       }
     }
 
@@ -218,12 +237,12 @@
         checkStartValidation();
         checkEndValidation();
         compareDateValidation();
-        var combine = startDay + '-' + startMnth + '-' + startYear + " " + startTime;
-        var endCombine = endDay + '-' + endMnth + '-' + endYear + " " + endTime;
-        console.log(combine);
-        console.log(endCombine);
+        createValidationMsg();
         if (!startNotValidFlag && !endNotValidFlag && !compareFlag) {
-          console.log("valid");
+          var combine = startDay + '-' + startMnth + '-' + startYear + " " + startTime;
+          var endCombine = endDay + '-' + endMnth + '-' + endYear + " " + endTime;
+          console.log(combine);
+          console.log(endCombine);
           //  $.ajax({
           //   url: '/demo/submitquery.php',
           //   type: 'POST',
@@ -381,9 +400,7 @@
             </div>
           </div>
         </div>
-        <div id="startValidationTag">
-          <div class="ui left pointing red basic label"><p>Please fill in the date values</p></div>
-        </div>
+        <div id="startValidationTag"></div>
       </div>
 
     <h2 class = 'ui center aligned dividing header'> Pick a End Time and Date </h2>
@@ -405,9 +422,7 @@
           </div>
         </div>
       </div>
-      <div id="endValidationTag">
-        <div class="ui left pointing red basic label"><p>Please fill in the date values</p></div>
-      </div>
+      <div id="endValidationTag"></div>
     </div>
 
     <br>
