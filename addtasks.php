@@ -66,6 +66,7 @@
 
   <!-- list.js is a js file that stores a list of suggestions for the autocomplete function. Needed only if suggestions are from a local source-->
   <script src="list.js"></script>
+  <script src="locationlist.js"></script>
 
   <style type="text/css">
     body > .grid {
@@ -84,7 +85,10 @@
 
   <!-- Following script block shows how to get implement autocomplete with suggestions from a local js file-->
   <script>
+
+    // import {getLocList} from 'locationlist';
     var availableTags = getList(); //getList() function is a function from "list.js". Returns an array of string
+    var locations = getLocList(); //getLocList() function is a function from "locationlist.js". Returns an array of string
     var selectedOptions = []; //To store the selected options
     var detailsOfTask = ""; //To store the selected options
     var count = 0;
@@ -95,7 +99,7 @@
     var validateTaskDetail = false;
 
    $(document).ready(function() {
-      $('#suggestionFromLocalSource').autocomplete({
+      $('#suggestionForSkills').autocomplete({
         source: availableTags,
 
         //when an option is selected
@@ -120,10 +124,10 @@
         }
       });
       // do not submit form. Manually insert link.
-    $('#localForm').on('submit', function(){
+    $('#localSkillsForm').on('submit', function(){
       event.preventDefault();
       if (selectedOptions.length === 0 && !validateTask) {
-        $('#autocompleteValidation').append('<div class="ui pointing red basic label"><p>Please select an option</p></div>');
+        $('#skillsValidation').append('<div class="ui pointing red basic label"><p>Please select an option</p></div>');
         validateTask = true;
       }
       return false;
@@ -140,7 +144,7 @@
           }
         });
       });
-    })  
+    })
 
     //add drop down functionality
     $(document).ready(function() {      
@@ -159,7 +163,7 @@
     $(document).ready(function() {
       $('#nextSeq').click(function() {
         if (selectedOptions.length === 0 && !validateTask) {
-          $('#autocompleteValidation').append('<div class="ui pointing red basic label"><p>Please select an option</p></div>');
+          $('#skillsValidation').append('<div class="ui pointing red basic label"><p>Please select an option</p></div>');
           validateTask = true;
         } else if (selectedOptions.length > 0) {
           $('#toggleTask').slideUp(1000);
@@ -230,9 +234,9 @@
         <h2 class="ui dividing header">Tasks to Create</h2>
         <!-- Input HTML for suggestions from a local source-->
         <div id="toggleTask" class="ui-widget">
-          <form id="localForm">
+          <form id="localSkillsForm">
             <label >Choose your tasks: </label>
-            <input id="suggestionFromLocalSource">
+            <input id="suggestionForSkills">
           </form>
 
           <br>
@@ -240,7 +244,7 @@
           <div id="tags"></div>
 
           <!--validation for autocorrect-->
-          <div id="autocompleteValidation"></div>
+          <div id="skillsValidation"></div>
           <br>
           <button id="nextSeq" class="ui button">Next</button>
         </div>
@@ -259,8 +263,20 @@
             </div>
             <!--validation for taskDetail-->
             <div id="taskDetailValidation"></div>
-
           </form>
+
+          <div class="ui-widget">
+          <form id="localLocationForm">
+            <label >Choose your task's location: </label>
+            <input id="suggestionForLocation">
+          </form>
+
+          <br>
+
+          <!--validation for autocorrect-->
+          <div id="locationValidation"></div>
+        </div>
+
           <button id="finalSeq" class="ui button">Next</button>
         </div>
 

@@ -12,11 +12,12 @@
 		//connect to data base
 		// $db = pg_connect("host=127.0.0.1 port=5432 dbname=project1 user=postgres password=1234") or die('Could not connect: ' . pg_last_error()); 
 		
-		
+
 
 
 		// $insertQuery = "INSERT INTO Tasks Values('$email', '$firstName', '$lastName', '$password', '$contact', $creditNum, $creditSecurity, '$creditExpiry', $zipcode)";      
   //     	$result = pg_query($db, $insertQuery);
+		$stringVal = $options . $date . $time;
 	  	echo json_encode(array("abc" => $stringVal));
 	 } 
 
