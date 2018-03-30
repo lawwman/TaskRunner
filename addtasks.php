@@ -202,11 +202,16 @@
           $('#taskDetailValidation').append('<div class="ui pointing red basic label"><p>Please fill in task detail</p></div>');
           validateTaskDetail = true;
         }
+        if (selectedLoc == "" && !validateLocation) {
+          $('#locationValidation').append('<div class="ui pointing red basic label"><p>Please fill in task detail</p></div>');
+          validateLocation = true;
+        }
         console.log($('#taskDetailTextBox').val());
-        if ($('#taskDetailTextBox').val() != "") {
+        if ($('#taskDetailTextBox').val() != "" && selectedLoc != "") {
           //information to send
           var selectedOptionsJSON = JSON.stringify(selectedOptions);
           var taskDetailJSON = JSON.stringify($('#taskDetailTextBox').val());
+          var selectedLocJSON = JSON.stringify(selectedLoc);
 
           console.log('sending');
           $.ajax({
