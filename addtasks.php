@@ -98,6 +98,7 @@
 
     var validateTask = false; //boolean variation if validation message is showing
     var validateTaskDetail = false;
+    var validateLocation = false;
 
    $(document).ready(function() {
       $('#suggestionForSkills').autocomplete({
@@ -147,14 +148,14 @@
         }
       });
       // do not submit form. Manually insert link.
-    // $('#localSkillsForm').on('submit', function(){
-    //   event.preventDefault();
-    //   if (selectedOptions.length === 0 && !validateTask) {
-    //     $('#skillsValidation').append('<div class="ui pointing red basic label"><p>Please select an option</p></div>');
-    //     validateTask = true;
-    //   }
-    //   return false;
-    //   });
+    $('#localLocationForm').on('submit', function(){
+      event.preventDefault();
+      if (selectedLoc == "" && !validateLocation) {
+        $('#locationValidation').append('<div class="ui pointing red basic label"><p>Please select an option</p></div>');
+        validateLocation = true;
+      }
+      return false;
+      });
     });
 
     // performs sign out functionality.
@@ -293,9 +294,9 @@
             <label >Choose your task's location: </label>
             <input id="suggestionForLocation">
           </form>
-          <br>
           <!--validation for autocorrect-->
           <div id="locationValidation"></div>
+          <br>
         </div>
 
           <button id="finalSeq" class="ui button">Next</button>
