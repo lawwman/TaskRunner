@@ -9,7 +9,6 @@
     logout();
     consoleLog('hi');
   }
-
   redirectIfNot('taskee');
   
   function showUser() {
@@ -18,7 +17,7 @@
       <div class="ui dropdown inverted button">Hello, '. $_SESSION['userName'] . '</div>
       <div class="ui dropdown inverted button" id="signOut">Sign Out</div>
       ';
-      consoleLog($_SESSION['email']);
+      consoleLog($_SESSION['userEmail']);
       consoleLog($_SESSION['userType']);
     } else {
       echo "<a class='ui inverted button' href='/demo/taskeelogin.php'>Log in</a>
@@ -36,7 +35,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
   <!-- Site Properties -->
-  <title>Homepage - Semantic</title>
+  <title>Homepage - Taskee</title>
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/reset.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/site.css">
 
@@ -54,6 +53,7 @@
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/icon.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/sidebar.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/transition.css">
+  <link rel="stylesheet" type="text/css" href="semantic/dist/components/label.css">
 
   <script src="assets/jquery-3.3.1.min"></script>
   <script src="semantic/dist/components/transition.js"></script>
@@ -70,7 +70,8 @@
           }
         });
       });
-    })
+  });
+
   </script>
 
 
@@ -176,15 +177,8 @@
           <i class="sidebar icon"></i>
         </a>
         <a class="active item">Home</a>
-        <div class="ui simple dropdown item">
-          <span class = "text">My Tasks</span>
-          <i class = "dropdown icon"></i>
-          <div class = "menu">
-            <a class ="item" href="/demo/viewcreatedtasks.php"> View Created Tasks</a>
-            <a class ="item" href="/demo/viewrunningtasks.php"> View tasks I am running</a>
-          </div>
-        </div>
-        <a class="item" href="/demo/viewbids.php">My Bids</a>
+        <a class="item" href="/demo/viewcreatedtasks.php">View Created Tasks</a>
+        <a class="item" href="/demo/addtasks.php">Add Task</a>        
         <div class="right item">
           <?php showUser(); ?> 
         </div>
@@ -202,29 +196,46 @@
   </div>
 
   <div class="ui vertical stripe segment">
-    <div class="ui center aligned stackable grid container">
-      <div class="row">
-        <div class="eight wide column">
-          <h3 class="ui header">We Help Companies and Companions</h3>
-          <p>We can give your company superpowers to do things that they never thought possible. Let us delight your customers and empower your needs...through pure data analytics.</p>
-          <h3 class="ui header">We Make Bananas That Can Dance</h3>
-          <p>Yes that's right, you thought it was the stuff of dreams, but even bananas can be bioengineered.</p>
+    <div class="ui left aligned stackable fourteen column grid container">
+      
+      <div class="two wide column"></div>
+      <div class="five wide column">
+        <h3 class="ui header" style="color: grey;">How to Get Started</h3>          
+      </div>            
+      
+      <div class="seven wide column">         
+        <h2>
+          <div class="ui big grey circular label">1</div> 
+          Create a Task
+        </h2>       
+        <p> Create a Task or any errand </p> <br>       
+        <h2>      
+          <div class="ui big grey circular label aligned left ">2</div> 
+          Match a Tasker
+        </h2>
+        <p> You'll be able to select a skilled Tasker who bidded for your Task </p> <br>
+        <h2> 
+          <div class="ui big grey circular label">3</div> 
+          Get it Done 
+        </h2>         
+        <p> Your Tasker arrives and completes the job for you </p> <br>
+
+        <div class="row">
+          <div class="center aligned column">
+            <a class="ui huge button" href='/demo/addtasks.php'>Create a Task</a>
+          </div>
         </div>
       </div>
-      <div class="row">
-        <div class="center aligned column">
-          <a class="ui huge button">Check Them Out</a>
-        </div>
-      </div>
+              
     </div>
   </div>
 
-  <div class="ui vertical stripe segment">
+  <div class="ui vertical stripe segment">  
     <div class="ui text container">
-      <h3 class="ui header">Breaking The Grid, Grabs Your Attention</h3>
-      <p>Instead of focusing on content creation and hard work, we have learned how to master the art of doing nothing by providing massive amounts of whitespace and generic content that can seem massive, monolithic and worth your attention.</p>
-      <a class="ui large button">Read More</a>
-    </div>
+      <h3 class="ui header">Easily add and manage tasks with Task Sourcing</h3>
+      <p>Have already created a task? <br> Select a Tasker bidder to complete your task now!</p>
+      <a class="ui large button" href='/demo/viewcreatedtasks.php'>View Created Tasks!</a>
+    </div>    
   </div>
 
 
@@ -232,23 +243,24 @@
     <div class="ui container">
       <div class="ui stackable inverted divided equal height stackable grid">
         <div class="three wide column">
-          <h4 class="ui inverted header">About</h4>
+          <h4 class="ui inverted header">Discover</h4>
           <div class="ui inverted link list">
-            <a href="#" class="item">Sitemap</a>
-            <a href="#" class="item">Contact Us</a>
+            <a href='/demo/taskersignup.php' class="item">Become a Tasker</a>            
           </div>
         </div>
-        <div class="three wide column">
-          <h4 class="ui inverted header">Services</h4>
+        <div class="three wide column"></div>
+        <div class="seven wide column">          
+          <h4 class="ui inverted header">Navigate</h4>
           <div class="ui inverted link list">
-            <a href="#" class="item">DNA FAQ</a>
-            <a href="#" class="item">How To Access</a>
+            <a href='/demo/viewcreatedtasks.php' class="item">My Created Tasks</a>            
+            <a href='/demo/addtasks.php' class="item">Create a Task</a>            
           </div>
         </div>
-        <div class="seven wide column">
-          <h4 class="ui inverted header">Footer Header</h4>
-          <p>Extra space for a call to action inside the footer that could help re-engage users.</p>
+        
+        <div class = "row">        
+          &copy; 2018&nbsp;<b>Task Sourcing</b>&nbsp;| Created by &nbsp;<b>Jonathan Kennard Lawrence Wei Ping</b>        
         </div>
+        
       </div>
     </div>
   </div>

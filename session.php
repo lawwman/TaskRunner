@@ -14,10 +14,12 @@
   /**
    * Logs into param $email account. 
    */
-  function login($userName, $userType, $email) {
+  function login($userName, $userType, $email, $isAdmin, $isStaff) {
     $_SESSION['userName'] = $userName;
     $_SESSION['userType'] = $userType;
     $_SESSION['userEmail'] = $email;
+    $_SESSION['isAdmin'] = $isAdmin;
+    $_SESSION['isStaff'] = $isStaff;
   }
 
   /**

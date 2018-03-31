@@ -1,11 +1,12 @@
-Email,First Name,Last Name,Password,birth date,Phone,creditNum,creditSecurity,creditExpiry,address,unit number,zipcode
-johndoe1@gmail.com,john,doe,$2y$10$MAVCsX.5Fa9iTtfIkjHMdOny1qx8ci.7KlCgjzJBq4vYgCzXmZYXG,28/2/1995,111111,378282000000000,360,28/2/2030,serangoon ave 3,#05-24,112345
-johndoe2@gmail.com,john,doe,$2y$10$0kEcBbmo9jwtxtVQlipC4OAKjHUYeDlrI8p01Oc5oaqLGzVJ9bgDm,28/2/1995,111112,371450000000000,123,28/2/2030,serangoon ave 4,#03-26,237521
-johndoe3@gmail.com,john,doe,$2y$10$8IR33fwiXvyH3vgG8aaz5O382IFdiU77MuNARFqYeXcIwo43fo1Sa,28/2/1995,111113,378734000000000,432,28/2/2030,serangoon ave 3,#05-68,112345
-johndoe4@gmail.com,john,doe,$2y$10$mGwTfK/nMTJIbz.wAjNQP.y3nO.wFGhGiumMSpxruRiJyS6sEyDg.,28/2/1995,111114,5610590000000000,234,28/2/2030,serangoon ave 3,#01,123467
-johndoe5@gmail.com,john,doe,$2y$10$Q1sJbF6o6Qyq5oH69ykDyeQu90LqLp0F/sI5.cGtWX20c8qOPJzy6,28/2/1998,111115,30569300000000,231,28/2/2030,serangoon ave 3,#5,112345
-johndoe6@gmail.com,john,doe,$2y$10$ZAf8GSVZmTkFOPjLZ/mKu.LRpHCm1p9GCdprfx7m8bBSAqXMfF1j6,28/2/1995,111116,6011110000000000,125,28/2/2030,serangoon ave 3,#12-45,112345
-johndoe7@gmail.com,john,doe,$2y$10$7mgM6aV2f..bUSOMOVknvuHQGzubc7aC8V4Nie6icOOctJdCl2D5q,28/2/1994,,6011000000000000,406,28/2/2030,serangoon ave 3,#12-45,112345
-johndoe8@gmail.com,john,doe,$2y$10$xXO6Fm5IdOM2jvdKimKJZ.H6VoTs4wagmt/4GL8ZXzsjBSSVSeM/G,28/2/1995,111118,3530110000000000,857,28/2/2030,serangoon ave 3,#12-45,112345
-johndoe9@gmail.com,john,doe,$2y$10$/.ykju3JmQ53k2zNXIACCeGfHh4nhmBVejcOaH5zfLXc6zbBw/1Iq,28/2/1995,111119,3566000000000000,957,28/2/2030,serangoon ave 3,#12-45,112345
-johndoe10@gmail.com,john,doe,"$2y$10$YfHQ2onxOWdw6Lq1fixs.OOQtSeZQQ2nIqD9OjXHz7s8z75jE/5aa",28/2/1995,,5555560000000000,127,28/2/2030,serangoon ave 31,#12-45,112345
+Email,First Name,Last Name,Password,birth date,Phone,creditNum,creditSecurity,creditExpiry,address,unit number,zipcode,isAdmin,isStaff
+johndoe1@gmail.com,john,doe,$2y$10$MAVCsX.5Fa9iTtfIkjHMdOny1qx8ci.7KlCgjzJBq4vYgCzXmZYXG,28/2/1995,111111,378282000000000,360,28/2/2030,serangoon ave 3,#05-24,112345,FALSE,FALSE
+johndoe2@gmail.com,john,doe,$2y$10$0kEcBbmo9jwtxtVQlipC4OAKjHUYeDlrI8p01Oc5oaqLGzVJ9bgDm,28/2/1995,111112,371450000000000,123,28/2/2030,serangoon ave 4,#03-26,237521,FALSE,FALSE
+johndoe3@gmail.com,john,doe,$2y$10$8IR33fwiXvyH3vgG8aaz5O382IFdiU77MuNARFqYeXcIwo43fo1Sa,28/2/1995,111113,378734000000000,432,28/2/2030,serangoon ave 3,#05-68,112345,FALSE,FALSE
+johndoe4@gmail.com,john,doe,$2y$10$mGwTfK/nMTJIbz.wAjNQP.y3nO.wFGhGiumMSpxruRiJyS6sEyDg.,28/2/1995,111114,5610590000000000,234,28/2/2030,serangoon ave 3,#01,123467,FALSE,FALSE
+johndoe5@gmail.com,john,doe,$2y$10$Q1sJbF6o6Qyq5oH69ykDyeQu90LqLp0F/sI5.cGtWX20c8qOPJzy6,28/2/1998,111115,30569300000000,231,28/2/2030,serangoon ave 3,#5,112345,FALSE,FALSE
+johndoe6@gmail.com,john,doe,$2y$10$ZAf8GSVZmTkFOPjLZ/mKu.LRpHCm1p9GCdprfx7m8bBSAqXMfF1j6,28/2/1995,111116,6011110000000000,125,28/2/2030,serangoon ave 3,#12-45,112345,FALSE,FALSE
+johndoe7@gmail.com,john,doe,$2y$10$7mgM6aV2f..bUSOMOVknvuHQGzubc7aC8V4Nie6icOOctJdCl2D5q,28/2/1994,,6011000000000000,406,28/2/2030,serangoon ave 3,#12-45,112345,FALSE,FALSE
+johndoe8@gmail.com,john,doe,$2y$10$xXO6Fm5IdOM2jvdKimKJZ.H6VoTs4wagmt/4GL8ZXzsjBSSVSeM/G,28/2/1995,111118,3530110000000000,857,28/2/2030,serangoon ave 3,#12-45,112345,FALSE,FALSE
+johndoe9@gmail.com,john,doe,$2y$10$/.ykju3JmQ53k2zNXIACCeGfHh4nhmBVejcOaH5zfLXc6zbBw/1Iq,28/2/1995,111119,3566000000000000,957,28/2/2030,serangoon ave 3,#12-45,112345,FALSE,FALSE
+johndoe10@gmail.com,john,doe,"$2y$10$YfHQ2onxOWdw6Lq1fixs.OOQtSeZQQ2nIqD9OjXHz7s8z75jE/5aa",28/2/1995,,5555560000000000,127,28/2/2030,serangoon ave 31,#12-45,112345,FALSE,FALSE
+kennard_ng@outlook.com,kennard,ng,$2y$10$ZqQZ96W0rslM80TE7wm0keyq6rwJ7erfN2BxvTW8Cmwi5q711GK7y,28/2/1995,90695481,12491200000000,123,1/7/2023,serangoon ave 3,#01-01,556121,TRUE,TRUE

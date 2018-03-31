@@ -8,29 +8,33 @@
 
   if (isset($_POST['login'])) {
     $email = $_POST['email'];
-    $password = $_POST['password'];
-
+    $password = $_POST['password'];    
     $db = pg_connect("host=127.0.0.1 port=5432 dbname=project1 user=postgres password=1234") or die('Could not connect: ' . pg_last_error()); 
 
-    $insertQuery = "SELECT email, pword, firstName FROM Taskees WHERE email='$email'";
-    $result = pg_query($db, $insertQuery);
+    $insertQuery = "SELECT email, pword, firstname, isAdmin, isStaff FROM Taskees WHERE email='$email'";
+    $result = pg_query($db, $insertQuery);        
 
     if (pg_num_rows($result) > 0) {
-      $row = pg_fetch_row($result);
-      $email = $row[0];
+      $row = pg_fetch_row($result);      
+      $email = $row[0];      
       $hash = $row[1];
       $firstName = $row[2];
 
       if (password_verify($password, $hash)) {
-        login($firstName, 'taskee', $email);
-        header('Location: /demo/index.php');
-      }
-
-    } else {
-      echo '<script language="javascript">';
-      echo 'alert("Login failed. Please re-enter your details.")';   
-      echo '</script>';  
+        login($firstName, 'taskee', $email, $row[3], $row[4]);
+        header('Location: /demo/taskeedashboard.php');      
+      }       
+      else {        
+        echo '<script language="javascript">';
+        echo 'alert("Login failed. Please re-enter your details.")';   
+        echo '</script>';  
+      } 
     } 
+    else {        
+        echo '<script language="javascript">';
+        echo 'alert("Email does not exist. Please sign up instead.")';   
+        echo '</script>';  
+    }     
   } 
 ?>
 
@@ -123,7 +127,7 @@
         Welcome Back, Taskee
       </div>
     </h2>
-    <form class="ui large form" action="/demo/logintaskee.php" method="POST">
+    <form class="ui large form" action="/demo/taskeelogin.php" method="POST">
       <div class="ui stacked segment">
         <div class="field">
           <div class="ui left icon input">
@@ -145,7 +149,7 @@
     </form>
 
     <div class="ui message">
-      New to us? <a href="/demo/signup.php">Sign Up</a>
+      New to us? <a href="/demo/taskeesignup.php">Sign Up</a>
     </div>
   </div>
 </div>
