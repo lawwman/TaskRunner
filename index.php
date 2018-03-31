@@ -196,13 +196,13 @@
   <!-- How to Get Started -->
   <div class="ui vertical stripe segment">
     <div class="ui left aligned stackable fourteen column grid container">
-      
-    	<div class="two wide column"></div>
+
+      <div class="two wide column"></div>
       <div class="five wide column">
         <h3 class="ui header" style="color: grey;">How to Get Started</h3>          
-	    </div>	      		
-			
-		  <div class="seven wide column">					        
+      </div>	      		
+
+      <div class="seven wide column">					        
         <h2>
           <div class="ui big grey circular label">1</div> 
           Become a Tasker
@@ -213,19 +213,19 @@
             <a class="ui huge button" href='/demo/taskersignup.php'>Sign up to become a Tasker</a> 
           </div>
         </div>      
-        
+
         <br><br>
 
         <h2>			
-  			  <div class="ui big grey circular label aligned left ">2</div> 
-  			  Become a Taskee
-  			</h2>
-  			<p> You'll be able to select from Tasks to bid for and wait to be Matched </p>   			
+          <div class="ui big grey circular label aligned left ">2</div> 
+          Become a Taskee
+        </h2>
+        <p> You'll be able to select from Tasks to bid for and wait to be Matched </p>   			
         <div class="row">
           <div class="center aligned column">
             <a class="ui huge button" href='/demo/taskeesignup.php'>Sign up to become a Taskee</a>
           </div>
-      	</div>                    
+        </div>                    
       </div>
 
     </div>
