@@ -245,9 +245,7 @@
         <div class="three wide column">
           <h4 class="ui inverted header">Discover</h4>
           <div class="ui inverted link list">
-            <a href='/demo/taskeesignup.php' class="item">Sign up to Create Tasks
-            <a href='/demo/taskersignup.php' class="item">Become a Tasker</a>
-            </a>
+            <a href='/demo/taskeesignup.php' class="item">Sign up to Create Tasks</a>
           </div>
         </div>
         <div class="three wide column">

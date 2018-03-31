@@ -43,11 +43,14 @@
       $db = pg_connect("host=127.0.0.1 port=5432 dbname=project1 user=postgres password=1234") or die('Could not connect: ' . pg_last_error()); 
 
       $insertQuery = "INSERT INTO Taskers Values('$email', '$firstName', '$lastName', '$password','$birthdate', '$contact', $creditNum, $creditSecurity, '$creditExpiry', '$streetAddr', '$unitNum', $zipcode)";      
+      consoleLog($insertQuery);
       $result = pg_query($db, $insertQuery);
       
-      if ($result) {
+      if ($result) {        
         $tasker = 'tasker';
-        login($firstName, $tasker, $email);        
+        $isAdmin = pg_query($db, "SELECT isAdmin FROM Taskers WHERE email='$email'");        
+        $isStaff = pg_query($db, "SELECT isStaff FROM Taskers WHERE email='$email'");
+        login($firstName, $tasker, $email, $isAdmin, $isStaff);        
         header('Location: /demo/taskerdashboard.php');
       }     
     }

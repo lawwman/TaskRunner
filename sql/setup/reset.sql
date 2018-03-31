@@ -20,7 +20,15 @@ CREATE TABLE Taskees (
     creditSecurity INT NOT NULL,
     creditExpiry DATE NOT NULL,
     
-    zipcode INT NOT NULL
+    zipcode INT NOT NULL,
+
+    isAdmin BOOLEAN NOT NULL DEFAULT FALSE,
+    isStaff BOOLEAN NOT NULL DEFAULT FALSE 
+    CHECK (
+        (NOT isAdmin AND NOT isStaff) OR 
+        (NOT isAdmin AND isStaff) OR 
+        (isAdmin AND isStaff)
+    )
 );
 
 CREATE TABLE Taskers (
@@ -41,8 +49,15 @@ CREATE TABLE Taskers (
     unitNum VARCHAR(20),
     zipcode INT NOT NULL,
     
+    isAdmin BOOLEAN NOT NULL DEFAULT FALSE,
+    isStaff BOOLEAN NOT NULL DEFAULT FALSE 
+    
     -- we can't have someone born later than today using this interface
-	CHECK(birthDate < now())
+	CHECK(birthDate < now() AND
+        ((NOT isAdmin AND NOT isStaff) OR 
+        (NOT isAdmin AND isStaff) OR 
+        (isAdmin AND isStaff))
+    )
 );
 
 CREATE TABLE Skills (

@@ -21,8 +21,8 @@
       consoleLog($_SESSION['userEmail']);
       consoleLog($_SESSION['userType']);
     } else {
-      echo "<a class='ui inverted button' href='/demo/taskeelogin.php'>Log in</a>
-      <a class='ui inverted button' href='/demo/taskersignup.php'>Become a Tasker</a>";
+      echo "<a class='ui inverted button' href='/demo/taskeelogin.php'>Log in as Taskee</a>
+      <a class='ui inverted button' href='/demo/taskerlogin.php'>Log in as Tasker</a>";
     }
   }
   

@@ -40,15 +40,14 @@
       $db = pg_connect("host=127.0.0.1 port=5432 dbname=project1 user=postgres password=1234") or die('Could not connect: ' . pg_last_error()); 
 
       $insertQuery = "INSERT INTO Taskees Values('$email', '$firstName', '$lastName', '$password', '$contact', $creditNum, $creditSecurity, '$creditExpiry', $zipcode)";     
-      consoleLog($insertQuery);
       $result = pg_query($db, $insertQuery);
-      consoleLog($result);
-      consoleLog($firstName);
 
       if ($result) {
         consoleLog($firstName);
         $taskee = 'taskee';
-        login($firstName, $taskee, $email);
+        $isAdmin = pg_query($db, "SELECT isAdmin FROM Taskers WHERE email='$email'");        
+        $isStaff = pg_query($db, "SELECT isStaff FROM Taskers WHERE email='$email'");
+        login($firstName, $taskee, $email, $isAdmin, $isStaff);
         header('Location: /demo/index.php');
       }     
     }

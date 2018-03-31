@@ -11,7 +11,7 @@
     $password = $_POST['password'];    
     $db = pg_connect("host=127.0.0.1 port=5432 dbname=project1 user=postgres password=1234") or die('Could not connect: ' . pg_last_error()); 
 
-    $insertQuery = "SELECT email, pword, firstname FROM Taskees WHERE email='$email'";
+    $insertQuery = "SELECT email, pword, firstname, isAdmin, isStaff FROM Taskers WHERE email='$email'";
     $result = pg_query($db, $insertQuery);        
 
     if (pg_num_rows($result) > 0) {
@@ -21,15 +21,20 @@
       $firstName = $row[2];
 
       if (password_verify($password, $hash)) {
-        login($firstName, 'taskee', $email);
-        header('Location: /demo/taskeedashboard.php');      
+        login($firstName, 'tasker', $email, $row[3], $row[4]);
+        header('Location: /demo/taskerdashboard.php');      
       }       
       else {        
         echo '<script language="javascript">';
         echo 'alert("Login failed. Please re-enter your details.")';   
         echo '</script>';  
       } 
-    }    
+    } 
+    else {        
+        echo '<script language="javascript">';
+        echo 'alert("Email does not exist. Please sign up instead.")';   
+        echo '</script>';  
+    }     
   } 
 ?>
 
@@ -119,10 +124,10 @@
   <div class="column">
     <h2 class="ui blue image header">
       <div class="content">
-        Welcome Back, Taskee
+        Welcome Back, Tasker
       </div>
     </h2>
-    <form class="ui large form" action="/demo/logintaskee.php" method="POST">
+    <form class="ui large form" action="/demo/taskerlogin.php" method="POST">
       <div class="ui stacked segment">
         <div class="field">
           <div class="ui left icon input">
@@ -144,7 +149,7 @@
     </form>
 
     <div class="ui message">
-      New to us? <a href="/demo/signup.php">Sign Up</a>
+      New to us? <a href="/demo/taskersignup.php">Sign Up</a>
     </div>
   </div>
 </div>

@@ -9,7 +9,6 @@
     logout();
     consoleLog('hi');
   }
-
   redirectIfNot('taskee');
   
   function showUser() {
@@ -71,7 +70,8 @@
           }
         });
       });
-    })
+  });
+
   </script>
 
 
@@ -232,9 +232,9 @@
 
   <div class="ui vertical stripe segment">  
     <div class="ui text container">
-      <h3 class="ui header">Easily book and manage tasks with Task Sourcing</h3>
-      <p>Instead of worrying about the lack of time or inadequate skills to complete a task, why not choose someone qualified enough to do it for you?</p>
-      <a class="ui large button" href='/demo/taskeesignup'>Sign up now!</a>
+      <h3 class="ui header">Easily add and manage tasks with Task Sourcing</h3>
+      <p>Have already created a task? <br> Select a Tasker bidder to complete your task now!</p>
+      <a class="ui large button" href='/demo/viewcreatedtasks.php'>View Created Tasks!</a>
     </div>    
   </div>
 
@@ -245,8 +245,7 @@
         <div class="three wide column">
           <h4 class="ui inverted header">Discover</h4>
           <div class="ui inverted link list">
-            <a href='/demo/taskersignup.php' class="item">Become a Tasker</a>
-            <a href='/demo/taskeesignup.php' class="item">Sign up to Create Tasks</a>
+            <a href='/demo/taskersignup.php' class="item">Become a Tasker</a>            
           </div>
         </div>
         <div class="three wide column"></div>
