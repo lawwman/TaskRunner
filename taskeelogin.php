@@ -23,14 +23,12 @@
       if (password_verify($password, $hash)) {
         login($firstName, 'taskee', $email, $row[3], $row[4]);
         header('Location: /demo/taskeedashboard.php');      
-      }       
-      else {        
+      } else {        
         echo '<script language="javascript">';
         echo 'alert("Login failed. Please re-enter your details.")';   
         echo '</script>';  
-      } 
-    } 
-    else {        
+      }       
+    } else {        
         echo '<script language="javascript">';
         echo 'alert("Email does not exist. Please sign up instead.")';   
         echo '</script>';  
