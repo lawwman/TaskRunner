@@ -240,8 +240,8 @@
         createValidationMsg();
         if (!startNotValidFlag && !endNotValidFlag && !compareFlag) {
           var seconds = ":00";
-          dateInput = startDay + '-' + startMnth + '-' + startYear + " " + startTime + seconds;
-          dateEndInput = endDay + '-' + endMnth + '-' + endYear + " " + endTime + seconds;
+          dateInput = startYear + '-' + startMnth + '-' + startDay + " " + startTime + seconds;
+          dateEndInput = endYear + '-' + endMnth + '-' + endDay + " " + endTime + seconds;
           dateInputJSON = JSON.stringify(dateInput);
           dateEndInputJSON = JSON.stringify(dateEndInput);
            $.ajax({
