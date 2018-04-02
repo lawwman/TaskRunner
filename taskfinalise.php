@@ -80,9 +80,7 @@
 
   <script>
     var dateInputJSON;
-    var timeInputJSON;
     var dateEndInputJSON;
-    var timeEndInputJSON;
 
     var startDay = 0;
     var startMnth = 0;
@@ -239,19 +237,18 @@
         compareDateValidation();
         createValidationMsg();
         if (!startNotValidFlag && !endNotValidFlag && !compareFlag) {
-          var combine = startDay + '-' + startMnth + '-' + startYear + " " + startTime;
-          var endCombine = endDay + '-' + endMnth + '-' + endYear + " " + endTime;
-          console.log(combine);
-          console.log(endCombine);
-          //  $.ajax({
-          //   url: '/demo/submitquery.php',
-          //   type: 'POST',
-          //   dataType: 'json',
-          //   data: {date: dateInputJSON, time: timeInputJSON, endDate: dateEndInputJSON, endTime: timeEndInputJSON},
-          //   success: function(data){
-          //     console.log(data.abc);
-          //   }
-          // });
+          var seconds = ":00";
+          dateInputJSON = startDay + '-' + startMnth + '-' + startYear + " " + startTime + seconds;
+          dateEndInputJSON = endDay + '-' + endMnth + '-' + endYear + " " + endTime + seconds;
+           $.ajax({
+            url: '/demo/submitquery.php',
+            type: 'POST',
+            dataType: 'json',
+            data: {date: dateInputJSON, endDate: dateEndInputJSON},
+            success: function(data){
+              console.log(data.abc);
+            }
+          });
         }
         if (startNotValidFlag || endNotValidFlag || compareFlag) {
           console.log("not valid");

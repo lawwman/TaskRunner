@@ -62,7 +62,7 @@ CREATE TABLE HasSkills (
 );
 
 CREATE TABLE Tasks (
-	task_id BIGINT PRIMARY KEY, -- BIGINT so that can contain more than 4 bil accounts (in case single user creates multiple accs)
+	task_id VARCHAR(100) PRIMARY KEY, -- BIGINT so that can contain more than 4 bil accounts (in case single user creates multiple accs)
     ttype VARCHAR(50) NOT NULL REFERENCES Skills,
 	task_details VARCHAR(3000), -- Details of task 
 	
@@ -88,7 +88,7 @@ CREATE TABLE Tasks (
 );
 
 CREATE TABLE Bids (
-	task_id BIGINT NOT NULL REFERENCES Tasks, 
+	task_id VARCHAR(100) NOT NULL REFERENCES Tasks, 
     taskeeEmail VARCHAR(100) NOT NULL REFERENCES Taskees,
     taskerEmail VARCHAR(100) NOT NULL REFERENCES Taskers,
 	
