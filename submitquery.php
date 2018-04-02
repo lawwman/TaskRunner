@@ -3,9 +3,9 @@
 	$options;
 	$details;
 	$locs;
-	if (isset($_SESSION['options'])) {
-		$options = json_decode($_SESSION['options'], true);
-		unset($_SESSION['options']); //remove the session variable from $SESSION once it is obtained
+	if (isset($_SESSION['skill'])) {
+		$skill = json_decode($_SESSION['skill']);
+		unset($_SESSION['skill']); //remove the session variable from $SESSION once it is obtained
 	}
 	if (isset($_SESSION['locs'])) {
 	$locs = json_decode($_SESSION['locs']);
@@ -22,7 +22,7 @@
 		$db = pg_connect("host=127.0.0.1 port=5432 dbname=project1 user=postgres password=1234") or die('Could not connect: ' . pg_last_error()); 
 		$createdDateTime = date('Y-m-d H:i:s');
 		$task_id = uniqid();
-		$stringVal = $task_id . $options . $details . $locs . $date . $endDate;
+		$stringVal = $task_id . $skill . $details . $locs . $createdDateTime . $date . $endDate;
 	 	echo json_encode(array("abc" => $stringVal));
 
 		// $insertQuery = "INSERT INTO Tasks Values('$task_id', '$options', '$taskee_email', '$tasker_email', NULL, '$createdDateTime', '$date', '$endDate', '$loc')";      

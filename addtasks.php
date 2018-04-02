@@ -89,11 +89,9 @@
     // import {getLocList} from 'locationlist';
     var availableTags = getList(); //getList() function is a function from "list.js". Returns an array of string
     var locations = getLocList(); //getLocList() function is a function from "locationlist.js". Returns an array of string
-    var selectedOptions = []; //To store the selected options
+    var selectedSkill = ""; //To store the selected options
     var detailsOfTask = ""; //To store the selected options
     var selectedLoc = "";
-    var count = 0;
-    var id = "removeTag";
 
 
     var validateTask = false; //boolean variation if validation message is showing
@@ -107,28 +105,13 @@
         //when an option is selected
         select: function(select, ui) {
           var label = ui.item.label;
-          selectedOptions.push(label); //store selected function
-          console.log(selectedOptions);
-          count++; //increment count to give unique id to each tag!
-          $('#tags').append('<div class="ui image label">'+ label + '<i id="' + id + count + '" class="delete icon removeTag"></i></div>');
-
-          //function when option tag is clicked
-          $("#" + id+ count).click(function() {
-            var toRemove = $(this).parent().text(); //get option
-            selectedOptions = selectedOptions.filter(function(item) {
-              return item != toRemove;
-            });
-            console.log(selectedOptions);
-
-            //finally, remove tag.
-            $(this).parent().remove(); 
-          });
+          selectedSkill = label;
         }
       });
       // do not submit form. Manually insert link.
     $('#localSkillsForm').on('submit', function(){
       event.preventDefault();
-      if (selectedOptions.length === 0 && !validateTask) {
+      if (selectedSkill == "" && !validateTask) {
         $('#skillsValidation').append('<div class="ui pointing red basic label"><p>Please select an option</p></div>');
         validateTask = true;
       }
@@ -143,7 +126,6 @@
         //when an option is selected
         select: function(select, ui) {
           var label = ui.item.label;
-          console.log(label);
           selectedLoc = label;
         }
       });
@@ -170,14 +152,6 @@
       });
     })
 
-    //add drop down functionality
-    $(document).ready(function() {      
-      $(".1-120").append('<option>Duration (Hours)</option>')
-      for (i=1;i<=120;i++){
-        $(".1-120").append($('<option></option>').val(i).html(i))
-      }
-    })
-
     //script to ensure lower sequence not shown yet
     $(document).ready(function() {
       $('#toggleDetail').hide();
@@ -186,10 +160,10 @@
     //script to toggle
     $(document).ready(function() {
       $('#nextSeq').click(function() {
-        if (selectedOptions.length === 0 && !validateTask) {
+        if (selectedSkill == "" && !validateTask) {
           $('#skillsValidation').append('<div class="ui pointing red basic label"><p>Please select an option</p></div>');
           validateTask = true;
-        } else if (selectedOptions.length > 0) {
+        } else if (selectedSkill != "") {
           $('#toggleTask').slideUp(1000);
           $('#toggleDetail').slideDown(1000);
         }
@@ -209,7 +183,7 @@
         console.log($('#taskDetailTextBox').val());
         if ($('#taskDetailTextBox').val() != "" && selectedLoc != "") {
           //information to send
-          var selectedOptionsJSON = JSON.stringify(selectedOptions);
+          var selectedSkillJSON = JSON.stringify(selectedSkill);
           var taskDetailJSON = JSON.stringify($('#taskDetailTextBox').val());
           var selectedLocJSON = JSON.stringify(selectedLoc);
 
@@ -217,7 +191,7 @@
           $.ajax({
             url: '/demo/storetaskdetail.php',
             type: 'POST',
-            data: { options: selectedOptionsJSON, details: taskDetailJSON, locs: selectedLocJSON },
+            data: { skill: selectedSkillJSON, details: taskDetailJSON, locs: selectedLocJSON },
             dataType: 'json',
             success: function(data) {
               window.location.replace("/demo/taskfinalise.php");
