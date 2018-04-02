@@ -79,6 +79,8 @@
   </script>
 
   <script>
+    var dateInput;
+    var dateEndInput;
     var dateInputJSON;
     var dateEndInputJSON;
 
@@ -238,8 +240,10 @@
         createValidationMsg();
         if (!startNotValidFlag && !endNotValidFlag && !compareFlag) {
           var seconds = ":00";
-          dateInputJSON = startDay + '-' + startMnth + '-' + startYear + " " + startTime + seconds;
-          dateEndInputJSON = endDay + '-' + endMnth + '-' + endYear + " " + endTime + seconds;
+          dateInput = startDay + '-' + startMnth + '-' + startYear + " " + startTime + seconds;
+          dateEndInput = endDay + '-' + endMnth + '-' + endYear + " " + endTime + seconds;
+          dateInputJSON = JSON.stringify(dateInput);
+          dateEndInputJSON = JSON.stringify(dateEndInput);
            $.ajax({
             url: '/demo/submitquery.php',
             type: 'POST',
