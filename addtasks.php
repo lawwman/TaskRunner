@@ -86,7 +86,6 @@
   <!-- Following script block shows how to get implement autocomplete with suggestions from a local js file-->
   <script>
 
-    // import {getLocList} from 'locationlist';
     var availableTags = getList(); //getList() function is a function from "list.js". Returns an array of string
     var locations = getLocList(); //getLocList() function is a function from "locationlist.js". Returns an array of string
     var selectedSkill = ""; //To store the selected options
