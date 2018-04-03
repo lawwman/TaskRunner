@@ -122,7 +122,6 @@
     $(document).ready(function() {
       $(".card").click(function() {
         currentTaskIDSelected = $(this).find('.hideTask').val();
-        console.log(currentTaskIDSelected);
       })
     })
 
@@ -134,8 +133,7 @@
             data: { taskid: currentTaskIDSelected },
             success: function(data){
               var obj = JSON.parse(data);
-              console.log(obj);
-              console.log(obj.abc);
+              //window.location.replace("/demo/blahblah.php");
             }
           });
       })
@@ -149,8 +147,7 @@
             data: { taskid: currentTaskIDSelected },
             success: function(data){
               var obj = JSON.parse(data);
-              console.log(obj);
-              console.log(obj.abc);
+              //window.location.replace("/demo/blahblah.php");
             }
           });
       })
