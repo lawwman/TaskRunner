@@ -175,6 +175,7 @@
     $(document).ready(function() {
       $('#calendarDate').calendar({
         type: 'date',
+        minDate: new Date(),
         onChange: function(date) {
             startYear = date.getFullYear();
             var month = date.getMonth() + 1;
@@ -205,6 +206,7 @@
 
       $('#calendarEndDate').calendar({
         type: 'date',
+        minDate: new Date(),
         onChange: function(date) {
             endYear = date.getFullYear();
             var month = date.getMonth() + 1;
