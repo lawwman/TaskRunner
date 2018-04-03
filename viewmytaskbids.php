@@ -39,7 +39,7 @@
               <div class='content'>
                 <a class='header'>$row[firstname]</a>
                 <div class='meta'>
-                  <p class='description'> Status: </p>
+                  <p class='description'> Status: $row[taskeremail]</p>
                 </div>
                 <br>
                 <div class='description'> Location: </div>
