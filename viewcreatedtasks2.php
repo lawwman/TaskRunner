@@ -133,7 +133,7 @@
           }
         });
     }
-    
+
     function viewBid(taskId) {
       taskID = taskId;
         $.ajax({
@@ -141,7 +141,6 @@
           type: "POST",
           data: { taskid: taskId },
           success: function(data){
-            alert("yay");
             var obj = JSON.parse(data);
             console.log(obj);
             console.log(obj.abc);
