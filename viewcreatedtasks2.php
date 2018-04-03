@@ -32,6 +32,7 @@
       echo "
           <div class='card'>
             <div class='content'>
+              <input type='hidden' value='$row[task_id]' class='hideTask'>
               <a class='header'>$row[ttype]</a>
               <div class='meta'>
                 <p class='description'> Status: $row[status]</p>
@@ -126,7 +127,6 @@
           type: "POST",
           data: { taskid: taskId },
           success: function(data){
-            alert("yay");
             var obj = JSON.parse(data);
             console.log(obj);
             console.log(obj.abc);
@@ -147,6 +147,13 @@
           }
         });
     }
+
+    $(document).ready(function() {
+      $(".card").click(function() {
+        var yay = $(this).find('.hideTask').val();
+        console.log(yay);
+      })
+    })
 
     // performs sign out functionality.
     $(document).ready(function() {
