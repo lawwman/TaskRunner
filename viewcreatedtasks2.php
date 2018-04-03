@@ -8,7 +8,7 @@
     logout();
   }
 
-  redirectIfNot('taskee');
+  //redirectIfNot('taskee');
 
   function showUser() {
     if (isLoggedIn()) {
@@ -30,26 +30,24 @@
     $result = pg_query($db, "SELECT * FROM tasks WHERE taskeeemail = '$userEmail' ");
     while ($row = pg_fetch_assoc($result)) {
       echo "
-         <div class='ui link two cards' id='showTaskDetails'>
-            <div class='card'>
-              <div class='content'>
-                <a class='header'>$row[ttype]</a>
-                <div class='meta'>
-                  <p class='description'> Status: $row[status]</p>
-                </div>
-                <br>
-                <div class='description'> Location: $row[loc]</div>
-                <br>
-                <div class='description'> created by: $row[taskeeemail]</div>
-                <br>
-                <div class='meta'>
-                 <span class='date'>Created in $row[createddatetime]</span>
-                </div>
+          <div class='card'>
+            <div class='content'>
+              <a class='header'>$row[ttype]</a>
+              <div class='meta'>
+                <p class='description'> Status: $row[status]</p>
+              </div>
+              <br>
+              <div class='description'> Location: $row[loc]</div>
+              <br>
+              <div class='description'> created by: $row[taskeeemail]</div>
+              <br>
+              <div class='meta'>
+               <span class='date'>Created in $row[createddatetime]</span>
               </div>
             </div>
           </div>
 
-          <div id='taskDetailModal' class='ui modal' value= '123'>
+          <div id='taskDetailModal' class='ui modal'>
             <i class = 'close icon'></i>
             <div class='center header'>
               $row[ttype]
@@ -63,7 +61,7 @@
               </div>
             </div>
             <div class='actions'>
-              <a href='/demo/edittasks.php?taskid=". $row['task_id'] . "'>
+              <a href='/demo/edittasks.php'>
                 <div class='ui blue icon button'>
                   Edit Task
                 </div>
@@ -254,8 +252,9 @@
 
 <div class="my_container">
   <form method = "post">
+    <div class='ui link two cards' id='showTaskDetails'>
       <?php showBidders(); ?> 
-
+    </div>
   </form>  
 </div>
 
