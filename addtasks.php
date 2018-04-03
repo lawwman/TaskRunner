@@ -66,6 +66,7 @@
 
   <!-- list.js is a js file that stores a list of suggestions for the autocomplete function. Needed only if suggestions are from a local source-->
   <script src="list.js"></script>
+  <script src="locationlist.js"></script>
 
   <style type="text/css">
     body > .grid {
@@ -84,48 +85,55 @@
 
   <!-- Following script block shows how to get implement autocomplete with suggestions from a local js file-->
   <script>
+
     var availableTags = getList(); //getList() function is a function from "list.js". Returns an array of string
-    var selectedOptions = []; //To store the selected options
+    var locations = getLocList(); //getLocList() function is a function from "locationlist.js". Returns an array of string
+    var selectedSkill = ""; //To store the selected options
     var detailsOfTask = ""; //To store the selected options
-    var count = 0;
-    var id = "removeTag";
+    var selectedLoc = "";
 
 
     var validateTask = false; //boolean variation if validation message is showing
     var validateTaskDetail = false;
-    var validateDropdown = false;
+    var validateLocation = false;
 
    $(document).ready(function() {
-      $('#suggestionFromLocalSource').autocomplete({
+      $('#suggestionForSkills').autocomplete({
         source: availableTags,
 
         //when an option is selected
         select: function(select, ui) {
           var label = ui.item.label;
-          selectedOptions.push(label); //store selected function
-          console.log(selectedOptions);
-          count++; //increment count to give unique id to each tag!
-          $('#tags').append('<div class="ui image label">'+ label + '<i id="' + id + count + '" class="delete icon removeTag"></i></div>');
-
-          //function when option tag is clicked
-          $("#" + id+ count).click(function() {
-            var toRemove = $(this).parent().text(); //get option
-            selectedOptions = selectedOptions.filter(function(item) {
-              return item != toRemove;
-            });
-            console.log(selectedOptions);
-
-            //finally, remove tag.
-            $(this).parent().remove(); 
-          });
+          selectedSkill = label;
         }
       });
       // do not submit form. Manually insert link.
-    $('#localForm').on('submit', function(){
+    $('#localSkillsForm').on('submit', function(){
       event.preventDefault();
-      if (selectedOptions.length === 0 && !validateTask) {
-        $('#autocompleteValidation').append('<div class="ui pointing red basic label"><p>Please select an option</p></div>');
+      if (selectedSkill == "" && !validateTask) {
+        $('#skillsValidation').append('<div class="ui pointing red basic label"><p>Please select an option</p></div>');
         validateTask = true;
+      }
+      return false;
+      });
+    });
+
+   $(document).ready(function() {
+      $('#suggestionForLocation').autocomplete({
+        source: locations,
+
+        //when an option is selected
+        select: function(select, ui) {
+          var label = ui.item.label;
+          selectedLoc = label;
+        }
+      });
+      // do not submit form. Manually insert link.
+    $('#localLocationForm').on('submit', function(){
+      event.preventDefault();
+      if (selectedLoc == "" && !validateLocation) {
+        $('#locationValidation').append('<div class="ui pointing red basic label"><p>Please select an option</p></div>');
+        validateLocation = true;
       }
       return false;
       });
@@ -141,14 +149,6 @@
           }
         });
       });
-    })  
-
-    //add drop down functionality
-    $(document).ready(function() {      
-      $(".1-120").append('<option>Duration (Hours)</option>')
-      for (i=1;i<=120;i++){
-        $(".1-120").append($('<option></option>').val(i).html(i))
-      }
     })
 
     //script to ensure lower sequence not shown yet
@@ -159,10 +159,10 @@
     //script to toggle
     $(document).ready(function() {
       $('#nextSeq').click(function() {
-        if (selectedOptions.length === 0 && !validateTask) {
-          $('#autocompleteValidation').append('<div class="ui pointing red basic label"><p>Please select an option</p></div>');
+        if (selectedSkill == "" && !validateTask) {
+          $('#skillsValidation').append('<div class="ui pointing red basic label"><p>Please select an option</p></div>');
           validateTask = true;
-        } else if (selectedOptions.length > 0) {
+        } else if (selectedSkill != "") {
           $('#toggleTask').slideUp(1000);
           $('#toggleDetail').slideDown(1000);
         }
@@ -175,26 +175,25 @@
           $('#taskDetailValidation').append('<div class="ui pointing red basic label"><p>Please fill in task detail</p></div>');
           validateTaskDetail = true;
         }
-        if ($(".1-120").val() === "Duration (Hours)" && !validateDropdown) {
-          $('#dropdownValidation').append('<div class="ui pointing red basic label"><p>Please select a duration</p></div>');
-          validateDropdown = true;
+        if (selectedLoc == "" && !validateLocation) {
+          $('#locationValidation').append('<div class="ui pointing red basic label"><p>Please fill in task detail</p></div>');
+          validateLocation = true;
         }
         console.log($('#taskDetailTextBox').val());
-        console.log($(".1-120").val());
-        if ($(".1-120").val() != "Duration (Hours)" && $('#taskDetailTextBox').val() != "") {
+        if ($('#taskDetailTextBox').val() != "" && selectedLoc != "") {
           //information to send
-          var selectedOptionsJSON = JSON.stringify(selectedOptions);
+          var selectedSkillJSON = JSON.stringify(selectedSkill);
           var taskDetailJSON = JSON.stringify($('#taskDetailTextBox').val());
-          var durationJSON = JSON.stringify($(".1-120").val());
+          var selectedLocJSON = JSON.stringify(selectedLoc);
 
           console.log('sending');
           $.ajax({
-            url: '/demo/testing.php',
+            url: '/demo/storetaskdetail.php',
             type: 'POST',
-            data: { options: selectedOptionsJSON },
+            data: { skill: selectedSkillJSON, details: taskDetailJSON, locs: selectedLocJSON },
             dataType: 'json',
             success: function(data) {
-              window.location.replace("/demo/testReceive.php");
+              window.location.replace("/demo/taskfinalise.php");
             }
           });
         }
@@ -237,9 +236,9 @@
         <h2 class="ui dividing header">Tasks to Create</h2>
         <!-- Input HTML for suggestions from a local source-->
         <div id="toggleTask" class="ui-widget">
-          <form id="localForm">
+          <form id="localSkillsForm">
             <label >Choose your tasks: </label>
-            <input id="suggestionFromLocalSource">
+            <input id="suggestionForSkills">
           </form>
 
           <br>
@@ -247,7 +246,7 @@
           <div id="tags"></div>
 
           <!--validation for autocorrect-->
-          <div id="autocompleteValidation"></div>
+          <div id="skillsValidation"></div>
           <br>
           <button id="nextSeq" class="ui button">Next</button>
         </div>
@@ -266,15 +265,18 @@
             </div>
             <!--validation for taskDetail-->
             <div id="taskDetailValidation"></div>
-
-            <div class="field">                
-              <select class="1-120" name="dropdown">
-              </select>
-            </div>
-            <!--validation for dropdown-->
-            <div id="dropdownValidation"></div>
-
           </form>
+
+          <div class="ui-widget">
+          <form id="localLocationForm">
+            <label >Choose your task's location: </label>
+            <input id="suggestionForLocation">
+          </form>
+          <!--validation for autocorrect-->
+          <div id="locationValidation"></div>
+          <br>
+        </div>
+
           <button id="finalSeq" class="ui button">Next</button>
         </div>
 
