@@ -1,4 +1,4 @@
-<script>
-    console.log(sessionStorage.getItem("taskid"));
-    sessionStorage.clear();
-</script>
+<?php
+	$val = "hi";
+	echo json_encode(array("abc" => $val));
+?>

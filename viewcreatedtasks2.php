@@ -74,6 +74,7 @@
           </div>
 ";
     }
+    pg_close($db);
   }
 ?>
 
@@ -120,16 +121,32 @@
 
     function editTask(taskId) {
       taskID = taskId;
-      sessionStorage.setItem("taskid", taskID);
-      console.log(sessionStorage.getItem("taskid"));
-      window.location.replace("/demo/storetask.php");
+        $.ajax({
+          url: '/demo/storetask.php',
+          type: "POST",
+          data: { taskid: taskId },
+          success: function(data){
+            alert("yay");
+            var obj = JSON.parse(data);
+            console.log(obj);
+            console.log(obj.abc);
+          }
+        });
     }
-
+    
     function viewBid(taskId) {
       taskID = taskId;
-      sessionStorage.setItem("taskid", taskID);
-      console.log(sessionStorage.getItem("taskid"));
-      window.location.replace("/demo/storetask.php");
+        $.ajax({
+          url: '/demo/storetask.php',
+          type: "POST",
+          data: { taskid: taskId },
+          success: function(data){
+            alert("yay");
+            var obj = JSON.parse(data);
+            console.log(obj);
+            console.log(obj.abc);
+          }
+        });
     }
 
     // performs sign out functionality.
