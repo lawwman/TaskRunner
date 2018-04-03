@@ -61,11 +61,12 @@
               </div>
             </div>
             <div class='actions'>
-              <a href='/demo/edittasks.php'>
-                <div class='ui blue icon button'>
-                  Edit Task
-                </div>
-              </a>
+              <button class='ui primary blue button' onclick=\"editTask('$row[task_id]');\">
+              Edit
+              </button>
+              <button class='ui primary blue button' onclick=\"viewBid('$row[task_id]');\">
+              View bidders
+              </button>
               <div class='ui approve red icon button' type='button' id='deleteTask' value='$row[task_id]'> 
                 Delete Task 
               </div>
@@ -113,6 +114,24 @@
   <script src="semantic/dist/components/dimmer.js"></script>
 
   <script>
+
+    var taskID = "";
+
+
+    function editTask(taskId) {
+      taskID = taskId;
+      sessionStorage.setItem("taskid", taskID);
+      console.log(sessionStorage.getItem("taskid"));
+      window.location.replace("/demo/storetask.php");
+    }
+
+    function viewBid(taskId) {
+      taskID = taskId;
+      sessionStorage.setItem("taskid", taskID);
+      console.log(sessionStorage.getItem("taskid"));
+      window.location.replace("/demo/storetask.php");
+    }
+
     // performs sign out functionality.
     $(document).ready(function() {
       $('#signOut').click(function() {
@@ -124,9 +143,7 @@
         });
       });
     })
-  </script>
 
-  <script>
   $(document).ready(function() {
     $('#showTaskDetails').click(function(){
       $('#taskDetailModal').modal({
@@ -135,6 +152,7 @@
       }).modal('show');
     });
   })
+
   </script>
 
   <style type="text/css">
@@ -251,11 +269,9 @@
   </div>
 
 <div class="my_container">
-  <form method = "post">
-    <div class='ui link two cards' id='showTaskDetails'>
-      <?php showBidders(); ?> 
-    </div>
-  </form>  
+  <div class='ui link two cards' id='showTaskDetails'>
+    <?php showBidders(); ?> 
+  </div>
 </div>
 
 
