@@ -134,10 +134,15 @@
 
     $(document).ready(function() {
       $(".confirmBtn").click(function() {
-        // console.log("confirm");
-        // $.ajax({
-        //   url: 
-        // });
+        console.log("confirm");
+        $.ajax({
+          url: '/demo/selectbidder.php',
+          data: { user: currentUserSelected },
+          type: 'POST',
+          success: function(data) {
+            console.log(data);
+          }
+        });
       })
     })
 
