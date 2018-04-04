@@ -50,9 +50,29 @@
                  <span class='date'>Created in </span>
                 </div>
                 <br>
-                <button class='ui primary blue button'>
+                <button class='ui primary blue button bidBtn'>
                   Select Bidder!
                 </button>
+              </div>
+            </div>
+
+            <div class='ui basic modal' id='taskUserModal'>
+              <div class='ui icon header'>
+                <i class='archive icon'></i>
+                  Archive Old Messages
+              </div>
+              <div class='content'>
+                <p>Are you sure you want to select $row[taskeremail]?</p>
+              </div>
+              <div class='actions'>
+                <div class='ui red basic cancel inverted button'>
+                  <i class='remove icon'></i>
+                    No
+                 </div>
+                <div class='ui green ok inverted button'>
+                  <i class='checkmark icon'></i>
+                    Yes
+                </div>
               </div>
             </div>";
       }
@@ -61,6 +81,10 @@
       unset($_SESSION['taskid']);
       unset($_SESSION['tasktype']);
     }
+  }
+
+  function selectBidder() {
+
   }
 ?>
 
@@ -133,6 +157,15 @@
             window.location.replace("/demo/index.php");
           }
         });
+      });
+    })
+
+    $(document).ready(function() {
+      $('.bidBtn').click(function(){
+        $('#taskUserModal').modal({
+          onApprove: function() {
+          }
+        }).modal('show');
       });
     })
 
