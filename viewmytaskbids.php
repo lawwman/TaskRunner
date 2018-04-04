@@ -37,18 +37,15 @@
         echo "
             <div class='card'>
               <div class='content'>
-                <a class='header'>$row[firstname]</a>
+                <input type='hidden' value='$row[taskeremail]' class='hideTask'>
+                <a class='header'>$row[firstname] $row[lastname]</a>
                 <div class='meta'>
-                  <p class='description'> Status: $row[taskeremail]</p>
+                  <p class='description'> email: $row[taskeremail]</p>
                 </div>
                 <br>
-                <div class='description'> Location: </div>
+                <div class='description'> Rate: $row[hrate] $/hr</div>
                 <br>
-                <div class='description'> created by: </div>
-                <br>
-                <div class='meta'>
-                 <span class='date'>Created in </span>
-                </div>
+                <div class='description'> Proficiency: $row[proflevel] %</div>
                 <br>
                 <button class='ui primary blue button bidBtn'>
                   Select Bidder!
@@ -69,7 +66,7 @@
                   <i class='remove icon'></i>
                     No
                  </div>
-                <div class='ui green ok inverted button'>
+                <div class='ui green ok inverted button confirmBtn'>
                   <i class='checkmark icon'></i>
                     Yes
                 </div>
@@ -126,25 +123,21 @@
 
   <script>
 
-    var currentTaskIDSelected = "";
+    var currentUserSelected = "";
 
     $(document).ready(function() {
       $(".card").click(function() {
-        currentTaskIDSelected = $(this).find('.hideTask').val();
+        currentUserSelected = $(this).find('.hideTask').val();
+        console.log(currentUserSelected);
       })
     })
 
     $(document).ready(function() {
-      $("#editBtn").click(function() {
-          $.ajax({
-            url: '/demo/storetaskid.php',
-            type: "POST",
-            data: { taskid: currentTaskIDSelected },
-            success: function(data){
-              var obj = JSON.parse(data);
-              //window.location.replace("/demo/blahblah.php");
-            }
-          });
+      $(".confirmBtn").click(function() {
+        // console.log("confirm");
+        // $.ajax({
+        //   url: 
+        // });
       })
     })
 
