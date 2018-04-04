@@ -297,8 +297,6 @@
     </div>
   </div>
 
-
-
   <!-- Footer -->
   <div class="ui inverted vertical footer segment">
     <div class="ui container">

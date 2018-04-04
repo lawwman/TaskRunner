@@ -32,7 +32,7 @@
       $taskid = $_SESSION['taskid'];
       $tasktype = $_SESSION['tasktype'];
       $result = pg_query($db, "SELECT * FROM Bids B inner join Taskers T on B.taskeremail = T.email inner join hasSkills HS
-        on B.taskeremail = HS.tEmail WHERE B.task_id = '$taskid' and HS.sname = '$tasktype' ");
+        on B.taskeremail = HS.tEmail WHERE B.task_id = '$taskid' and HS.sname = '$tasktype' and B.status = 'pending' ");
       while ($row = pg_fetch_assoc($result)) {
         echo "
             <div class='card'>
@@ -49,6 +49,10 @@
                 <div class='meta'>
                  <span class='date'>Created in </span>
                 </div>
+                <br>
+                <button class='ui primary blue button'>
+                  Select Bidder!
+                </button>
               </div>
             </div>";
       }
