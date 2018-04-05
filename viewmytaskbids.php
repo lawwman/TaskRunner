@@ -144,6 +144,7 @@
           data: { user: currentUserSelected, taskid: currentTaskUpdating },
           type: 'POST',
           success: function(data) {
+            console.log("success");
             console.log(data);
           }
         });
