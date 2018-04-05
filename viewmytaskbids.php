@@ -144,8 +144,8 @@
           data: { user: currentUserSelected, taskid: currentTaskUpdating },
           type: 'POST',
           success: function(data) {
-            console.log("success");
-            console.log(data);
+            alert("you have successfully chosen a bidder");
+            window.location.replace("/demo/viewcreatedtasks.php");
           }
         });
       })

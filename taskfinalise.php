@@ -19,6 +19,13 @@
       <a class='ui inverted button' href='/demo/signup.php'>Sign Up</a>";
     }
   }
+
+  if (!isset($_SESSION['skill']) || !isset($_SESSION['locs']) || !isset($_SESSION['details'])) {
+    echo '<script language="javascript">';
+    echo 'alert("task details not set, redirecting to page...");';
+    echo '</script>';
+    echo '<script type="text/javascript">location.href = "/demo/addtasks.php";</script>';
+  }
 ?>
 
 <html>
@@ -98,9 +105,9 @@
     var endNotValidFlag = false;
     var compareFlag = false;
 
-    var startErrorShowing = 0;
-    var endErrorShowing = 0;
-    var compareErrorShowing = 0;
+    var startErrorShowing = false;
+    var endErrorShowing = false;
+    var compareErrorShowing = false;
 
     //check if values are selected
     function checkStartValidation() {
@@ -113,7 +120,7 @@
     //check if values are selected
     function checkEndValidation() {
       if (endDay == 0 || endMnth == 0 || endYear == 0 || endTime == "250") {
-        startNotValidFlag = true;
+        endNotValidFlag = true;
       } else {
         endNotValidFlag = false;
       }
@@ -149,8 +156,6 @@
       if (startDay == endDay) {
         var sHour = startTime.substring(0,2);
         var eHour = endTime.substring(0,2);
-        console.log("start hour " + sHour);
-        console.log("end hour " + eHour);
         if (sHour >= eHour) {
           compareFlag = true;
           return;
@@ -161,14 +166,34 @@
     }
 
     function createValidationMsg() {
-      if (startNotValidFlag && startErrorShowing == 0) {
-        startErrorShowing = 1;
-        $('#startValidationTag').append('<div class="ui left pointing red basic label"><p>Please fill in the date values</p></div>');
+      if (startNotValidFlag && !startErrorShowing) {
+        startErrorShowing = true;
+        $('#startValidationTag').append('<div class="ui left pointing red basic label" id="startVTag"><p>Please fill in the date values</p></div>');
       }
 
-      if (endNotValidFlag&& endErrorShowing == 0) {
-        endErrorShowing = 1;
-        $('#endValidationTag').append('<div class="ui left pointing red basic label"><p>Please fill in the date values</p></div>');
+      if (!startNotValidFlag && startErrorShowing) {
+        startErrorShowing = false;
+        $('#startVTag').remove();
+      }
+
+      if (endNotValidFlag && !endErrorShowing) {
+        endErrorShowing = true;
+        $('#endValidationTag').append('<div class="ui left pointing red basic label" id="endVTag"><p>Please fill in the date values</p></div>');
+      }
+
+      if (!endNotValidFlag && endErrorShowing) {
+        endErrorShowing = false;
+        $('#endVTag').remove();
+      }
+
+      if (compareFlag && !compareErrorShowing) {
+        compareErrorShowing = true;
+        $('#endValidationTag').append('<div class="ui left pointing red basic label" id="compareVTag"><p>Make sure start date is before end date</p></div>');
+      }
+
+      if (!compareFlag && compareErrorShowing) {
+        compareErrorShowing = false;
+        $('#compareVTag').remove();
       }
     }
 
@@ -252,12 +277,12 @@
             dataType: 'json',
             data: {date: dateInputJSON, endDate: dateEndInputJSON},
             success: function(data){
-              console.log(data.abc);
+              console.log(data);
             }
           });
         }
         if (startNotValidFlag || endNotValidFlag || compareFlag) {
-          console.log("not valid");
+          console.log("dates are not valid");
         }
       });
     
