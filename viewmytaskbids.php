@@ -56,7 +56,7 @@
             <div class='ui basic modal' id='taskUserModal'>
               <div class='ui icon header'>
                 <i class='archive icon'></i>
-                  Archive Old Messages
+                  Select Bidder.
               </div>
               <div class='content'>
                 <p>Are you sure you want to select $row[taskeremail]?</p>
