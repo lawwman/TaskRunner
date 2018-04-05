@@ -37,7 +37,8 @@
         echo "
             <div class='card'>
               <div class='content'>
-                <input type='hidden' value='$row[taskeremail]' class='hideTask'>
+                <input type='hidden' value='$row[taskeremail]' class='hideTasker'>
+                <input type='hidden' value='".$_SESSION['taskid'] ."' class='hideTask'>
                 <a class='header'>$row[firstname] $row[lastname]</a>
                 <div class='meta'>
                   <p class='description'> email: $row[taskeremail]</p>
@@ -124,11 +125,14 @@
   <script>
 
     var currentUserSelected = "";
+    var currentTaskUpdating = "";
 
     $(document).ready(function() {
       $(".card").click(function() {
-        currentUserSelected = $(this).find('.hideTask').val();
+        currentUserSelected = $(this).find('.hideTasker').val();
+        currentTaskUpdating = $(this).find('.hideTask').val();
         console.log(currentUserSelected);
+        console.log(currentTaskUpdating);
       })
     })
 
@@ -137,7 +141,7 @@
         console.log("confirm");
         $.ajax({
           url: '/demo/selectbidder.php',
-          data: { user: currentUserSelected },
+          data: { user: currentUserSelected, taskid: currentTaskUpdating },
           type: 'POST',
           success: function(data) {
             console.log(data);
