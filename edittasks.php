@@ -181,10 +181,9 @@
     var loc;
     var locJSON;
 
-    dateInputStart = "not set";
-    timeInputStart = "not set";
-    dateInputEnd = "not set";
-    timeInputEnd = "not set";
+    var compareFlag = false;
+    var ErrorShowing = false;
+
     sec = ":00";
 
     function monthConv(date){
@@ -227,20 +226,78 @@
 
     function convertDatesToJSON() {
       //check if date/time was changed, else use the current read from database
-        var startConvert = document.getElementById('date_start').value;
-        dateInputStart = monthConv(startConvert);
-        timeInputStart = document.getElementById('time_start').value;
-        var endConvert = document.getElementById('date_end').value;
-        dateInputEnd = monthConv(endConvert);
-        timeInputEnd = document.getElementById('time_end').value;
+      var startConvert = document.getElementById('date_start').value;
+      dateInputStart = monthConv(startConvert);
+      timeInputStart = document.getElementById('time_start').value;
+      var endConvert = document.getElementById('date_end').value;
+      dateInputEnd = monthConv(endConvert);
+      timeInputEnd = document.getElementById('time_end').value;
 
+      var zero = "0";
 
-       start = dateInputStart + ' ' + timeInputStart + sec;
-       startJSON = JSON.stringify(start);
-       end = dateInputEnd + ' ' + timeInputEnd + sec;
-       endJSON = JSON.stringify(end); 
-       console.log(start);
-       console.log(end); 
+      //convert start to JSON
+      start = dateInputStart + ' ' + timeInputStart + sec;
+      if (start.charAt(1) == ":") {
+        start = zero.concat(start);
+      }
+      startJSON = JSON.stringify(start);
+
+      //convert end to JSON
+      end = dateInputEnd + ' ' + timeInputEnd + sec;
+      if (end.charAt(1) == ":") {
+        end = zero.concat(end);
+      }
+      endJSON = JSON.stringify(end);
+      console.log(start);
+      console.log(end); 
+    }
+
+    function validateDate() {
+      var startYear = parseInt(start.substring(0, 4));
+      var endYear = parseInt(end.substring(0, 4));
+
+      var startMnth = parseInt(start.substring(5,7));
+      var endMnth = parseInt(end.substring(5,7));
+
+      var startDay = parseInt(start.substring(8,10));
+      var endDay = parseInt(end.substring(8,10));
+
+      var sHour = parseInt(start.substring(11,13));
+      var eHour = parseInt(end.substring(11,13));
+      //check the year
+     if (startYear > endYear) {
+        compareFlag = true;
+        return;
+      } else {
+        compareFlag = false;
+      }
+
+      //check month. Year is correct if code reaches this point
+      if (startMnth > endMnth) {
+        compareFlag = true;
+        return;
+      } else {
+        compareFlag = false;
+      }
+
+      //check day. Year and month is correct if code reaches this point
+      if (startDay > endDay) {
+        compareFlag = true;
+        return;
+      } else {
+        compareFlag = false;
+      }
+
+      //check Time. Year and Month and Day is correct if code reaches this point
+      //corner case: startDay and endDay is the same day. Time matters.
+      if (startDay == endDay) {
+        if (sHour >= eHour) {
+          compareFlag = true;
+          return;
+        } else {
+          compareFlag = false;
+        }
+      }
     }
 
     $(document).ready(function() {
@@ -276,6 +333,7 @@
       $('#editSubmit').click(function() {
         convertFieldsToJSON();
         convertDatesToJSON();
+        validateDate();
 
          $.ajax({
           url: '/demo/editquery.php',
@@ -289,11 +347,12 @@
           }
         });
       });
-
+      
       $('#testy').click(function() {
         convertDatesToJSON();
+        validateDate();
       })
-    
+
     });
   </script>
 
