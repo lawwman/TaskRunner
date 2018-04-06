@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>  
 
 <?php 
@@ -9,10 +8,11 @@
     logout();
   }
 
+
   function showUser() {
     if (isLoggedIn()) {
       echo '
-      <div class="ui dropdown inverted button">Hello, '. $_SESSION['user'] . '</div>
+      <div class="ui dropdown inverted button">Hello, '. $_SESSION['userName'] . '</div>
       <div class="ui dropdown inverted button" id="signOut" formaction="/demo/signup.php">Sign Out</div>
       ';
     } else {
@@ -20,25 +20,99 @@
       <a class='ui inverted button' href='/demo/signup.php'>Sign Up</a>";
     }
   }
-  
-  function showTasks() {
+
+  function showTasksRunnning() {
       // Connect to the database. Please change the password in the following line accordingly
-    $db     = pg_connect("host=127.0.0.1 port=5432 dbname=project1 user=postgres password=1234");
-    $userName = $_SESSION['user'];
-    $result = pg_query($db, "SELECT * FROM tasks WHERE runner='$userName'");
-    while ($row = pg_fetch_assoc($result)) {
-      echo "<div class='card'>
-              <div class='content'>
-                <a class='header'>$row[task_name]</a>
+  $db = pg_connect("host=127.0.0.1 port=5432 dbname=project1 user=postgres password=1234") or die('Could not connect ' . pg_last_error()); 
+    $userEmail = $_SESSION['userEmail'];
+    $resultRunning = pg_query($db, "SELECT * FROM  bids b INNER JOIN tasks t ON b.task_id=t.task_id  WHERE b.taskeremail = '$userEmail' AND (b.status = 'accepted' OR b.status= 'rejected') ");
+    while ($row = pg_fetch_assoc($resultRunning)) {
+      echo "
+          <div class='card' value= 'abc'>
+            <div class='content'>
+              <input type='hidden' value='$row[task_id]' class='hideTask'>
+              <a class='header'>$row[ttype]</a>
                 <div class='meta'>
-                  <p class='description'>Created by $row[creator]</p>
+                  <p class='description'> Status: $row[status]</p>
                 </div>
                 <br>
-                <div class='description'>$row[task_details]</div>
+                <div class='description'> Location: $row[loc]</div>
+                <br>
+                <div class='description'> created by: $row[taskeeemail]</div>
                 <br>
                 <div class='meta'>
                  <span class='date'>Created in $row[createddatetime]</span>
                 </div>
+              </div>
+            </div>
+              
+
+            <div id='taskRunningDetailModal' class='ui modal'>
+              <i class = 'close icon'></i>
+              <div class='center header'>
+                $row[ttype]
+              </div>
+              <div class='image content'>
+                <div class='ui small left floated image'> 
+                  <img src='/demo/steve.jpg'>
+                </div>
+                <div>
+                  $row[task_details]
+                </div>
+              </div>
+              <div class='actions'>
+                <button class='ui primary teal icon button' id='dropTask'> 
+                  Drop Task 
+                </button>
+              </div>
+            </div>";
+    }
+  }
+
+  function showTasksBidded() {
+      // Connect to the database. Please change the password in the following line accordingly
+  $db = pg_connect("host=127.0.0.1 port=5432 dbname=project1 user=postgres password=1234") or die('Could not connect ' . pg_last_error()); 
+    $userEmail = $_SESSION['userEmail'];
+    $result = "SELECT * FROM  bids b INNER JOIN tasks t ON b.task_id=t.task_id  WHERE b.taskeremail = '$userEmail' AND b.status = 'pending' ";
+    $resultID = pg_query($db, $result);
+    while ($row = pg_fetch_assoc($resultID)) {
+      echo "
+          <div class='card' value= 'abc'>
+            <div class='content'>
+              <input type='hidden' value='$row[task_id]' class='hideTask'>
+              <a class='header'>$row[ttype]</a>
+                <div class='meta'>
+                  <p class='description'> Status: $row[status]</p>
+                </div>
+                <br>
+                <div class='description'> Location: $row[loc]</div>
+                <br>
+                <div class='description'> created by: $row[taskeeemail]</div>
+                <br>
+                <div class='meta'>
+                 <span class='date'>Created in $row[createddatetime]</span>
+                </div>
+              </div>
+            </div>
+              
+
+            <div id='taskBiddedDetailModal' class='ui modal'>
+              <i class = 'close icon'></i>
+              <div class='center header'>
+                $row[ttype]
+              </div>
+              <div class='image content'>
+                <div class='ui small left floated image'> 
+                  <img src='/demo/steve.jpg'>
+                </div>
+                <div>
+                  $row[task_details]
+                </div>
+              </div>
+              <div class='actions'>
+                  <button class='ui blue primary icon button' id='dropBid'>
+                    Drop Bid
+                  </button>
               </div>
             </div>";
     }
@@ -60,7 +134,7 @@
 
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/container.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/grid.css">
-  <link rel="stylesheet" type="text/css" href=".semantic/dist/components/header.css">
+  <link rel="stylesheet" type="text/css" href="semantic/dist/components/header.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/image.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/menu.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/card.css">
@@ -73,23 +147,91 @@
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/icon.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/sidebar.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/transition.css">
+  <link rel="stylesheet" type="text/css" href="semantic/dist/components/modal.css">
+  <link rel="stylesheet" type="text/css" href="semantic/dist/components/dimmer.css">
 
   <script src="assets/jquery-3.3.1.min"></script>
   <script src="semantic/dist/components/transition.js"></script>
   <script src="semantic/dist/components/dropdown.js"></script>
+  <script src="semantic/dist/components/modal.js"></script>
+  <script src="semantic/dist/components/dimmer.js"></script>
 
   <script>
     // performs sign out functionality.
     $(document).ready(function() {
       $('#signOut').click(function() {
         $.ajax({
-          url: '/demo/viewrunningtasks.php?argument=signOut',
+          url: '/demo/viewtasks.php?argument=signOut',
           success: function(html){
             window.location.replace("/demo/index.php");
           }
         });
       });
     })
+  </script>
+
+  <script>
+
+  var currentTaskIDSelected = "";
+  var dropBid ;
+  var dropTask;
+
+  dropBid = "dropbid"
+  dropTask = "droptask";
+
+  $(document).ready(function(){
+    $(".card").click(function(){
+      currentTaskIDSelected = $(this).find('.hideTask').val();
+    })
+  })
+
+  $(document).ready(function(){
+    $("#dropBid").click(function(){
+      $.ajax({
+        url: '/demo/droptaskbid.php',
+        type: "POST",
+        data: {taskid: currentTaskIDSelected, dropbid: dropBid},
+        success: function(data){
+          var obj = JSON.parse(data);
+          console.log(obj);
+          window.location.replace("/demo/viewrunningtasks.php");
+        }
+      });
+    })
+  })
+
+  $(document).ready(function(){
+    $("#dropTask").click(function(){
+      $.ajax({
+        url: '/demo/droptaskbid.php',
+        type: "POST",
+        data: {taskid: currentTaskIDSelected, droptask: dropTask},
+        success: function(data){
+          var obj = JSON.parse(data);
+          console.log(obj);
+          window.location.replace("/demo/viewrunningtasks.php");
+        }
+      });
+    })
+  })
+
+  $(document).ready(function() {
+    $('#showTaskBiddedDetails').click(function(){
+      $('#taskBiddedDetailModal').modal({
+        onApprove: function() {
+        }
+      }).modal('show');
+    });
+  })
+
+  $(document).ready(function() {
+    $('#showTaskRunningDetails').click(function(){
+      $('#taskRunningDetailModal').modal({
+        onApprove: function() {
+        }
+      }).modal('show');
+    });
+  })
   </script>
 
   <style type="text/css">
@@ -179,7 +321,6 @@
       }
     }
 
-
   </style>
 </head>
 
@@ -197,15 +338,8 @@
           <i class="sidebar icon"></i>
         </a>
         <a class="item" href="/demo/index.php">Home</a>
-        <div class="ui simple dropdown item">
-          <span class = "text">My Tasks</span>
-          <i class = "dropdown icon"></i>
-          <div class = "menu">
-            <a class ="item" href="/demo/viewcreatedtasks.php"> View Created Tasks</a>
-            <a class ="item" href="/demo/viewrunningtasks.php"> View tasks I am running</a>
-          </div>
-        </div>
-        <a class="item" href="/demo/viewbids.php">My Bids</a>
+          <a class ="item" href="/demo/viewcreatedtasks.php"> View Created Tasks</a>
+          <a class ="item" href="/demo/viewrunningtasks.php"> View tasks I am running</a>
         <div class="right item">
           <?php showUser(); ?> 
         </div>
@@ -213,13 +347,21 @@
     </div>
   </div>
 
-<div class="my_container">
-  <div class="ui link three cards">
-    <?php showTasks(); ?> 
-
-    </div>
+<form method = "post">
+  <div class="my_container">
+    <h2 class="ui dividing header">Task Bidded</h2>
+    <div class='ui link three cards' id='showTaskBiddedDetails'>
+      <?php showTasksBidded(); ?> 
+    </div> 
   </div>
 
+  <div class="my_container">
+    <h2 class="ui dividing header">Task Running</h2>
+    <div class='ui link three cards' id='showTaskRunningDetails'>
+      <?php showTasksRunnning(); ?> 
+    </div>  
+  </div>
+</form>
 
 
   <!-- Footer -->

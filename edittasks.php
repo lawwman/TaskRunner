@@ -1,6 +1,6 @@
-<!DOCTYPE html>
+<!DOCTYPE html>  
 
-<!-- PHP Portions -->
+<!-- php login and sign out -->
 <?php
   require('debugging.php');
   require('session.php');
@@ -21,36 +21,88 @@
     }
   }
 
-  // Connect to the database. Please change the password in the following line accordingly
-  $db = pg_connect("host=127.0.0.1 port=5432 dbname=project1 user=postgres password=1234") or die('Could not connect ' . pg_last_error());  
+  function editTask(){
+    $db = pg_connect("host=127.0.0.1 port=5432 dbname=project1 user=postgres password=1234") or die('Could not connect ' . pg_last_error());
+      $taskid = $_SESSION['taskid'];
+      consoleLog($taskid);
+      $query = "SELECT * FROM tasks where task_id = '$taskid'";    
+      $result = pg_query($db, $query);   // Query template    
+      $row    = pg_fetch_assoc($result);    // To store the result row
 
-  $result = pg_query($db, "SELECT * FROM tasks where task_id = $_POST['taskid']");   // Query template    
-  $row    = pg_fetch_assoc($result);    // To store the result row
+        echo " 
+              <div class = 'one field'>
+                <label>Task Type </label>
+                <div class = 'fields'>
+                  <div class='sixteen wide field'>
+                    <input type='text' id='task_type_updated' value='$row[ttype]'>
+                  </div>
+                </div>
+              </div>
 
-  if (isset($_POST['edittask'])) {
-    $taskid_updated = 123456; //for now hardcode taskid    
-    $task_name_updated = $_POST['taskname'];
-    $task_details_updated = $_POST['description'];
-    $duration_updated = $_POST['dropdown'];    
-    $reward_updated = $_POST['reward'];            
-    consoleLog($task_id);
-    consoleLog('$task_name_updated');
-    $updateQuery = "UPDATE tasks SET task_name = '$task_name_updated',  
-        task_details = '$task_details_updated', duration_minutes = '$duration_updated',  
-        reward = '$reward_updated' WHERE task_id = '$taskid_updated'";    
-    consoleLog($updateQuery);
-    $edit_task_result = pg_query($db, $updateQuery);
+              <div class = 'field'>
+                <label>Task Details </label>
+                <div class = 'fields'>
+                  <div class='sixteen wide field'>
+                    <input style = 'height: 300px;' type='text' id='task_details_updated' value='$row[task_details]' >
+                  </div>
+                </div>
+              </div>
+              
+              <div class = 'field'>
+                <label>Task Location </label>
+                <div class = 'fields'>
+                  <div class='sixteen wide field'>
+                    <input type='text' id='task_loc_updated' value='$row[loc]' >
+                  </div>
+                </div>
+              </div>
+
+              <div class='fields'>
+                <div class='eight wide field'>
+                  <label> Start Date </label>
+                  <div class='ui calendar' id='calendarDateStart'>
+                    <div class='ui input left icon'>
+                      <i class='calendar icon'></i>
+                      <input type='text' placeholder='Date' id=date_start value='$row[startdatetime]'>
+                    </div>
+                  </div>
+                </div>
+                <div class='eight wide field'>
+                <label> Start Time </label>
+                  <div class='ui calendar' id='calendarTimeStart'>
+                    <div class='ui input left icon'>
+                      <i class='clock icon'></i>
+                      <input type='text' placeholder='Time' id=time_start value='$row[startdatetime]'>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class='fields'>
+                <div class='eight wide field'>
+                <label> End Date </label>
+                  <div class='ui calendar' id='calendarDateEnd' >
+                    <div class='ui input left icon'>
+                      <i class='calendar icon'></i>
+                      <input type='text' placeholder='Date' id=date_end value='$row[enddatetime]'>
+                    </div>
+                  </div>
+                </div>
+                <div class='eight wide field'>
+                <label> End Time </label>
+                  <div class='ui calendar' id='calendarTimeEnd' >
+                    <div class='ui input left icon'>
+                      <i class='clock icon'></i>
+                      <input type='text' placeholder='Time' id=time_end value='$row[enddatetime]'>
+                    </div>
+                  </div>
+                </div>
+              </div>";        
     
-    if($edit_task_result){
-//      echo 'Task Edited Successfully!';
-      header('Location: /demo/index.php');  
-    }
-  }  
+  }
 
 ?> 
 
-<!-- HTML Portions -->
-<html>
 <head>
   <!-- Standard Meta -->
   <meta charset="utf-8" />
@@ -58,7 +110,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
   <!-- Site Properties -->
-  <title>Edit Task</title>
+  <title>Add New Task</title>
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/reset.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/site.css">
 
@@ -85,6 +137,12 @@
   <script src="semantic/dist/components/transition.js"></script>
   <script src="semantic/dist/components/dropdown.js"></script>  
 
+    <!-- used for calander function -->
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+  <link href="https://cdn.rawgit.com/mdehoog/Semantic-UI/6e6d051d47b598ebab05857545f242caf2b4b48c/dist/semantic.min.css" rel="stylesheet" type="text/css" />
+  <script src="https://code.jquery.com/jquery-2.1.4.js"></script>
+  <script src="https://cdn.rawgit.com/mdehoog/Semantic-UI/6e6d051d47b598ebab05857545f242caf2b4b48c/dist/semantic.min.js"></script>
+
   <style type="text/css">
     body > .grid {
       height: 100%;
@@ -105,67 +163,167 @@
           }
         });
       });
-    })  
-
-    $(document).ready(function() {      
-      var $select = $(".1-120");
-      $select.append('<option>Duration (Hours)</option>')
-      for (i=1;i<=120;i++){
-        $select.append($('<option></option>').val(i).html(i))
-      }
-    })     
-    
-  $(document).ready(function() {
-    $('.ui.form').form({
-      on: 'blur',      
-      fields: {
-        taskname: {
-          identifier  : 'taskname',
-          rules: [
-            {
-              type   : 'empty',
-              prompt : 'Please enter your task name'
-            },
-          ] 
-        },             
-
-        description: {
-          identifier  : 'description',
-          rules: [
-            {
-              type   : 'empty',
-              prompt : 'Please enter your task description'
-            },
-            {
-              type   : 'length[10]',
-              prompt : 'Your description must be at least 10 characters'
-            }
-          ]
-        },
-      
-        reward: {
-          identifier  : 'reward',
-          rules: [
-            {
-             type    : 'empty',
-             promt   : 'Please enter your reward amount'  
-            },
-            {
-             type    : 'integer',
-             prompt  : 'Please enter only integers'
-            }
-          ] 
-        }
-
-      }
-    });
-  });
-
+    })   
 
   </script>
+
+  <script>
+
+    var dateInputStart;
+    var timeInputStart;
+    var dateInputEnd;
+    var timeInputEnd;
+    var sec;
+    var ttype;
+    var ttypeJSON;
+    var details;
+    var detailsJSON;
+    var loc;
+    var locJSON;
+
+    dateInputStart = "not set";
+    timeInputStart = "not set";
+    dateInputEnd = "not set";
+    timeInputEnd = "not set";
+    sec = ":00";
+
+    function monthConv(date){
+      var splitStringEmpty = date.split(" ");
+      var month = splitStringEmpty[0];
+      // var day = splitString[1].substring(0,1);
+      var converted;
+      switch(month){
+        case 'January'  : converted = '01'; break;
+        case 'February' : converted = '02'; break;
+        case 'March'    : converted = '03'; break;
+        case 'April'    : converted = '04'; break;
+        case 'May'      : converted = '05'; break;
+        case 'June'     : converted = '06'; break;
+        case 'July'     : converted = '07'; break;
+        case 'August'   : converted = '08'; break;
+        case 'September': converted = '09'; break;
+        case 'October'  : converted = '10'; break;
+        case 'November' : converted = '11'; break;
+        case 'December' : converted = '12'; break;
+      } 
+
+      var stringSplitComma = splitStringEmpty[1].split(",");
+      var day = stringSplitComma[0];
+      if(day <10){
+        day= '0' + day;
+      }
+
+      return (splitStringEmpty[2] + '-' + converted + '-' + day);
+    }
+
+    $(document).ready(function() {
+      $('#calendarDateStart').calendar({
+        type: 'date',
+        onChange: function(date) {
+            var year = date.getFullYear();
+            var month = date.getMonth() + 1;
+            var day = date.getDate();
+            if (month < 10) {
+                month = '0' + month;
+            }
+            if (day < 10) {
+                day = '0' + day;
+            }
+
+            // everything combined
+            dateInputStart = year + '-' + month + '-' + day;
+          }
+      });
+
+      $('#calendarTimeStart').calendar({
+        type: 'time',
+        ampm: false,
+        disableMinute: true,
+        onChange: function(time,text){
+          timeInputStart = text;
+          console.log(timeInputStart);
+        }
+      });
+
+       $('#calendarDateEnd').calendar({
+        type: 'date',
+        onChange: function(date) {
+            var year = date.getFullYear();
+            var month = date.getMonth() + 1;
+            var day = date.getDate();
+            if (month < 10) {
+                month = '0' + month;
+            }
+            if (day < 10) {
+                day = '0' + day;
+            }
+
+            // everything combined
+            dateInputEnd = year + '-' + month + '-' + day;
+          
+
+            console.log(dateInputEnd);
+          }
+      });
+
+      $('#calendarTimeEnd').calendar({
+        type: 'time',
+        ampm: false,
+        disableMinute: true,
+        onChange: function(time,text){
+          timeInputEnd = text;
+          console.log(timeInputEnd);
+        }
+      });
+      
+
+      $('#editSubmit').click(function() {
+        ttype = document.getElementById('task_type_updated').value;
+        ttypeJSON = JSON.stringify(ttype);
+        details = document.getElementById('task_details_updated').value;
+        detailsJSON = JSON.stringify(details);
+        loc = document.getElementById('task_loc_updated').value;
+        locJSON = JSON.stringify(loc);
+        
+        //check if date/time was changed, else use the current read from database
+        if(dateInputStart=== 'not set'){
+          var startConvert = document.getElementById('date_start').value;
+          dateInputStart = monthConv(startConvert);
+        }
+        if(timeInputStart==='not set'){
+          timeInputStart = document.getElementById('time_start').value;
+        }
+        if(dateInputEnd==='not set'){
+          var endConvert = document.getElementById('date_end').value;
+          dateInputEnd = monthConv(endConvert);
+        }
+        if(timeInputEnd==='not set'){
+          timeInputEnd = document.getElementById('time_end').value;
+        }
+         start = dateInputStart + ' ' + timeInputStart + sec;
+         startJSON = JSON.stringify(start);
+         end = dateInputEnd + ' ' + timeInputEnd + sec;
+         endJSON = JSON.stringify(end);
+
+         $.ajax({
+          url: '/demo/editquery.php',
+          type: 'POST',
+          dataType: 'json',
+          data: {start: startJSON, end: endJSON, ttype: ttypeJSON, details: detailsJSON, loc: locJSON},
+          success: function(data){
+            // console.log('sent');
+            window.location.replace("/demo/viewcreatedtasks.php");
+            console.log(data.abc);  
+          }
+        });
+      });
+    
+    });
+  </script>
+
 </head>
 
-<body class='ui'>
+<body class = 'ui'>
 
   <!-- Top menu -->
   <div class="pusher">
@@ -186,56 +344,28 @@
             </div>
           </div>          
           <a class="item" href="/demo/viewbids.php">My Bids</a>          
-          <div class="right item">
-            <?php showUser(); ?>
+          <div class="right item">       
+            <?php showUser(); ?>    
           </div>
         </div>
       </div>
     </div>
-
-    <!-- Form for task adding-->
-    <div class="ui middle aligned center aligned grid inverted">
-      <div class="six wide column">
-        <form class="ui form" action="/demo/edittasks.php" method="POST">
-          <h2 class="ui dividing header">Update Task Details</h2>
-
-          <div class="one field">
-            <label>Task Name</label>
-            <div class="fields">
-              <div class="sixteen wide field">
-                <input type="text" name="taskname" placeholder="Task Name">
-              </div>
-            </div>
-          </div>    
-          
-          <div class="field">
-            <label>Task Details</label>
-            <div class="fields">
-              <div class=" sixteen wide field">
-                <input style = "height: 300px;" type="text" name="description" placeholder="Description">
-              </div>
-            </div> 
-          </div>
-            
-          <div class="fields">
-            <div class="ten wide field">
-              <input type="text" name="reward" placeholder="Reward">
-            </div>                  
-              
-            <div class="field">                
-              <select class="1-120" name="dropdown">
-              </select>
-            </div>         
-          </div>           
-          <input type="submit" name="edittask" value="Submit" class="ui button primary" tabindex="0" />
-          
-          <div class="ui error message"></div>
-        </form>        
-      </div>
+    
+ 
+    <div class="ui middle alighed center aligned grid inverted">
+      <div class = "six wide column">
+       <form class="ui form" name="update" action="edittasks.php" method="POST" >  
+          <?php editTask() ?> 
+          <br>
+          <button class="ui blue primary button" id="editSubmit" >
+            Submit
+          </button> 
+        </form>
+      </div>  
     </div>
-  </div>
 
   <!-- Footer -->
+  <br>
   <div class="ui inverted vertical footer segment">
     <div class="ui container">
       <div class="ui stackable inverted divided equal height stackable grid">
@@ -260,6 +390,6 @@
       </div>
     </div>
   </div>  
+</div>
 </body>
-
 </html>
