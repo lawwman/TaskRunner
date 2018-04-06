@@ -134,7 +134,7 @@
             data: { taskid: currentTaskIDSelected, tasktype: currentTaskType},
             success: function(data){
               var obj = JSON.parse(data);
-              //window.location.replace("/demo/blahblah.php");
+              window.location.replace("/demo/edittasks.php");
             }
           });
       })
