@@ -23,58 +23,66 @@
   }
 
 
-  function showTasks() {
-    // Connect to the database. Please change the password in the following line accordingly
-    $db = pg_connect("host=127.0.0.1 port=5432 dbname=project1 user=postgres password=1234") or die('Could not connect ' . pg_last_error()); 
-    $userEmail = $_SESSION['userEmail'];
-    $result = pg_query($db, "SELECT * FROM tasks WHERE taskeeemail = '$userEmail' ");
-    while ($row = pg_fetch_assoc($result)) {
-      echo "
-          <div class='card'>
-            <div class='content'>
-              <input type='hidden' value='$row[task_id]' class='hideTask'>
-              <a class='header'>$row[ttype]</a>
-              <div class='meta'>
-                <p class='description'> Status: $row[status]</p>
-              </div>
-              <br>
-              <div class='description'> Location: $row[loc]</div>
-              <br>
-              <div class='description'> created by: $row[taskeeemail]</div>
-              <br>
-              <div class='meta'>
-               <span class='date'>Created in $row[createddatetime]</span>
-              </div>
-            </div>
-          </div>
+  function showBidders() {
 
-          <div id='taskDetailModal' class='ui modal'>
-            <i class = 'close icon'></i>
-            <div class='center header'>
-              $row[ttype]
-            </div>
-            <div class='image content'>
-              <div class='ui small left floated image'> 
-                <img src='/demo/steve.jpg'>
+    if (isset($_SESSION['taskid']) && isset($_SESSION['tasktype'])) {
+      // Connect to the database. Please change the password in the following line accordingly
+      $db = pg_connect("host=127.0.0.1 port=5432 dbname=project1 user=postgres password=1234") or die('Could not connect ' . pg_last_error()); 
+      $userEmail = $_SESSION['userEmail'];
+      $taskid = $_SESSION['taskid'];
+      $tasktype = $_SESSION['tasktype'];
+      $result = pg_query($db, "SELECT * FROM Bids B inner join Taskers T on B.taskeremail = T.email inner join hasSkills HS
+        on B.taskeremail = HS.tEmail WHERE B.task_id = '$taskid' and HS.sname = '$tasktype' and B.status = 'pending' ");
+      while ($row = pg_fetch_assoc($result)) {
+        echo "
+            <div class='card'>
+              <div class='content'>
+                <input type='hidden' value='$row[taskeremail]' class='hideTasker'>
+                <input type='hidden' value='".$_SESSION['taskid'] ."' class='hideTask'>
+                <a class='header'>$row[firstname] $row[lastname]</a>
+                <div class='meta'>
+                  <p class='description'> email: $row[taskeremail]</p>
+                </div>
+                <br>
+                <div class='description'> Rate: $row[hrate] $/hr</div>
+                <br>
+                <div class='description'> Proficiency: $row[proflevel] %</div>
+                <br>
+                <button class='ui primary blue button bidBtn'>
+                  Select Bidder!
+                </button>
               </div>
-              <div>
-                $row[task_details]
-              </div>
             </div>
-            <div class='actions'>
-              <button class='ui primary blue button' id='editBtn'>
-              Edit
-              </button>
-              <button class='ui primary blue button' id='viewBidBtn'>
-              View bidders
-              </button>
-              <div class='ui approve red icon button' type='button' id='deleteTask'> 
-                Delete Task 
+
+            <div class='ui basic modal' id='taskUserModal'>
+              <div class='ui icon header'>
+                <i class='archive icon'></i>
+                  Select Bidder.
               </div>
-            </div>
-          </div>";
+              <div class='content'>
+                <p>Are you sure you want to select $row[taskeremail]?</p>
+              </div>
+              <div class='actions'>
+                <div class='ui red basic cancel inverted button'>
+                  <i class='remove icon'></i>
+                    No
+                 </div>
+                <div class='ui green ok inverted button confirmBtn'>
+                  <i class='checkmark icon'></i>
+                    Yes
+                </div>
+              </div>
+            </div>";
+      }
+      pg_close($db);
+      //unset the session variables
+      unset($_SESSION['taskid']);
+      unset($_SESSION['tasktype']);
     }
-    pg_close($db);
+  }
+
+  function selectBidder() {
+
   }
 ?>
 
@@ -116,42 +124,30 @@
 
   <script>
 
-    var currentTaskIDSelected = "";
-    var currentTaskType = "";
+    var currentUserSelected = "";
+    var currentTaskUpdating = "";
 
     $(document).ready(function() {
       $(".card").click(function() {
-        currentTaskIDSelected = $(this).find('.hideTask').val();
-        currentTaskType = $(this).find('.header').text();
+        currentUserSelected = $(this).find('.hideTasker').val();
+        currentTaskUpdating = $(this).find('.hideTask').val();
+        console.log(currentUserSelected);
+        console.log(currentTaskUpdating);
       })
     })
 
     $(document).ready(function() {
-      $("#editBtn").click(function() {
-          $.ajax({
-            url: '/demo/storetaskid.php',
-            type: "POST",
-            data: { taskid: currentTaskIDSelected, tasktype: currentTaskType},
-            success: function(data){
-              var obj = JSON.parse(data);
-              //window.location.replace("/demo/blahblah.php");
-            }
-          });
-      })
-    })
-
-    $(document).ready(function() {
-      $("#viewBidBtn").click(function() {
-          $.ajax({
-            url: '/demo/storetaskid.php',
-            type: "POST",
-            data: { taskid: currentTaskIDSelected, tasktype: currentTaskType},
-            success: function(data){
-              var obj = JSON.parse(data);
-              console.log('clicked');
-              window.location.replace("/demo/viewmytaskbids.php");
-            }
-          });
+      $(".confirmBtn").click(function() {
+        console.log("confirm");
+        $.ajax({
+          url: '/demo/selectbidder.php',
+          data: { user: currentUserSelected, taskid: currentTaskUpdating },
+          type: 'POST',
+          success: function(data) {
+            alert("you have successfully chosen a bidder");
+            window.location.replace("/demo/viewcreatedtasks.php");
+          }
+        });
       })
     })
 
@@ -168,8 +164,8 @@
     })
 
     $(document).ready(function() {
-      $('#showTaskDetails').click(function(){
-        $('#taskDetailModal').modal({
+      $('.bidBtn').click(function(){
+        $('#taskUserModal').modal({
           onApprove: function() {
           }
         }).modal('show');
@@ -291,11 +287,13 @@
     </div>
   </div>
 
-  <div class="my_container">
-    <div class='ui link two cards' id='showTaskDetails'>
-      <?php showTasks(); ?> 
-    </div>
+<div class="my_container">
+  <div class='ui link three cards'>
+    <?php showBidders(); ?> 
   </div>
+</div>
+
+
 
   <!-- Footer -->
   <div class="ui inverted vertical footer segment">
