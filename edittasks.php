@@ -9,6 +9,8 @@
     logout();
   }
 
+  redirectIfNot('taskee');
+
   function showUser() {
     if (isLoggedIn()) {
       echo '
@@ -41,10 +43,8 @@
 
               <div class = 'field'>
                 <label>Task Details </label>
-                <div class = 'fields'>
-                  <div class='sixteen wide field'>
-                    <input style = 'height: 300px;' type='text' id='task_details_updated' value='$row[task_details]' >
-                  </div>
+                <div class='field'>
+                  <textarea id='task_details_updated' rows='2'>$row[task_details]</textarea> 
                 </div>
               </div>
               
@@ -216,94 +216,66 @@
       return (splitStringEmpty[2] + '-' + converted + '-' + day);
     }
 
+    function convertFieldsToJSON() {
+      ttype = document.getElementById('task_type_updated').value;
+      ttypeJSON = JSON.stringify(ttype);
+      details = document.getElementById('task_details_updated').value;
+      detailsJSON = JSON.stringify(details);
+      loc = document.getElementById('task_loc_updated').value;
+      locJSON = JSON.stringify(loc);
+    }
+
+    function convertDatesToJSON() {
+      //check if date/time was changed, else use the current read from database
+        var startConvert = document.getElementById('date_start').value;
+        dateInputStart = monthConv(startConvert);
+        timeInputStart = document.getElementById('time_start').value;
+        var endConvert = document.getElementById('date_end').value;
+        dateInputEnd = monthConv(endConvert);
+        timeInputEnd = document.getElementById('time_end').value;
+
+
+       start = dateInputStart + ' ' + timeInputStart + sec;
+       startJSON = JSON.stringify(start);
+       end = dateInputEnd + ' ' + timeInputEnd + sec;
+       endJSON = JSON.stringify(end); 
+       console.log(start);
+       console.log(end); 
+    }
+
+    $(document).ready(function() {
+      $(window).keydown(function(event){
+        if(event.keyCode == 13) {
+          event.preventDefault();
+          return false;
+        }
+      });
+    })
+
     $(document).ready(function() {
       $('#calendarDateStart').calendar({
-        type: 'date',
-        onChange: function(date) {
-            var year = date.getFullYear();
-            var month = date.getMonth() + 1;
-            var day = date.getDate();
-            if (month < 10) {
-                month = '0' + month;
-            }
-            if (day < 10) {
-                day = '0' + day;
-            }
-
-            // everything combined
-            dateInputStart = year + '-' + month + '-' + day;
-          }
+        type: 'date'
       });
 
       $('#calendarTimeStart').calendar({
         type: 'time',
         ampm: false,
-        disableMinute: true,
-        onChange: function(time,text){
-          timeInputStart = text;
-          console.log(timeInputStart);
-        }
+        disableMinute: true
       });
 
-       $('#calendarDateEnd').calendar({
-        type: 'date',
-        onChange: function(date) {
-            var year = date.getFullYear();
-            var month = date.getMonth() + 1;
-            var day = date.getDate();
-            if (month < 10) {
-                month = '0' + month;
-            }
-            if (day < 10) {
-                day = '0' + day;
-            }
-
-            // everything combined
-            dateInputEnd = year + '-' + month + '-' + day;
-          
-
-            console.log(dateInputEnd);
-          }
+      $('#calendarDateEnd').calendar({
+        type: 'date'
       });
 
       $('#calendarTimeEnd').calendar({
         type: 'time',
         ampm: false,
-        disableMinute: true,
-        onChange: function(time,text){
-          timeInputEnd = text;
-          console.log(timeInputEnd);
-        }
+        disableMinute: true
       });
-      
 
       $('#editSubmit').click(function() {
-        ttype = document.getElementById('task_type_updated').value;
-        ttypeJSON = JSON.stringify(ttype);
-        details = document.getElementById('task_details_updated').value;
-        detailsJSON = JSON.stringify(details);
-        loc = document.getElementById('task_loc_updated').value;
-        locJSON = JSON.stringify(loc);
-        
-        //check if date/time was changed, else use the current read from database
-        if(dateInputStart=== 'not set'){
-          var startConvert = document.getElementById('date_start').value;
-          dateInputStart = monthConv(startConvert);
-        }
-        if(timeInputStart==='not set'){
-          timeInputStart = document.getElementById('time_start').value;
-        }
-        if(dateInputEnd==='not set'){
-          var endConvert = document.getElementById('date_end').value;
-          dateInputEnd = monthConv(endConvert);
-        }
-        if(timeInputEnd==='not set'){
-          timeInputEnd = document.getElementById('time_end').value;
-        }
-         start = dateInputStart + ' ' + timeInputStart + sec;
-         startJSON = JSON.stringify(start);
-         end = dateInputEnd + ' ' + timeInputEnd + sec;
-         endJSON = JSON.stringify(end);
+        convertFieldsToJSON();
+        convertDatesToJSON();
 
          $.ajax({
           url: '/demo/editquery.php',
@@ -317,6 +289,10 @@
           }
         });
       });
+
+      $('#testy').click(function() {
+        convertDatesToJSON();
+      })
     
     });
   </script>
@@ -354,13 +330,18 @@
  
     <div class="ui middle alighed center aligned grid inverted">
       <div class = "six wide column">
-       <form class="ui form" name="update" action="edittasks.php" method="POST" >  
+        <br>
+        <form class="ui form" id="editForm">  
           <?php editTask() ?> 
           <br>
           <button class="ui blue primary button" id="editSubmit" >
             Submit
           </button> 
         </form>
+
+        <button class="ui blue primary button" id="testy" >
+            Submit
+        </button> 
       </div>  
     </div>
 
