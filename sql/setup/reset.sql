@@ -114,10 +114,10 @@ CREATE TABLE Bids (
     taskeeEmail VARCHAR(100) NOT NULL REFERENCES Taskees,
     taskerEmail VARCHAR(100) NOT NULL REFERENCES Taskers,
 	
-  status VARCHAR(100) NOT NULL DEFAULT 'pending', 
+  	status VARCHAR(100) NOT NULL DEFAULT 'pending', 
 	bidDateTime TIMESTAMP NOT NULL DEFAULT now(),
 
-  CONSTRAINT discrete_status CHECK(status in ('rejected', 'pending', 'accepted')),
+  	CONSTRAINT discrete_status CHECK(status in ('rejected', 'pending', 'accepted')),
 	PRIMARY KEY(taskerEmail, taskeeEmail, task_id)
 );
 
