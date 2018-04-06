@@ -7,6 +7,13 @@ DROP TABLE IF EXISTS Taskers CASCADE;
 DROP TABLE IF EXISTS Skills CASCADE;
 DROP TABLE IF EXISTS HasSkills CASCADE;
 
+DROP FUNCTION IF EXISTS getTaskCursor;
+DROP FUNCTION IF EXISTS getHasSkillCursor;
+DROP FUNCTION IF EXISTS getSkillCursor;
+DROP FUNCTION IF EXISTS getBidCursor;
+DROP FUNCTION IF EXISTS getTaskeeCursor;
+DROP FUNCTION IF EXISTS getTaskerCursor;
+
 CREATE TABLE Taskees (
     email VARCHAR(100) PRIMARY KEY,
     
@@ -113,6 +120,49 @@ CREATE TABLE Bids (
   CONSTRAINT discrete_status CHECK(status in ('rejected', 'pending', 'accepted')),
 	PRIMARY KEY(taskerEmail, taskeeEmail, task_id)
 );
+
+-- SQL Functions to be used in the database 
+CREATE FUNCTION getTaskCursor(refcursor) RETURNS refcursor AS $$
+BEGIN
+	OPEN $1 FOR SELECT * FROM tasks;
+    RETURN $1;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE FUNCTION getBidCursor(refcursor) RETURNS refcursor AS $$
+BEGIN
+	OPEN $1 FOR SELECT * FROM tasks;
+    RETURN $1;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE FUNCTION getHasSkillCursor(refcursor) RETURNS refcursor AS $$
+BEGIN
+	OPEN $1 FOR SELECT * FROM tasks;
+    RETURN $1;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE FUNCTION getSkillCursor(refcursor) RETURNS refcursor AS $$
+BEGIN
+	OPEN $1 FOR SELECT * FROM tasks;
+    RETURN $1;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE FUNCTION getTaskeeCursor(refcursor) RETURNS refcursor AS $$
+BEGIN
+	OPEN $1 FOR SELECT * FROM tasks;
+    RETURN $1;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE FUNCTION getTaskerCursor(refcursor) RETURNS refcursor AS $$
+BEGIN
+	OPEN $1 FOR SELECT * FROM tasks;
+    RETURN $1;
+END;
+$$ LANGUAGE plpgsql;
 
 COPY Skills FROM '..\..\apps\demo\htdocs\sql\setup\data\skills.csv' DELIMITER ',' CSV HEADER;
 COPY Taskees FROM '..\..\apps\demo\htdocs\sql\setup\data\taskees.csv' DELIMITER ',' CSV HEADER;
