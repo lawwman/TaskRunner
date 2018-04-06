@@ -231,11 +231,11 @@
     }
 
     function convertFieldsToJSON() {
-      ttype = document.getElementById('task_type_updated').value;
+      ttype = $('#taskauto').val();
       ttypeJSON = JSON.stringify(ttype);
       details = document.getElementById('task_details_updated').value;
       detailsJSON = JSON.stringify(details);
-      loc = document.getElementById('task_loc_updated').value;
+      loc = $('#locauto').val();
       locJSON = JSON.stringify(loc);
     }
 
