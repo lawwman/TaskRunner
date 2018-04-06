@@ -34,10 +34,15 @@
         echo " 
               <div class = 'one field'>
                 <label>Task Type </label>
-                <div class = 'fields'>
-                  <div class='sixteen wide field'>
-                    <input type='text' id='task_type_updated' value='$row[ttype]'>
+                <div class='ui search task'>
+                  <div class='ui icon input'>
+                    <input class='prompt' type='text' placeholder='Select new task!' id='taskauto' value='$row[ttype]'>
+                    <i class='search icon'></i>
                   </div>
+                  <div class='results'></div>
+                </div>
+                <div class='ui pointing label'>
+                  Old task type is $row[ttype]
                 </div>
               </div>
 
@@ -50,10 +55,15 @@
               
               <div class = 'field'>
                 <label>Task Location </label>
-                <div class = 'fields'>
-                  <div class='sixteen wide field'>
-                    <input type='text' id='task_loc_updated' value='$row[loc]' >
+                <div class='ui search loc'>
+                  <div class='ui icon input'>
+                    <input class='prompt' type='text' placeholder='Select new location!' id='locauto' value='$row[loc]'>
+                    <i class='search icon'></i>
                   </div>
+                  <div class='results'></div>
+                </div>
+                <div class='ui pointing label'>
+                  Old task location is $row[loc]
                 </div>
               </div>
 
@@ -129,19 +139,24 @@
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/list.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/message.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/icon.css">
-  <link rel="stylesheet" type="text/css" href="semantic/dist/components/dropdown.css">  
+  <link rel="stylesheet" type="text/css" href="semantic/dist/components/dropdown.css">
+  <link rel="stylesheet" type="text/css" href="semantic/dist/components/search.css">
 
   <script src="assets/jquery-3.3.1.min"></script>
   <script src="semantic/dist/components/form.js"></script>
   <script src="semantic/dist/components/checkbox.js"></script>
   <script src="semantic/dist/components/transition.js"></script>
-  <script src="semantic/dist/components/dropdown.js"></script>  
+  <script src="semantic/dist/components/dropdown.js"></script>
+  <script src="semantic/dist/components/search.js"></script>    
 
     <!-- used for calander function -->
   <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
   <link href="https://cdn.rawgit.com/mdehoog/Semantic-UI/6e6d051d47b598ebab05857545f242caf2b4b48c/dist/semantic.min.css" rel="stylesheet" type="text/css" />
   <script src="https://code.jquery.com/jquery-2.1.4.js"></script>
   <script src="https://cdn.rawgit.com/mdehoog/Semantic-UI/6e6d051d47b598ebab05857545f242caf2b4b48c/dist/semantic.min.js"></script>
+
+  <script src="listforsemantic.js"></script>
+  <script src="locationlistforsemantic.js"></script>
 
   <style type="text/css">
     body > .grid {
@@ -163,12 +178,12 @@
           }
         });
       });
-    })   
-
+    })
   </script>
 
   <script>
-
+    var availableTags = getListUI(); //getList() function is a function from "list.js". Returns an array of string
+    var locations = getLocList(); //getLocList() function is a function from "locationlist.js". Returns an array of string
     var dateInputStart;
     var timeInputStart;
     var dateInputEnd;
@@ -204,7 +219,7 @@
         case 'October'  : converted = '10'; break;
         case 'November' : converted = '11'; break;
         case 'December' : converted = '12'; break;
-      } 
+      }
 
       var stringSplitComma = splitStringEmpty[1].split(",");
       var day = stringSplitComma[0];
@@ -330,6 +345,15 @@
         disableMinute: true
       });
 
+      $('.ui.search.task').search({
+        source: availableTags
+      });
+
+      $('.ui.search.loc').search({
+        source: locations
+      });
+
+
       $('#editSubmit').click(function() {
         convertFieldsToJSON();
         convertDatesToJSON();
@@ -351,6 +375,8 @@
       $('#testy').click(function() {
         convertDatesToJSON();
         validateDate();
+        console.log($('#taskauto').val());
+        console.log($('#locauto').val());
       })
 
     });
@@ -401,7 +427,7 @@
         <button class="ui blue primary button" id="testy" >
             Submit
         </button> 
-      </div>  
+      </div>
     </div>
 
   <!-- Footer -->
