@@ -287,6 +287,32 @@
           console.log("dates are not valid");
         }
       });
+
+      $('#autoButton').click(function() {
+        checkStartValidation();
+        checkEndValidation();
+        compareDateValidation();
+        createValidationMsg();
+        if (!startNotValidFlag && !endNotValidFlag && !compareFlag) {
+          var seconds = ":00";
+          dateInput = startYear + '-' + startMnth + '-' + startDay + " " + startTime + seconds;
+          dateEndInput = endYear + '-' + endMnth + '-' + endDay + " " + endTime + seconds;
+          dateInputJSON = JSON.stringify(dateInput);
+          dateEndInputJSON = JSON.stringify(dateEndInput);
+           $.ajax({
+            url: '/demo/submitautoquery.php',
+            type: 'POST',
+            dataType: 'json',
+            data: {date: dateInputJSON, endDate: dateEndInputJSON},
+            success: function(data){
+              console.log(data);
+            }
+          });
+        }
+        if (startNotValidFlag || endNotValidFlag || compareFlag) {
+          console.log("dates are not valid");
+        }
+      });
     
     });
   </script>
@@ -461,10 +487,10 @@
 </form> 
 
 
-<div class="ui right floated button">
-  Select for me
-</div> 
-<button id="manualButton" class="ui right floated button" >
+<button id="autoButton" class="ui floated red button" >
+  Select for me!
+</button>
+<button id="manualButton" class="ui right floated blue button" >
   manual
 </button>
 
