@@ -12,6 +12,74 @@ DROP FUNCTION IF EXISTS getBidCursor;
 DROP FUNCTION IF EXISTS getTaskeeCursor;
 DROP FUNCTION IF EXISTS getTaskerCursor;
 
+DROP SEQUENCE IF EXISTS idGen;
+
+DROP FUNCTION IF EXISTS getUniqueTaskId;
+
+-- SQL Functions to be used in the database 
+CREATE SEQUENCE idGen
+START WITH 1
+INCREMENT BY 1
+MINVALUE 1
+NO MAXVALUE
+CACHE 1;
+
+CREATE FUNCTION getUniqueTaskId() RETURNS BIGINT AS $$
+DECLARE 
+	num BIGINT := nextval('idGen');
+BEGIN
+	CREATE VIEW TaskId AS SELECT task_id FROM Tasks;
+    LOOP
+        EXIT WHEN NOT EXISTS(SELECT task_id FROM TaskId WHERE task_id = num);
+        num = nextval('idGen');
+    END LOOP;
+    DROP VIEW TaskId;
+    RETURN num;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE FUNCTION getTaskCursor(refcursor) RETURNS refcursor AS $$
+BEGIN
+	OPEN $1 FOR SELECT * FROM Tasks;
+    RETURN $1;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE FUNCTION getBidCursor(refcursor) RETURNS refcursor AS $$
+BEGIN
+	OPEN $1 FOR SELECT * FROM Bids;
+    RETURN $1;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE FUNCTION getHasSkillCursor(refcursor) RETURNS refcursor AS $$
+BEGIN
+	OPEN $1 FOR SELECT * FROM HasSkills;
+    RETURN $1;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE FUNCTION getSkillCursor(refcursor) RETURNS refcursor AS $$
+BEGIN
+	OPEN $1 FOR SELECT * FROM Skills;
+    RETURN $1;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE FUNCTION getTaskeeCursor(refcursor) RETURNS refcursor AS $$
+BEGIN
+	OPEN $1 FOR SELECT * FROM Taskees;
+    RETURN $1;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE FUNCTION getTaskerCursor(refcursor) RETURNS refcursor AS $$
+BEGIN
+	OPEN $1 FOR SELECT * FROM Taskers;
+    RETURN $1;
+END;
+$$ LANGUAGE plpgsql;
+
 CREATE TABLE Taskees (
     email VARCHAR(100) PRIMARY KEY,
     
@@ -82,7 +150,7 @@ CREATE TABLE HasSkills (
 );
 
 CREATE TABLE Tasks (
-	task_id VARCHAR(100) PRIMARY KEY, -- BIGINT so that can contain more than 4 bil accounts (in case single user creates multiple accs)
+	task_id BIGINT PRIMARY KEY DEFAULT getUniqueTaskid(), -- BIGINT so that can contain more than 4 bil accounts (in case single user creates multiple accs)
     ttype VARCHAR(50) NOT NULL REFERENCES Skills,
 	task_details VARCHAR(3000), -- Details of task 
 	
@@ -108,7 +176,7 @@ CREATE TABLE Tasks (
 );
 
 CREATE TABLE Bids (
-	task_id VARCHAR(100) NOT NULL REFERENCES Tasks, 
+	task_id BIGINT NOT NULL REFERENCES Tasks, 
     taskeeEmail VARCHAR(100) NOT NULL REFERENCES Taskees,
     taskerEmail VARCHAR(100) NOT NULL REFERENCES Taskers,
 	
@@ -119,48 +187,6 @@ CREATE TABLE Bids (
 	PRIMARY KEY(taskerEmail, taskeeEmail, task_id)
 );
 
--- SQL Functions to be used in the database 
-CREATE FUNCTION getTaskCursor(refcursor) RETURNS refcursor AS $$
-BEGIN
-	OPEN $1 FOR SELECT * FROM Tasks;
-    RETURN $1;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE FUNCTION getBidCursor(refcursor) RETURNS refcursor AS $$
-BEGIN
-	OPEN $1 FOR SELECT * FROM Bids;
-    RETURN $1;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE FUNCTION getHasSkillCursor(refcursor) RETURNS refcursor AS $$
-BEGIN
-	OPEN $1 FOR SELECT * FROM HasSkills;
-    RETURN $1;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE FUNCTION getSkillCursor(refcursor) RETURNS refcursor AS $$
-BEGIN
-	OPEN $1 FOR SELECT * FROM Skills;
-    RETURN $1;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE FUNCTION getTaskeeCursor(refcursor) RETURNS refcursor AS $$
-BEGIN
-	OPEN $1 FOR SELECT * FROM Taskees;
-    RETURN $1;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE FUNCTION getTaskerCursor(refcursor) RETURNS refcursor AS $$
-BEGIN
-	OPEN $1 FOR SELECT * FROM Taskers;
-    RETURN $1;
-END;
-$$ LANGUAGE plpgsql;
 
 COPY Skills FROM '..\..\apps\demo\htdocs\sql\setup\data\skills.csv' DELIMITER ',' CSV HEADER;
 COPY Taskees FROM '..\..\apps\demo\htdocs\sql\setup\data\taskees.csv' DELIMITER ',' CSV HEADER;
