@@ -9,6 +9,8 @@
     logout();
   }
 
+  redirectIfNot('taskee');
+
   function showUser() {
     if (isLoggedIn()) {
       echo '
@@ -32,28 +34,36 @@
         echo " 
               <div class = 'one field'>
                 <label>Task Type </label>
-                <div class = 'fields'>
-                  <div class='sixteen wide field'>
-                    <input type='text' id='task_type_updated' value='$row[ttype]'>
+                <div class='ui search task'>
+                  <div class='ui icon input'>
+                    <input class='prompt' type='text' placeholder='Select new task!' id='taskauto' value='$row[ttype]'>
+                    <i class='search icon'></i>
                   </div>
+                  <div class='results'></div>
+                </div>
+                <div class='ui pointing label'>
+                  Old task type is $row[ttype]
                 </div>
               </div>
 
               <div class = 'field'>
                 <label>Task Details </label>
-                <div class = 'fields'>
-                  <div class='sixteen wide field'>
-                    <input style = 'height: 300px;' type='text' id='task_details_updated' value='$row[task_details]' >
-                  </div>
+                <div class='field'>
+                  <textarea id='task_details_updated' rows='2'>$row[task_details]</textarea> 
                 </div>
               </div>
               
               <div class = 'field'>
                 <label>Task Location </label>
-                <div class = 'fields'>
-                  <div class='sixteen wide field'>
-                    <input type='text' id='task_loc_updated' value='$row[loc]' >
+                <div class='ui search loc'>
+                  <div class='ui icon input'>
+                    <input class='prompt' type='text' placeholder='Select new location!' id='locauto' value='$row[loc]'>
+                    <i class='search icon'></i>
                   </div>
+                  <div class='results'></div>
+                </div>
+                <div class='ui pointing label'>
+                  Old task location is $row[loc]
                 </div>
               </div>
 
@@ -129,19 +139,24 @@
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/list.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/message.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/icon.css">
-  <link rel="stylesheet" type="text/css" href="semantic/dist/components/dropdown.css">  
+  <link rel="stylesheet" type="text/css" href="semantic/dist/components/dropdown.css">
+  <link rel="stylesheet" type="text/css" href="semantic/dist/components/search.css">
 
   <script src="assets/jquery-3.3.1.min"></script>
   <script src="semantic/dist/components/form.js"></script>
   <script src="semantic/dist/components/checkbox.js"></script>
   <script src="semantic/dist/components/transition.js"></script>
-  <script src="semantic/dist/components/dropdown.js"></script>  
+  <script src="semantic/dist/components/dropdown.js"></script>
+  <script src="semantic/dist/components/search.js"></script>    
 
     <!-- used for calander function -->
   <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
   <link href="https://cdn.rawgit.com/mdehoog/Semantic-UI/6e6d051d47b598ebab05857545f242caf2b4b48c/dist/semantic.min.css" rel="stylesheet" type="text/css" />
   <script src="https://code.jquery.com/jquery-2.1.4.js"></script>
   <script src="https://cdn.rawgit.com/mdehoog/Semantic-UI/6e6d051d47b598ebab05857545f242caf2b4b48c/dist/semantic.min.js"></script>
+
+  <script src="listforsemantic.js"></script>
+  <script src="locationlistforsemantic.js"></script>
 
   <style type="text/css">
     body > .grid {
@@ -163,12 +178,12 @@
           }
         });
       });
-    })   
-
+    })
   </script>
 
   <script>
-
+    var availableTags = getListUI(); //getList() function is a function from "list.js". Returns an array of string
+    var locations = getLocList(); //getLocList() function is a function from "locationlist.js". Returns an array of string
     var dateInputStart;
     var timeInputStart;
     var dateInputEnd;
@@ -181,10 +196,9 @@
     var loc;
     var locJSON;
 
-    dateInputStart = "not set";
-    timeInputStart = "not set";
-    dateInputEnd = "not set";
-    timeInputEnd = "not set";
+    var compareFlag = false;
+    var ErrorShowing = false;
+
     sec = ":00";
 
     function monthConv(date){
@@ -205,7 +219,7 @@
         case 'October'  : converted = '10'; break;
         case 'November' : converted = '11'; break;
         case 'December' : converted = '12'; break;
-      } 
+      }
 
       var stringSplitComma = splitStringEmpty[1].split(",");
       var day = stringSplitComma[0];
@@ -216,94 +230,134 @@
       return (splitStringEmpty[2] + '-' + converted + '-' + day);
     }
 
+    function convertFieldsToJSON() {
+      ttype = $('#taskauto').val();
+      ttypeJSON = JSON.stringify(ttype);
+      details = document.getElementById('task_details_updated').value;
+      detailsJSON = JSON.stringify(details);
+      loc = $('#locauto').val();
+      locJSON = JSON.stringify(loc);
+    }
+
+    function convertDatesToJSON() {
+      //check if date/time was changed, else use the current read from database
+      var startConvert = document.getElementById('date_start').value;
+      dateInputStart = monthConv(startConvert);
+      timeInputStart = document.getElementById('time_start').value;
+      var endConvert = document.getElementById('date_end').value;
+      dateInputEnd = monthConv(endConvert);
+      timeInputEnd = document.getElementById('time_end').value;
+
+      var zero = "0";
+
+      //convert start to JSON
+      start = dateInputStart + ' ' + timeInputStart + sec;
+      if (start.charAt(1) == ":") {
+        start = zero.concat(start);
+      }
+      startJSON = JSON.stringify(start);
+
+      //convert end to JSON
+      end = dateInputEnd + ' ' + timeInputEnd + sec;
+      if (end.charAt(1) == ":") {
+        end = zero.concat(end);
+      }
+      endJSON = JSON.stringify(end);
+      console.log(start);
+      console.log(end); 
+    }
+
+    function validateDate() {
+      var startYear = parseInt(start.substring(0, 4));
+      var endYear = parseInt(end.substring(0, 4));
+
+      var startMnth = parseInt(start.substring(5,7));
+      var endMnth = parseInt(end.substring(5,7));
+
+      var startDay = parseInt(start.substring(8,10));
+      var endDay = parseInt(end.substring(8,10));
+
+      var sHour = parseInt(start.substring(11,13));
+      var eHour = parseInt(end.substring(11,13));
+      //check the year
+     if (startYear > endYear) {
+        compareFlag = true;
+        return;
+      } else {
+        compareFlag = false;
+      }
+
+      //check month. Year is correct if code reaches this point
+      if (startMnth > endMnth) {
+        compareFlag = true;
+        return;
+      } else {
+        compareFlag = false;
+      }
+
+      //check day. Year and month is correct if code reaches this point
+      if (startDay > endDay) {
+        compareFlag = true;
+        return;
+      } else {
+        compareFlag = false;
+      }
+
+      //check Time. Year and Month and Day is correct if code reaches this point
+      //corner case: startDay and endDay is the same day. Time matters.
+      if (startDay == endDay) {
+        if (sHour >= eHour) {
+          compareFlag = true;
+          return;
+        } else {
+          compareFlag = false;
+        }
+      }
+    }
+
+    $(document).ready(function() {
+      $(window).keydown(function(event){
+        if(event.keyCode == 13) {
+          event.preventDefault();
+          return false;
+        }
+      });
+    })
+
     $(document).ready(function() {
       $('#calendarDateStart').calendar({
-        type: 'date',
-        onChange: function(date) {
-            var year = date.getFullYear();
-            var month = date.getMonth() + 1;
-            var day = date.getDate();
-            if (month < 10) {
-                month = '0' + month;
-            }
-            if (day < 10) {
-                day = '0' + day;
-            }
-
-            // everything combined
-            dateInputStart = year + '-' + month + '-' + day;
-          }
+        type: 'date'
       });
 
       $('#calendarTimeStart').calendar({
         type: 'time',
         ampm: false,
-        disableMinute: true,
-        onChange: function(time,text){
-          timeInputStart = text;
-          console.log(timeInputStart);
-        }
+        disableMinute: true
       });
 
-       $('#calendarDateEnd').calendar({
-        type: 'date',
-        onChange: function(date) {
-            var year = date.getFullYear();
-            var month = date.getMonth() + 1;
-            var day = date.getDate();
-            if (month < 10) {
-                month = '0' + month;
-            }
-            if (day < 10) {
-                day = '0' + day;
-            }
-
-            // everything combined
-            dateInputEnd = year + '-' + month + '-' + day;
-          
-
-            console.log(dateInputEnd);
-          }
+      $('#calendarDateEnd').calendar({
+        type: 'date'
       });
 
       $('#calendarTimeEnd').calendar({
         type: 'time',
         ampm: false,
-        disableMinute: true,
-        onChange: function(time,text){
-          timeInputEnd = text;
-          console.log(timeInputEnd);
-        }
+        disableMinute: true
       });
-      
+
+      $('.ui.search.task').search({
+        source: availableTags
+      });
+
+      $('.ui.search.loc').search({
+        source: locations
+      });
+
 
       $('#editSubmit').click(function() {
-        ttype = document.getElementById('task_type_updated').value;
-        ttypeJSON = JSON.stringify(ttype);
-        details = document.getElementById('task_details_updated').value;
-        detailsJSON = JSON.stringify(details);
-        loc = document.getElementById('task_loc_updated').value;
-        locJSON = JSON.stringify(loc);
-        
-        //check if date/time was changed, else use the current read from database
-        if(dateInputStart=== 'not set'){
-          var startConvert = document.getElementById('date_start').value;
-          dateInputStart = monthConv(startConvert);
-        }
-        if(timeInputStart==='not set'){
-          timeInputStart = document.getElementById('time_start').value;
-        }
-        if(dateInputEnd==='not set'){
-          var endConvert = document.getElementById('date_end').value;
-          dateInputEnd = monthConv(endConvert);
-        }
-        if(timeInputEnd==='not set'){
-          timeInputEnd = document.getElementById('time_end').value;
-        }
-         start = dateInputStart + ' ' + timeInputStart + sec;
-         startJSON = JSON.stringify(start);
-         end = dateInputEnd + ' ' + timeInputEnd + sec;
-         endJSON = JSON.stringify(end);
+        convertFieldsToJSON();
+        convertDatesToJSON();
+        validateDate();
 
          $.ajax({
           url: '/demo/editquery.php',
@@ -317,7 +371,14 @@
           }
         });
       });
-    
+      
+      $('#testy').click(function() {
+        convertDatesToJSON();
+        validateDate();
+        console.log($('#taskauto').val());
+        console.log($('#locauto').val());
+      })
+
     });
   </script>
 
@@ -354,14 +415,19 @@
  
     <div class="ui middle alighed center aligned grid inverted">
       <div class = "six wide column">
-       <form class="ui form" name="update" action="edittasks.php" method="POST" >  
+        <br>
+        <form class="ui form" id="editForm">  
           <?php editTask() ?> 
           <br>
           <button class="ui blue primary button" id="editSubmit" >
             Submit
           </button> 
         </form>
-      </div>  
+
+        <button class="ui blue primary button" id="testy" >
+            Submit
+        </button> 
+      </div>
     </div>
 
   <!-- Footer -->
