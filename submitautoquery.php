@@ -38,15 +38,21 @@
 		$availableTasker = pg_query($db, "SELECT getAvailableTasker('$skill', '$date', '$endDate')");
 
 		if (pg_num_rows($availableTasker) > 0) {
+			//get Unique ID and tasker email
 			$status = 'pending';
 			$taskerEmail = pg_fetch_result($availableTasker, 0, 0);
 			$res = pg_query($db, "SELECT getUniqueTaskId()");
 			$uniqueId = pg_fetch_result($res, 0, 0);
 
+			pg_query($db, "BEGIN");
 			$insertQuery = "INSERT INTO Tasks Values('$uniqueId', '$skill', '$details', '$taskee_email', '$taskerEmail', '$status', '$createdDateTime', '$date', '$endDate', '$locs')";
 			$result = pg_query($db, $insertQuery);
-	      	if ($result) {
-				$stringVal = $row . " has been successfully chosen for your task!";
+			$result2 = pg_query($db, "INSERT INTO Bids Values('$uniqueId', '$taskee_email', '$taskerEmail', 'accepted', DEFAULT)");
+			if ($result && $result2) {
+				$stringVal = $taskerEmail . " has been successfully chosen for your task!";
+				pg_query($db, "COMMIT");
+			} else {
+				pg_query($db, "ROLLBACK");
 			}
 		} else {
 			$insertQuery = "INSERT INTO Tasks Values(DEFAULT, '$skill', '$details', '$taskee_email', NULL, '$status', '$createdDateTime', '$date', '$endDate', '$locs')";      
