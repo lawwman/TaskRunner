@@ -191,7 +191,8 @@ CREATE TABLE Bids (
 --Arguments are Skill name, task startdate and task enddate (in order)
 CREATE FUNCTION getAvailableTasker(VARCHAR, TIMESTAMP, TIMESTAMP) RETURNS VARCHAR AS $$
 select t.email from Taskers t inner join hasSkills HS on HS.tEmail = t.email where not exists
-(select * from tasks t2 where t2.taskeremail = t.email and t2.status = 'pending' and t2.enddatetime > $2 and t2.startdatetime < $3)
+(select * from tasks t2 where t2.taskeremail = t.email and t2.status = 'pending' and ((t2.enddatetime > $2 and t2.startdatetime < $3) or (t2.enddatetime < $3 and t2.startdatetime > $2)
+or (t2.enddatetime > $3 and t2.startdatetime < $2)))
 and HS.sname = $1 ORDER BY HS.profLevel, HS.hrate ASC;
 $$ LANGUAGE SQL;
 
