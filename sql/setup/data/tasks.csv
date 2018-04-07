@@ -1,11 +1,11 @@
 TaskID,ttype,Tasks Details,taskeeEmail,taskerEmail,Status,Created Date Time,startDateTime,endDateTime,location
-123456,Accounting,detailz,johndoe1@gmail.com,johndoe10@gmail.com,pending,28/1/2016 12:00,1/2/2016 12:00,1/2/2016 13:00,serangoon ave 3
-123457,Admin Work,detailz,johndoe1@gmail.com,johndoe9@gmail.com,pending,7/1/2016 12:05,9/1/2016 12:00,10/1/2016 14:00,serangoon ave 4
-123458,Accounting,detailz,johndoe1@gmail.com,johndoe10@gmail.com,completed,30/1/2016 14:00,1/2/2016 12:00,1/2/2016 13:00,serangoon ave 3
-123459,Admin Work,detailz,johndoe1@gmail.com,,bidded,31/1/2016 12:30,2/2/2016 14:00,3/2/2016 14:00,serangoon ave 3
-123460,Accounting,detailz,johndoe1@gmail.com,,not bidded,1/2/2017 12:50,2/2/2017 14:00,3/2/2017 14:00,serangoon ave 3
-123461,Admin Work,detailz,johndoe1@gmail.com,,not bidded,20/2/2018 12:00,20/3/2018 15:00,21/3/2018 15:00,serangoon ave 3
-123462,Reception,detailz,johndoe2@gmail.com,,bidded,3/2/2016 12:00,20/3/2018 15:00,21/3/2018 15:00,serangoon ave 3
-123463,Reception,detailz,johndoe2@gmail.com,,deleted,4/2/2018 13:00,20/3/2018 15:00,21/3/2018 15:00,serangoon ave 3
-123464,Reception,detailz,johndoe2@gmail.com,johndoe10@gmail.com,deleted,11/2/2018 12:00,20/3/2018 15:00,21/3/2018 15:00,serangoon ave 3
-123465,Reception,detailz,johndoe2@gmail.com,johndoe10@gmail.com,terminated,26/2/2018 12:00,20/3/2018 15:00,21/3/2018 15:00,serangoon ave 31
+123456,Accounting,detailz,johndoe1@gmail.com,johndoe10@gmail.com,pending,28/1/2016 12:00,1/2/2016 12:00,1/2/2016 13:00,Yishun
+123457,Admin Work,detailz,johndoe1@gmail.com,johndoe9@gmail.com,pending,7/1/2016 12:05,9/1/2016 12:00,10/1/2016 14:00,Toa Payoh
+123458,Accounting,detailz,johndoe1@gmail.com,johndoe10@gmail.com,completed,30/1/2016 14:00,1/2/2016 12:00,1/2/2016 13:00,Marina Bay
+123459,Admin Work,detailz,johndoe1@gmail.com,,bidded,31/1/2016 12:30,2/2/2016 14:00,3/2/2016 14:00,Raffles Place
+123460,Accounting,detailz,johndoe1@gmail.com,,not bidded,1/2/2017 12:50,2/2/2017 14:00,3/2/2017 14:00,Bishan
+123461,Admin Work,detailz,johndoe1@gmail.com,,not bidded,20/2/2018 12:00,20/3/2018 15:00,21/3/2018 15:00,Yishun
+123462,Reception,detailz,johndoe2@gmail.com,,bidded,3/2/2016 12:00,20/3/2018 15:00,21/3/2018 15:00,Ang Mo Kio
+123463,Reception,detailz,johndoe2@gmail.com,,deleted,4/2/2018 13:00,20/3/2018 15:00,21/3/2018 15:00,Woodlands
+123464,Reception,detailz,johndoe2@gmail.com,johndoe10@gmail.com,deleted,11/2/2018 12:00,20/3/2018 15:00,21/3/2018 15:00,Somerset
+123465,Reception,detailz,johndoe2@gmail.com,johndoe10@gmail.com,terminated,26/2/2018 12:00,20/3/2018 15:00,21/3/2018 15:00,Somerset

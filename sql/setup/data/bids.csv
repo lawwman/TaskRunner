@@ -8,6 +8,6 @@ TaskID,taskeeEmail,taskerEmail,Status,bidDateTime
 123462,johndoe1@gmail.com,johndoe8@gmail.com,pending,4/2/2016 12:00
 123463,johndoe2@gmail.com,johndoe8@gmail.com,rejected,5/2/2018 13:00
 123463,johndoe2@gmail.com,johndoe7@gmail.com,rejected,6/2/2018 10:00
-123464,johndoe2@gmail.com,johndoe8@gmail.com,rejected,11/2/2018 15:00
-123464,johndoe2@gmail.com,johndoe7@gmail.com,rejected,28/2/2018 12:00
+123464,johndoe2@gmail.com,johndoe8@gmail.com,pending,11/2/2018 15:00
+123464,johndoe2@gmail.com,johndoe7@gmail.com,pending,28/2/2018 12:00
 123465,johndoe2@gmail.com,johndoe8@gmail.com,rejected,28/2/2018 16:00
