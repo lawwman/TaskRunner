@@ -31,11 +31,10 @@
 		date_default_timezone_set('Asia/Singapore');
 
 		$createdDateTime = date('Y-m-d H:i:s');
-		$task_id = uniqid();
 		$taskee_email = $_SESSION['userEmail'];
 		$status = "not bidded";
 
-		$insertQuery = "INSERT INTO Tasks Values('$task_id', '$skill', '$details', '$taskee_email', NULL, '$status', '$createdDateTime', '$date', '$endDate', '$locs')";      
+		$insertQuery = "INSERT INTO Tasks Values(DEFAULT, '$skill', '$details', '$taskee_email', NULL, '$status', '$createdDateTime', '$date', '$endDate', '$locs')";      
       	$result = pg_query($db, $insertQuery);
       	if ($result) {
 			$stringVal = "Task has been successfully set, Task info: " . $task_id . $skill . $taskee_email . $status . $details . $locs . $createdDateTime . $date . $endDate;
