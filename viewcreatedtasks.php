@@ -7,18 +7,19 @@
   if ($_GET["argument"]=='signOut'){
     logout();
   }
-
-  //redirectIfNot('taskee');
+  redirectIfNot('taskee');
 
   function showUser() {
     if (isLoggedIn()) {
       echo '
       <div class="ui dropdown inverted button">Hello, '. $_SESSION['userName'] . '</div>
-      <div class="ui dropdown inverted button" id="signOut" formaction="/demo/signup.php">Sign Out</div>
+      <div class="ui dropdown inverted button" id="signOut">Sign Out</div>
       ';
+      consoleLog($_SESSION['userEmail']);
+      consoleLog($_SESSION['userType']);
     } else {
-      echo "<a class='ui inverted button' href='/demo/login.php'>Log in</a>
-      <a class='ui inverted button' href='/demo/signup.php'>Sign Up</a>";
+      echo "<a class='ui inverted button' href='/demo/taskeelogin.php'>Log in</a>
+      <a class='ui inverted button' href='/demo/taskersignup.php'>Become a Tasker</a>";
     }
   }
 
@@ -33,6 +34,7 @@
           <div class='card'>
             <div class='content'>
               <input type='hidden' value='$row[task_id]' class='hideTask'>
+              <input type='hidden' value='$row[task_details]' class='hideDetail'>
               <a class='header'>$row[ttype]</a>
               <div class='meta'>
                 <p class='description'> Status: $row[status]</p>
@@ -50,15 +52,13 @@
 
           <div id='taskDetailModal' class='ui modal'>
             <i class = 'close icon'></i>
-            <div class='center header'>
-              $row[ttype]
+            <div class='center header' id='showTask'>
             </div>
             <div class='image content'>
               <div class='ui small left floated image'> 
                 <img src='/demo/steve.jpg'>
               </div>
-              <div>
-                $row[task_details]
+              <div id='showDetail'>
               </div>
             </div>
             <div class='actions'>
@@ -117,22 +117,28 @@
   <script>
 
     var currentTaskIDSelected = "";
+    var currentTaskDetail = "";
     var currentTaskType = "";
 
     $(document).ready(function() {
       $(".card").click(function() {
         currentTaskIDSelected = $(this).find('.hideTask').val();
+        currentTaskDetail = $(this).find('.hideDetail').val();
         currentTaskType = $(this).find('.header').text();
+        $('#showTask').text(currentTaskType);
+        $('#showDetail').text(currentTaskDetail);
       })
     })
 
     $(document).ready(function() {
+      console.log("click edit button");
       $("#editBtn").click(function() {
           $.ajax({
             url: '/demo/storetaskid.php',
             type: "POST",
             data: { taskid: currentTaskIDSelected, tasktype: currentTaskType},
             success: function(data){
+              console.log("proceeding to edit page");
               var obj = JSON.parse(data);
               window.location.replace("/demo/edittasks.php");
             }
@@ -168,7 +174,7 @@
     })
 
     $(document).ready(function() {
-      $('#showTaskDetails').click(function(){
+      $('.card').click(function(){
         $('#taskDetailModal').modal({
           onApprove: function() {
           }
@@ -281,9 +287,9 @@
         <a class="toc item">
           <i class="sidebar icon"></i>
         </a>
-        <a class="item" href="/demo/index.php">Home</a>
-          <a class ="item" href="/demo/viewcreatedtasks.php"> View Created Tasks</a>
-          <a class ="item" href="/demo/viewrunningtasks.php"> View tasks I am running</a>
+        <a class="item" href="/demo/taskeedashboard.php">Home</a>
+        <a class="active item" href="/demo/viewcreatedtasks.php">View Created Tasks</a>
+        <a class="item" href="/demo/addtasks.php">Add Task</a>     
         <div class="right item">
           <?php showUser(); ?> 
         </div>
@@ -292,7 +298,7 @@
   </div>
 
   <div class="my_container">
-    <div class='ui link two cards' id='showTaskDetails'>
+    <div class='ui link two cards'>
       <?php showTasks(); ?> 
     </div>
   </div>

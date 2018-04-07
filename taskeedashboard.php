@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 
 <?php
@@ -7,7 +6,6 @@
 
   if ($_GET["argument"]=='signOut'){
     logout();
-    consoleLog('hi');
   }
   redirectIfNot('taskee');
   
