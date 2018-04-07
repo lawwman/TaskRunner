@@ -1,7 +1,5 @@
 DROP TABLE IF EXISTS Tasks CASCADE;
-DROP TABLE IF EXISTS Users CASCADE;
 DROP TABLE IF EXISTS Bids CASCADE;
-
 DROP TABLE IF EXISTS Taskees CASCADE;
 DROP TABLE IF EXISTS Taskers CASCADE;
 DROP TABLE IF EXISTS Skills CASCADE;
@@ -124,42 +122,42 @@ CREATE TABLE Bids (
 -- SQL Functions to be used in the database 
 CREATE FUNCTION getTaskCursor(refcursor) RETURNS refcursor AS $$
 BEGIN
-	OPEN $1 FOR SELECT * FROM tasks;
+	OPEN $1 FOR SELECT * FROM Tasks;
     RETURN $1;
 END;
 $$ LANGUAGE plpgsql;
 
 CREATE FUNCTION getBidCursor(refcursor) RETURNS refcursor AS $$
 BEGIN
-	OPEN $1 FOR SELECT * FROM tasks;
+	OPEN $1 FOR SELECT * FROM Bids;
     RETURN $1;
 END;
 $$ LANGUAGE plpgsql;
 
 CREATE FUNCTION getHasSkillCursor(refcursor) RETURNS refcursor AS $$
 BEGIN
-	OPEN $1 FOR SELECT * FROM tasks;
+	OPEN $1 FOR SELECT * FROM HasSkills;
     RETURN $1;
 END;
 $$ LANGUAGE plpgsql;
 
 CREATE FUNCTION getSkillCursor(refcursor) RETURNS refcursor AS $$
 BEGIN
-	OPEN $1 FOR SELECT * FROM tasks;
+	OPEN $1 FOR SELECT * FROM Skills;
     RETURN $1;
 END;
 $$ LANGUAGE plpgsql;
 
 CREATE FUNCTION getTaskeeCursor(refcursor) RETURNS refcursor AS $$
 BEGIN
-	OPEN $1 FOR SELECT * FROM tasks;
+	OPEN $1 FOR SELECT * FROM Taskees;
     RETURN $1;
 END;
 $$ LANGUAGE plpgsql;
 
 CREATE FUNCTION getTaskerCursor(refcursor) RETURNS refcursor AS $$
 BEGIN
-	OPEN $1 FOR SELECT * FROM tasks;
+	OPEN $1 FOR SELECT * FROM Taskers;
     RETURN $1;
 END;
 $$ LANGUAGE plpgsql;
