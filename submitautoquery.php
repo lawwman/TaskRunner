@@ -21,10 +21,6 @@
 	unset($_SESSION['details']); //remove the session variable from $SESSION once it is obtained
 	}
 
-	//get date and enddate values
-	$date=json_decode($_POST["date"]);
-	$endDate=json_decode($_POST["endDate"]);
-
 		//if values are set, proceed with sql statement
 	if(isset($_POST["date"]) && isset($_POST["endDate"]) && isLoggedIn()) {
 		//connect to data base
@@ -32,16 +28,22 @@
 		$db = pg_connect("host=127.0.0.1 port=5432 dbname=project1 user=postgres password=1234") or die('Could not connect: ' . pg_last_error()); 
 		date_default_timezone_set('Asia/Singapore');
 
+		//get date and enddate values
+		$date=json_decode($_POST["date"]);
+		$endDate=json_decode($_POST["endDate"]);
 		$createdDateTime = date('Y-m-d H:i:s');
 		$taskee_email = $_SESSION['userEmail'];
 		$status = "not bidded";
 
-		$availableTasker = pg_query($db, "SELECT getAvailableTasker('$skill')");
+		$availableTasker = pg_query($db, "SELECT getAvailableTasker('$skill', '$date', '$endDate')");
 
 		if (pg_num_rows($availableTasker) > 0) {
 			$status = 'pending';
-			$row = pg_fetch_result($availableTasker, 0, 0);
-			$insertQuery = "INSERT INTO Tasks Values(DEFAULT, '$skill', '$details', '$taskee_email', '$row', '$status', '$createdDateTime', '$date', '$endDate', '$locs')";
+			$taskerEmail = pg_fetch_result($availableTasker, 0, 0);
+			$res = pg_query($db, "SELECT getUniqueTaskId()");
+			$uniqueId = pg_fetch_result($res, 0, 0);
+
+			$insertQuery = "INSERT INTO Tasks Values('$uniqueId', '$skill', '$details', '$taskee_email', '$taskerEmail', '$status', '$createdDateTime', '$date', '$endDate', '$locs')";
 			$result = pg_query($db, $insertQuery);
 	      	if ($result) {
 				$stringVal = $row . " has been successfully chosen for your task!";
