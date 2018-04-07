@@ -61,9 +61,12 @@
                 </div>
               </div>
               <div class='actions'>
-                <button class='ui primary teal icon button' id='dropTask'> 
+                <button class='ui secondary icon button' id='dropTask'> 
                   Drop Task 
                 </button>
+                <button class ='ui primary icon button' id='completeTask'>
+                  Completed
+                  </button>
               </div>
             </div>";
     }
@@ -176,8 +179,9 @@
   var dropBid ;
   var dropTask;
 
-  dropBid = "dropbid"
+  dropBid = "dropbid";
   dropTask = "droptask";
+  completeTask ="Completed";
 
   $(document).ready(function(){
     $(".card").click(function(){
@@ -206,6 +210,21 @@
         url: '/demo/droptaskbid.php',
         type: "POST",
         data: {taskid: currentTaskIDSelected, droptask: dropTask},
+        success: function(data){
+          var obj = JSON.parse(data);
+          console.log(obj);
+          window.location.replace("/demo/viewrunningtasks.php");
+        }
+      });
+    })
+  })
+
+  $(document).ready(function(){
+    $("#completeTask").click(function(){
+      $.ajax({
+        url: '/demo/droptaskbid.php',
+        type: "POST",
+        data: {taskid: currentTaskIDSelected, completetask: completeTask},
         success: function(data){
           var obj = JSON.parse(data);
           console.log(obj);

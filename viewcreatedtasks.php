@@ -62,15 +62,15 @@
               </div>
             </div>
             <div class='actions'>
-              <button class='ui primary blue button' id='editBtn'>
+              <button class='ui primary button' id='editBtn'>
               Edit
               </button>
-              <button class='ui primary blue button' id='viewBidBtn'>
+              <button class='ui primary button' id='viewBidBtn'>
               View bidders
               </button>
-              <div class='ui approve red icon button' type='button' id='deleteTask'> 
+              <button class='ui secondary button' id='deleteBtn'> 
                 Delete Task 
-              </div>
+              </button>
             </div>
           </div>";
     }
@@ -156,6 +156,21 @@
               var obj = JSON.parse(data);
               console.log('clicked');
               window.location.replace("/demo/viewmytaskbids.php");
+            }
+          });
+      })
+    })
+   
+   $(document).ready(function() {
+      $("#deleteBtn").click(function() {
+          $.ajax({
+            url: '/demo/deletetask.php',
+            type: "POST",
+            data: { taskid: currentTaskIDSelected},
+            success: function(data){
+              var obj = JSON.parse(data);
+              console.log(obj);
+              window.location.replace("/demo/viewcreatedtasks.php");
             }
           });
       })

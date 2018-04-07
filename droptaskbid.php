@@ -35,6 +35,17 @@
 		
 	}
 
+	else if(isset($_POST['completetask']) && isset($_POST['taskid'])) {
+		$updateQueryTasks = "UPDATE tasks SET status = 'completed' WHERE task_id = '$taskid' ";
+		$submitTasksResult = pg_query($db,$updateQueryTasks);
+		if($submitTasksResult){
+				echo json_encode(array("abc" => $_POST['taskid']));
+			}else {
+				$errorMsg = pg_last_error($db);
+				echo json_encode(array("abc" => $errorMsg));
+			}
+	}
+
 	else if(isset($_POST['droptask']) && isset($_POST['taskid'])) {
 		BEGIN;
 		$updateQueryBid = "DELETE FROM bids WHERE taskeremail = '$taskerEmail' AND task_id = '$taskid' ";
