@@ -8,10 +8,12 @@
     logout();
   }
 
+  redirectIfNot('taskee');
+
   function showUser() {
     if (isLoggedIn()) {
       echo '
-      <div class="ui dropdown inverted button">Hello, '. $_SESSION['user'] . '</div>
+      <div class="ui dropdown inverted button">Hello, '. $_SESSION['userName'] . '</div>
       <div class="ui dropdown inverted button" id="signOut" formaction="/demo/signup.php">Sign Out</div>
       ';
     } else {
@@ -393,9 +395,9 @@
       <a class="toc item">
         <i class="sidebar icon"></i>
       </a>
-      <a class="item" href="/demo/index.php">Home</a>
-        <a class ="item" href="/demo/viewcreatedtasks.php"> View Created Tasks</a>
-        <a class ="item" href="/demo/viewrunningtasks.php"> View tasks I am running</a>
+      <a class="active item">Home</a>
+      <a class="item" href="/demo/viewcreatedtasks.php">View Created Tasks</a>
+      <a class="item" href="/demo/addtasks.php">Add Task</a>        
       <div class="right item">
         <?php showUser(); ?> 
       </div>

@@ -7,18 +7,19 @@
   if ($_GET["argument"]=='signOut'){
     logout();
   }
-
-  //redirectIfNot('taskee');
+  redirectIfNot('taskee');
 
   function showUser() {
     if (isLoggedIn()) {
       echo '
       <div class="ui dropdown inverted button">Hello, '. $_SESSION['userName'] . '</div>
-      <div class="ui dropdown inverted button" id="signOut" formaction="/demo/signup.php">Sign Out</div>
+      <div class="ui dropdown inverted button" id="signOut">Sign Out</div>
       ';
+      consoleLog($_SESSION['userEmail']);
+      consoleLog($_SESSION['userType']);
     } else {
-      echo "<a class='ui inverted button' href='/demo/login.php'>Log in</a>
-      <a class='ui inverted button' href='/demo/signup.php'>Sign Up</a>";
+      echo "<a class='ui inverted button' href='/demo/taskeelogin.php'>Log in</a>
+      <a class='ui inverted button' href='/demo/taskersignup.php'>Become a Tasker</a>";
     }
   }
 
@@ -286,9 +287,9 @@
         <a class="toc item">
           <i class="sidebar icon"></i>
         </a>
-        <a class="item" href="/demo/index.php">Home</a>
-          <a class ="item" href="/demo/viewcreatedtasks.php"> View Created Tasks</a>
-          <a class ="item" href="/demo/viewrunningtasks.php"> View tasks I am running</a>
+        <a class="item" href="/demo/taskeedashboard.php">Home</a>
+        <a class="active item" href="/demo/viewcreatedtasks.php">View Created Tasks</a>
+        <a class="item" href="/demo/addtasks.php">Add Task</a>     
         <div class="right item">
           <?php showUser(); ?> 
         </div>
