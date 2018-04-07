@@ -1,8 +1,9 @@
 <?php 
 	require('session.php');
-	$options;
+	$skill;
 	$details;
 	$locs;
+	$stringVal = "fail";
 
 	//check if prior values from addtasks.php has been set properly
 	if (isset($_SESSION['skill'])) {
@@ -27,6 +28,7 @@
 		//if values are set, proceed with sql statement
 	if(isset($_POST["date"]) && isset($_POST["endDate"]) && isLoggedIn()) {
 		//connect to data base
+		$stringVal = "connect to db";
 		$db = pg_connect("host=127.0.0.1 port=5432 dbname=project1 user=postgres password=1234") or die('Could not connect: ' . pg_last_error()); 
 		date_default_timezone_set('Asia/Singapore');
 
@@ -34,15 +36,23 @@
 		$taskee_email = $_SESSION['userEmail'];
 		$status = "not bidded";
 
-		// select t.email from taskers t where not exists
-		// (select * from tasks t2 where t2.taskeremail = t.email and t2.status = 'pending' and t2.enddatetime > '2016-01-31 12:30:00' and t2.startdatetime < '2016-02-05 14:00:00')
-		// and exists (select * from hasSkills HS where HS.tEmail = t.email and HS.sname = 'Admin Work');		
+		$availableTasker = pg_query($db, "SELECT getAvailableTasker('$skill')");
 
-		$insertQuery = "INSERT INTO Tasks Values(DEFAULT, '$skill', '$details', '$taskee_email', NULL, '$status', '$createdDateTime', '$date', '$endDate', '$locs')";      
-      	$result = pg_query($db, $insertQuery);
-      	if ($result) {
-			$stringVal = "Task has been successfully set, Task info: " . $task_id . $skill . $taskee_email . $status . $details . $locs . $createdDateTime . $date . $endDate;
-	  		echo json_encode(array("abc" => $stringVal));
-      	}
-	 } 
+		if (pg_num_rows($availableTasker) > 0) {
+			$status = 'pending';
+			$row = pg_fetch_result($availableTasker, 0, 0);
+			$insertQuery = "INSERT INTO Tasks Values(DEFAULT, '$skill', '$details', '$taskee_email', '$row', '$status', '$createdDateTime', '$date', '$endDate', '$locs')";
+			$result = pg_query($db, $insertQuery);
+	      	if ($result) {
+				$stringVal = $row . " has been successfully chosen for your task!";
+			}
+		} else {
+			$insertQuery = "INSERT INTO Tasks Values(DEFAULT, '$skill', '$details', '$taskee_email', NULL, '$status', '$createdDateTime', '$date', '$endDate', '$locs')";      
+	      	$result = pg_query($db, $insertQuery);
+	      	if ($result) {
+				$stringVal = "Task has been successfully set.";
+	      	}
+		}
+	 }
+	echo json_encode(array("abc" => $stringVal));
 ?>

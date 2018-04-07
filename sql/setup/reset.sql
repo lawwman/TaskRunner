@@ -11,6 +11,7 @@ DROP FUNCTION IF EXISTS getSkillCursor;
 DROP FUNCTION IF EXISTS getBidCursor;
 DROP FUNCTION IF EXISTS getTaskeeCursor;
 DROP FUNCTION IF EXISTS getTaskerCursor;
+DROP FUNCTION IF EXISTS getAvailableTasker(varchar, TIMESTAMP, TIMESTAMP);
 
 DROP SEQUENCE IF EXISTS idGen;
 
@@ -186,6 +187,13 @@ CREATE TABLE Bids (
   	CONSTRAINT discrete_status CHECK(status in ('rejected', 'pending', 'accepted')),
 	PRIMARY KEY(taskerEmail, taskeeEmail, task_id)
 );
+
+--Arguments are Skill name, task startdate and task enddate (in order)
+CREATE FUNCTION getAvailableTasker(VARCHAR, TIMESTAMP, TIMESTAMP) RETURNS VARCHAR AS $$
+select t.email from Taskers t inner join hasSkills HS on HS.tEmail = t.email where not exists
+(select * from tasks t2 where t2.taskeremail = t.email and t2.status = 'pending' and t2.enddatetime > $2 and t2.startdatetime < $3)
+and HS.sname = $1 ORDER BY HS.profLevel, HS.hrate ASC;
+$$ LANGUAGE SQL;
 
 
 COPY Skills FROM '..\..\apps\demo\htdocs\sql\setup\data\skills.csv' DELIMITER ',' CSV HEADER;

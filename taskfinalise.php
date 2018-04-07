@@ -305,7 +305,9 @@
             dataType: 'json',
             data: {date: dateInputJSON, endDate: dateEndInputJSON},
             success: function(data){
-              console.log(data);
+              console.log(data.abc);
+              alert(data.abc);
+              window.location.replace("/demo/viewcreatedtasks.php");
             }
           });
         }

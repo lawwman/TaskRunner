@@ -37,7 +37,7 @@
 		$insertQuery = "INSERT INTO Tasks Values(DEFAULT, '$skill', '$details', '$taskee_email', NULL, '$status', '$createdDateTime', '$date', '$endDate', '$locs')";      
       	$result = pg_query($db, $insertQuery);
       	if ($result) {
-			$stringVal = "Task has been successfully set, Task info: " . $task_id . $skill . $taskee_email . $status . $details . $locs . $createdDateTime . $date . $endDate;
+			$stringVal = "Task has been successfully set, Task info: " . $skill . $taskee_email . $status . $details . $locs . $createdDateTime . $date . $endDate;
 	  		echo json_encode(array("abc" => $stringVal));
       	}
 	 } 
