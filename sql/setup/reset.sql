@@ -5,12 +5,12 @@ DROP TABLE IF EXISTS Taskers CASCADE;
 DROP TABLE IF EXISTS Skills CASCADE;
 DROP TABLE IF EXISTS HasSkills CASCADE;
 
-DROP FUNCTION IF EXISTS getTaskCursor;
-DROP FUNCTION IF EXISTS getHasSkillCursor;
-DROP FUNCTION IF EXISTS getSkillCursor;
-DROP FUNCTION IF EXISTS getBidCursor;
-DROP FUNCTION IF EXISTS getTaskeeCursor;
-DROP FUNCTION IF EXISTS getTaskerCursor;
+DROP FUNCTION IF EXISTS getTasksCursor;
+DROP FUNCTION IF EXISTS getHasSkillsCursor;
+DROP FUNCTION IF EXISTS getSkillsCursor;
+DROP FUNCTION IF EXISTS getBidsCursor;
+DROP FUNCTION IF EXISTS getTaskeesCursor;
+DROP FUNCTION IF EXISTS getTaskersCursor;
 DROP FUNCTION IF EXISTS getAvailableTasker(varchar, TIMESTAMP, TIMESTAMP);
 
 DROP SEQUENCE IF EXISTS idGen;
@@ -39,42 +39,42 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE FUNCTION getTaskCursor(refcursor) RETURNS refcursor AS $$
+CREATE FUNCTION getTaskCursors(refcursor) RETURNS refcursor AS $$
 BEGIN
 	OPEN $1 FOR SELECT * FROM Tasks;
     RETURN $1;
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE FUNCTION getBidCursor(refcursor) RETURNS refcursor AS $$
+CREATE FUNCTION getBidCursors(refcursor) RETURNS refcursor AS $$
 BEGIN
 	OPEN $1 FOR SELECT * FROM Bids;
     RETURN $1;
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE FUNCTION getHasSkillCursor(refcursor) RETURNS refcursor AS $$
+CREATE FUNCTION getHasSkillCursors(refcursor) RETURNS refcursor AS $$
 BEGIN
 	OPEN $1 FOR SELECT * FROM HasSkills;
     RETURN $1;
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE FUNCTION getSkillCursor(refcursor) RETURNS refcursor AS $$
+CREATE FUNCTION getSkillCursors(refcursor) RETURNS refcursor AS $$
 BEGIN
 	OPEN $1 FOR SELECT * FROM Skills;
     RETURN $1;
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE FUNCTION getTaskeeCursor(refcursor) RETURNS refcursor AS $$
+CREATE FUNCTION getTaskeeCursors(refcursor) RETURNS refcursor AS $$
 BEGIN
 	OPEN $1 FOR SELECT * FROM Taskees;
     RETURN $1;
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE FUNCTION getTaskerCursor(refcursor) RETURNS refcursor AS $$
+CREATE FUNCTION getTaskerCursors(refcursor) RETURNS refcursor AS $$
 BEGIN
 	OPEN $1 FOR SELECT * FROM Taskers;
     RETURN $1;
