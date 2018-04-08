@@ -70,7 +70,7 @@
       return $.ajax({ 
         type: 'GET', 
         url: '/demo/adminRetrieval.php', 
-        data: { table: tableName, dir: direction, off: offset}, 
+        data: { func: "retrieve-data", table: tableName, dir: direction, off: offset}, 
         dataType: 'json',
         success: function (data) {
           populateTable(data, tableName);
@@ -114,6 +114,19 @@
         pageNo.value = parseInt(pageNo.value) - 1;
       }
     }
+    
+    function updateTableMaxPages(tableName) {
+      let maxPages = document.getElementById(tableName + "-max-pages");
+      $.ajax({ 
+        type: 'GET', 
+        url: '/demo/adminRetrieval.php', 
+        data: { func: "get-max-pages", table: tableName}, 
+        dataType: 'json',
+        success: function (data) {
+          maxPages.innerHTML = data;
+        }
+      });
+    }
 
     // performs sign out functionality.
     $(document).ready(function() {
@@ -145,6 +158,12 @@
       let taskeeData = retrieveData("taskees", "forward", 0);
       let taskerData = retrieveData("taskers", "forward", 0);
       let skillData = retrieveData("skills", "forward", 0);
+      updateTableMaxPages("tasks");
+      updateTableMaxPages("bids");
+      updateTableMaxPages("taskees");
+      updateTableMaxPages("taskers");
+      updateTableMaxPages("skills");
+      console.log("hello java");
     })
   </script>
 
@@ -300,7 +319,7 @@
           </button> &ensp;
         
           <input type="text" value="1" type="number" class="page-no" id="tasks-page-no">
-          &ensp; <div class="pagenum">of 50</div> &ensp;
+          &ensp; <div class="pagenum">of <span id="tasks-max-pages">50</span></div> &ensp;
         
           <button class ="ui tiny compact button next" id="tasks-next">
             <i class= "caret right icon"></i>
@@ -346,7 +365,7 @@
           </button> &ensp;
         
           <input type="text" value="1" type="number" class="page-no" id="taskers-page-no">
-          &ensp; <div class="pagenum">of 50</div> &ensp;
+          &ensp; <div class="pagenum">of <span id="taskers-max-pages">50</span></div> &ensp;
         
           <button class ="ui tiny compact button next" id="taskers-next">
             <i class= "caret right icon"></i>
@@ -390,7 +409,7 @@
           </button> &ensp;
         
           <input type="text" value="1" type="number" class="page-no" id="taskees-page-no">
-          &ensp; <div class="pagenum">of 50</div> &ensp;
+          &ensp; <div class="pagenum">of <span id="taskees-max-pages">50</span></div> &ensp;
         
           <button class ="ui tiny compact button next" id="taskees-next">
             <i class= "caret right icon"></i>
@@ -425,7 +444,7 @@
           </button> &ensp;
         
           <input type="text" value="1" type="number" class="page-no" id="skills-page-no">
-          &ensp; <div class="pagenum">of 50</div> &ensp;
+          &ensp; <div class="pagenum">of <span id="skills-max-pages">50</span></div> &ensp;
         
           <button class ="ui tiny compact button next" id="skills-next">
             <i class= "caret right icon"></i>
@@ -462,7 +481,7 @@
           </button> &ensp;
         
           <input type="text" value="1" type="number" class="page-no" id="bids-page-no">
-          &ensp; <div class="pagenum">of 50</div> &ensp;
+          &ensp; <div class="pagenum">of <span id="bids-max-pages">50</span></div> &ensp;
 
           <button class ="ui tiny compact button next" id="bids-next">
             <i class= "caret right icon"></i>

@@ -49,6 +49,19 @@
       return getPrevRows($pageNum, $table);
     }
   }
-  
-  echo json_encode(retrieveData($_GET['table'], $_GET['dir'], $_GET['off']));
+
+  function getNumPages($tableName) {
+    $db = pg_connect("host=127.0.0.1 port=5432 dbname=project1 user=postgres password=1234") or die('Could not connect: ' . pg_last_error());
+    $query = "SELECT COUNT(*) FROM " . $tableName;
+    $res = pg_query($db, $query);
+    $count = pg_fetch_all($res);
+    pg_close($db);
+    return (int) ceil(((float) $count[0]['count']) /  $GLOBALS['numRecordToRetrieve']);
+  }
+
+  if ($_GET['func'] == "retrieve-data") {
+    echo json_encode(retrieveData($_GET['table'], $_GET['dir'], $_GET['off']));
+  } else if ($_GET['func'] == 'get-max-pages') {
+    echo json_encode(getNumPages($_GET['table']));
+  }
 ?>
