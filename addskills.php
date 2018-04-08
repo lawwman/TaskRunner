@@ -197,7 +197,7 @@
             $('.removeBtn').click(function() {
               console.log($(this).find('.hideTask').val());
               var item = $(this).parents('.item');
-              console.log(item);
+             item.remove();
             });
             }
           }
