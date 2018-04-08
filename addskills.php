@@ -91,12 +91,19 @@
         });
       });
     })
+
+    $(document).ready(function() {
+      $('#toggleInput').hide();
+    })
   </script>
 
     <!-- Following script block shows how to get implement autocomplete with suggestions from a local js file-->
   <script>
     var availableTags = getList(); //getList() function is a function from "list.js". Returns an array of string
-    var selectedOptions = []; //To store the selected options
+    var selectedSkill; //To store the selected options
+    var skillPitch;
+    var profLevel;
+    var hourlyRate;
     var count = 0;
     var id = "removeTag";
 
@@ -106,9 +113,10 @@
 
         //when an option is selected
         select: function(select, ui) {
-          var label = ui.item.label;
-          selectedOptions.push(label); //store selected function
-          console.log(selectedOptions);
+          selectedSkill = ui.item.label;
+          console.log(selectedSkill);
+          $('#toggleInput').slideDown(1000);
+          $('#toggleSelectInput').slideUp(1000);
         }
       });
       // do not submit form. Manually insert link.
@@ -122,6 +130,33 @@
       event.preventDefault();
       });
    })
+
+   $(document).ready(function() {
+    $('#addBtn').click(function() {
+      //validate inputs
+      skillPitch = $('#pitchInput').val();
+      if (skillPitch == undefined) {
+        alert('Please enter pitch!');
+      } else {
+        $('#pitchInput').val('');
+        console.log(skillPitch);
+      }
+      profLevel = $('#profInput').val();
+      if (profLevel == undefined || !Number.isInteger(profLevel)) {
+        alert('Please enter valid proficiency level! i.e integer values');
+      } else {
+        $('#profInput').val('');
+        console.log(profLevel);
+      }
+      hourlyRate = $('#rateInput').val();
+      if (hourlyRate == undefined || !Number.isInteger(hourlyRate)) {
+        alert('Please enter valid hourly rate! i.e. integer values');
+      } else {
+        $('#rateInput').val('');
+        console.log(hourlyRate);
+      }
+    });
+   });
   </script>
 
 
@@ -276,10 +311,12 @@
     <div class="six wide column">
       <h2 class="ui dividing header">Add a skill here!</h2>
       <div class="ui-widget">
-        <form id="localForm">
-          <label >Select Skills: </label>
-          <input id="suggestionFromLocalSource">
-        </form>
+        <div id="toggleSelectInput">
+          <form id="localForm">
+            <label >Select Skills: </label>
+            <input id="suggestionFromLocalSource">
+          </form>
+        </div>
         <br><br><br>
 
         <div class="ui fields" id="toggleInput">
@@ -290,13 +327,13 @@
             </div>
             <div class="field">
               <label>Hourly rate</label>
-              <input type="text" name="rateInput" placeholder="8? 10?">
+              <input type="text" id="rateInput" placeholder="8? 10?">
             </div>
             <div class="field">
               <label>Proficiency</label>
-              <input type="text" name="profInput" placeholder="Your mastery of low wage skills">
+              <input type="text" id="profInput" placeholder="Your mastery of low wage skills">
             </div>
-            <div class="ui primary button">Next</div>
+            <div class="ui primary button" id="addBtn">Add Skill</div>
           </form>
         </div>
         <h2 class="ui dividing header"></h2>
