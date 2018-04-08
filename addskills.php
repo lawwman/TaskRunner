@@ -55,6 +55,7 @@
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/sidebar.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/transition.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/label.css">
+  <link rel="stylesheet" type="text/css" href="semantic/dist/components/item.css">
 
   <script src="assets/jquery-3.3.1.min"></script>
   <script src="semantic/dist/components/transition.js"></script>
@@ -108,7 +109,7 @@
           selectedOptions.push(label); //store selected function
           console.log(selectedOptions);
           count++; //increment count to give unique id to each tag!
-          $('#tags').append('<div class="ui image label">'+ label + '<i id="' + id + count + '" class="delete icon removeTag"></i></div>');
+          $('#skillItem').append('<div class="ui image label">'+ label + '<i id="' + id + count + '" class="delete icon removeTag"></i></div>');
 
           //function when option tag is clicked
           $("#" + id+ count).click(function() {
@@ -284,44 +285,94 @@
   <div class="ui middle aligned center aligned grid inverted">
     <!-- Suggestions from a local source-->
     <div class="ui container"></div> <br>
-      <div class="six wide column">
-        <h2 class="ui dividing header">Select a skill here!</h2>
-        <div class="ui-widget">
-          <form id="localForm">
-            <label >Local Source: </label>
-            <input id="suggestionFromLocalSource">
-          </form>
+    <div class="six wide column">
+      <h2 class="ui dividing header">Select a skill here!</h2>
+      <div class="ui-widget">
+        <form id="localForm">
+          <label >Select Skills: </label>
+          <input id="suggestionFromLocalSource">
+        </form>
 
-          <br>
-          <!--Tags for skills selected--> 
-          <div id="tags"></div>
+        <br>
+        <!--item for skills selected--> 
 
-          <!--validation for autocorrect-->
-          <div id="autocompleteValidation"></div>
+
+        <!--validation for autocorrect-->
+        <div id="autocompleteValidation"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ui middle aligned center aligned grid inverted">
+     <div class="ui items">
+      <div class="item">
+        <div class="ui small image">
+          <img src="/demo/steve.jpg">
+        </div>
+        <div class="content">
+          <div class="header">Arrowhead Valley Camp</div>
+          <div class="meta">
+            <span class="price">$1200</span>
+            <span class="stay">1 Month</span>
+          </div>
+          <div class="description">
+            <p></p>
+          </div>
+        </div>
+      </div>
+      <div class="item">
+        <div class="ui small image">
+          <img src="/demo/steve.jpg">
+        </div>
+        <div class="content">
+          <div class="header">Buck's Homebrew Stayaway</div>
+          <div class="meta">
+            <span class="price">$1000</span>
+            <span class="stay">2 Weeks</span>
+          </div>
+          <div class="description">
+            <p></p>
+          </div>
+        </div>
+      </div>
+      <div class="item">
+        <div class="ui small image">
+          <img src="/demo/steve.jpg">
+        </div>
+        <div class="content">
+          <div class="header">Astrology Camp</div>
+          <div class="meta">
+            <span class="price">$1600</span>
+            <span class="stay">6 Weeks</span>
+          </div>
+          <div class="description">
+            <p></p>
+          </div>
         </div>
       </div>
     </div>
   </div>
-  <br><br><br>
 
-  <div class="ui inverted vertical footer segment">
-    <div class="ui container">
-      <div class="ui stackable inverted divided equal height stackable grid">
-        <div class="three wide column">
-          <h4 class="ui inverted header">Discover</h4>
-          <div class="ui inverted link list">
-            <a href='/demo/taskeesignup.php' class="item">Sign up to Create Tasks</a>
-          </div>
+</div>
+<br><br><br>
+
+<div class="ui inverted vertical footer segment">
+  <div class="ui container">
+    <div class="ui stackable inverted divided equal height stackable grid">
+      <div class="three wide column">
+        <h4 class="ui inverted header">Discover</h4>
+        <div class="ui inverted link list">
+          <a href='/demo/taskeesignup.php' class="item">Sign up to Create Tasks</a>
         </div>
-        <div class="three wide column">
-          
-        </div>
-        <div class="seven wide column">          
-          <h4 class="ui inverted header">Navigate</h4>
-          <div class="ui inverted link list">
-            <a href='/demo/bidtasks.php' class="item">List of Available Tasks</a>            
-            <a href='/demo/viewrunningtasks.php' class="item">My Running Tasks</a>            
-          </div>
+      </div>
+      <div class="three wide column">
+        
+      </div>
+      <div class="seven wide column">          
+        <h4 class="ui inverted header">Navigate</h4>
+        <div class="ui inverted link list">
+          <a href='/demo/bidtasks.php' class="item">List of Available Tasks</a>            
+          <a href='/demo/viewrunningtasks.php' class="item">My Running Tasks</a>            
         </div>
       </div>
     </div>
