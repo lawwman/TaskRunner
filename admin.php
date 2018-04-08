@@ -107,10 +107,12 @@
     function updateTable(tableName, direction) {
       clearTable(tableName);
       let pageNo = document.getElementById(tableName + "-page-no");
-      console.log(pageNo);
       let newData = retrieveData(tableName, direction, pageNo.value);
-      console.log(tableName);
-      pageNo.value = parseInt(pageNo.value) + 1;
+      if (direction == "forward") {
+        pageNo.value = parseInt(pageNo.value) + 1;
+      } else {
+        pageNo.value = parseInt(pageNo.value) - 1;
+      }
     }
 
     // performs sign out functionality.
@@ -130,7 +132,13 @@
         updateTable(idArr[0], "forward");
       });
 
-      console.log("test5");
+      $('.prev').click(function() {
+        let curr = document.getElementById("tasks-page-no");
+        let idArr = this.id.split("-");
+        updateTable(idArr[0], "backward");
+      });
+
+      console.log("test");
 
       let taskData = retrieveData("tasks", "forward", 0);
       let bidData = retrieveData("bids", "forward", 0);
@@ -226,22 +234,15 @@
         font-size: 1.5em;
       }
     }
-
-    .pagenum {
-       line-height: 3em;       
-    }
-
-    #number {
-      width: 4em;
-      text-align: center; 
-    }
-
-    #tasks-page-no {
+    
+    .page-no {
       width: 4em;
       text-align: center;
     }
 
-
+    .pagenum {
+       line-height: 3em;       
+    }
   </style>
 </head>
 
@@ -294,11 +295,11 @@
       <div align="center">
         <div class="ui input focus">            
             
-          <button class= "ui tiny compact button">
+          <button class= "ui tiny compact button prev" id="tasks-prev">
             <i class= "caret left icon"></i>
           </button> &ensp;
         
-          <input type="text" value="1" type="number" id="tasks-page-no">
+          <input type="text" value="1" type="number" class="page-no" id="tasks-page-no">
           &ensp; <div class="pagenum">of 50</div> &ensp;
         
           <button class ="ui tiny compact button next" id="tasks-next">
@@ -340,11 +341,11 @@
       <div align="center">
         <div class="ui input focus">            
           
-          <button class ="ui tiny compact button" id="-next">
+          <button class ="ui tiny compact button prev" id="taskers-prev">
             <i class= "caret left icon"></i>
           </button> &ensp;
         
-          <input type="text" value="1" type="number" id="taskers-page-no">
+          <input type="text" value="1" type="number" class="page-no" id="taskers-page-no">
           &ensp; <div class="pagenum">of 50</div> &ensp;
         
           <button class ="ui tiny compact button next" id="taskers-next">
@@ -384,11 +385,11 @@
       <div align="center">
         <div class="ui input focus">            
           
-          <button class= "ui tiny compact button">
+          <button class= "ui tiny compact button prev" id="taskees-prev">
             <i class= "caret left icon"></i>
           </button> &ensp;
         
-          <input type="text" value="1" type="number" id="taskees-page-no">
+          <input type="text" value="1" type="number" class="page-no" id="taskees-page-no">
           &ensp; <div class="pagenum">of 50</div> &ensp;
         
           <button class ="ui tiny compact button next" id="taskees-next">
@@ -419,11 +420,11 @@
       <div align="center">
         <div class="ui input focus">            
           
-          <button class= "ui tiny compact button">
+          <button class= "ui tiny compact button prev" id="skills-prev">
             <i class= "caret left icon"></i>
           </button> &ensp;
         
-          <input type="text" value="1" type="number" id="skills-page-no">
+          <input type="text" value="1" type="number" class="page-no" id="skills-page-no">
           &ensp; <div class="pagenum">of 50</div> &ensp;
         
           <button class ="ui tiny compact button next" id="skills-next">
@@ -456,12 +457,13 @@
       <div align="center">
         <div class="ui input focus">            
             
-          <button class= "ui tiny compact button next" id="bids-next">
+          <button class= "ui tiny compact button prev" id="bids-prev">
             <i class= "caret left icon"></i>
           </button> &ensp;
         
-          <input type="text" value="1" type="number" class="number" id="bids-page-no">
+          <input type="text" value="1" type="number" class="page-no" id="bids-page-no">
           &ensp; <div class="pagenum">of 50</div> &ensp;
+
           <button class ="ui tiny compact button next" id="bids-next">
             <i class= "caret right icon"></i>
           </button>        

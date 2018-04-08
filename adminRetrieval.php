@@ -26,7 +26,7 @@
     pg_query($db, "BEGIN") or die("Could not start transaction\n");
     $query =  "SELECT get" . $tableName . "Cursor('tempcursor')";
     $res2 = pg_query($db, $query);
-    $query = "MOVE FORWARD " . (($pageNum - 1) * $GLOBALS['numRecordToRetrieve']) . " tempcursor";
+    $query = "MOVE FORWARD " . (($pageNum - 1) * $GLOBALS['numRecordToRetrieve'] + 1) . " tempcursor";
     $res1 = pg_query($db, $query);
     $query = "FETCH BACKWARD " . ($GLOBALS['numRecordToRetrieve']) . " tempcursor";
     $res1 = pg_query($db, $query);
