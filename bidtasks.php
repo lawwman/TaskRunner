@@ -1,28 +1,57 @@
-<!DOCTYPE html>
 
-<?php
+<!DOCTYPE html>  
+
+<?php 
   require('debugging.php');
   require('session.php');
 
   if ($_GET["argument"]=='signOut'){
     logout();
   }
-  redirectIfNot('taskee');
-  
+
   function showUser() {
     if (isLoggedIn()) {
       echo '
       <div class="ui dropdown inverted button">Hello, '. $_SESSION['userName'] . '</div>
-      <div class="ui dropdown inverted button" id="signOut">Sign Out</div>
+      <div class="ui dropdown inverted button" id="signOut" formaction="/demo/signup.php">Sign Out</div>
       ';
-      consoleLog($_SESSION['userEmail']);
-      consoleLog($_SESSION['userType']);
     } else {
-      echo "<a class='ui inverted button' href='/demo/taskeelogin.php'>Log in</a>
-      <a class='ui inverted button' href='/demo/taskersignup.php'>Become a Tasker</a>";
+      echo "<a class='ui inverted button' href='/demo/login.php'>Log in</a>
+      <a class='ui inverted button' href='/demo/signup.php'>Sign Up</a>";
     }
   }
-  
+
+  function showTasks() {
+      // Connect to the database. Please change the password in the following line accordingly
+    $taskerEmail = $_SESSION['userEmail'];
+    $db     = pg_connect("host=127.0.0.1 port=5432 dbname=project1 user=postgres password=1234"); 
+    $result = pg_query($db, "
+      SELECT * FROM tasks t1 WHERE (t1.status = 'not bidded' OR t1.status = 'bidded') AND 
+      NOT EXISTS ( SELECT '1' FROM tasks t2 WHERE t2.taskeremail = '$taskerEmail' AND 
+      ((t2.enddatetime > t1.startdatetime AND t2.startdatetime < t1.enddatetime) OR 
+       (t2.enddatetime < t1.enddatetime AND t2.startdatetime > t1.startdatetime) OR
+       (t2.enddatetime > t1.enddatetime AND t2.startdatetime < t1.startdatetime))
+      ) AND
+      NOT EXISTS ( SELECT '1' FROM bids b WHERE b.task_id = t1.task_id AND b.taskeremail = '$taskerEmail' AND b.status = 'pending') ");
+    while ($row = pg_fetch_assoc($result)) {
+      echo "<tr>
+      <td> 
+        <div class= 'ui checkbox'> 
+          <input type = 'checkbox' name = 'checkboxTicked' value='$row[task_id]'>
+        </div>
+      </td>
+      <td> $row[ttype]</td>
+      <td> $row[task_details] </td> 
+      <td> $row[taskeeemail] </td>
+      <td> $row[status] </td>
+      <td> $row[createddatetime] </td>
+      <td> $row[startdatetime] </td>
+      <td> $row[enddatetime] </td>
+      <td> $row[loc] </td>
+      </tr>";
+    }
+  }
+
 ?>
 
 <html>
@@ -33,7 +62,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
   <!-- Site Properties -->
-  <title>Homepage - Taskee</title>
+  <title>View Tasks - Semantic</title>
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/reset.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/site.css">
 
@@ -42,6 +71,7 @@
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/header.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/image.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/menu.css">
+  <link rel="stylesheet" type="text/css" href="semantic/dist/components/card.css">
 
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/divider.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/dropdown.css">
@@ -51,36 +81,66 @@
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/icon.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/sidebar.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/transition.css">
-  <link rel="stylesheet" type="text/css" href="semantic/dist/components/label.css">
+  <link rel="stylesheet" type="text/css" href="semantic/dist/components/modal.css">
+  <link rel="stylesheet" type="text/css" href="semantic/dist/components/dimmer.css">
+  <link rel="stylesheet" type="text/css" href="semantic/dist/components/table.css">  
+  <!-- <link rel="stylesheet" type="text/css" href="semantic/dist/components/checkbox.css">  --> 
 
   <script src="assets/jquery-3.3.1.min"></script>
   <script src="semantic/dist/components/transition.js"></script>
   <script src="semantic/dist/components/dropdown.js"></script>
+  <script src="semantic/dist/components/modal.js"></script>
+  <script src="semantic/dist/components/dimmer.js"></script>
 
   <script>
     // performs sign out functionality.
     $(document).ready(function() {
       $('#signOut').click(function() {
         $.ajax({
-          url: '/demo/taskeedashboard.php?argument=signOut',
+          url: '/demo/viewtasks.php?argument=signOut',
           success: function(html){
-            location.reload();
+            window.location.replace("/demo/index.php");
           }
         });
       });
-  });
-
+    })
   </script>
 
+  <script>
+    var allTaskid= new Array();
+
+    $(document).ready(function(){
+      $('#bid_submit').click(function() {
+        
+        $('input:checkbox[name="checkboxTicked"]:checked').each(function(){
+            allTaskid.push(this.value);
+          });
+
+        var taskidJSON = JSON.stringify(allTaskid);
+
+        $.ajax({
+          url:'/demo/taskerbid.php',
+          type: 'POST',
+          dataType: 'json',
+          data: {taskid: taskidJSON},
+          success: function(data){
+            //window.location.replace("/demo/taskerdashboard.php");
+            console.log(data.abc);
+          }
+        });
+      });
+    })
+  </script>
+  
 
   <style type="text/css">
 
-    .hidden.menu {
-      display: none;
+    .my_container {
+      margin: 50px;
     }
 
     .masthead.segment {
-      min-height: 700px;
+      min-height: 200px;
       padding: 1em 0em;
     }
     .masthead .logo.item img {
@@ -130,6 +190,9 @@
 
     .footer.segment {
       padding: 5em 0em;
+      position: absolute;
+      bottom: 0;
+      width: 100%;
     }
 
     .secondary.pointing.menu .toc.item {
@@ -160,13 +223,15 @@
       }
     }
 
-
   </style>
 </head>
+
+
+
 <body>
 
-<!-- Page Contents -->
-<div class="pusher">
+  <!-- Top menu -->
+ <div class="pusher">
   <div class="ui inverted vertical masthead center aligned segment">
 
     <div class="ui container">
@@ -174,96 +239,65 @@
         <a class="toc item">
           <i class="sidebar icon"></i>
         </a>
-        <a class="active item">Home</a>
-        <a class="item" href="/demo/viewcreatedtasks.php">View Created Tasks</a>
-        <a class="item" href="/demo/addtasks.php">Add Task</a>        
+        <a class="item" href="/demo/index.php">Home</a>
+          <a class="item" href="/demo/bidtasks.php">View Available Tasks to Bid</a>
+          <a class="item" href="/demo/viewrunningtasks.php">View Tasks I Am Running</a>
         <div class="right item">
           <?php showUser(); ?> 
         </div>
       </div>
     </div>
-
-    <div class="ui text container">
-      <h1 class="ui inverted header">
-        Task Sourcing
-      </h1>
-      <h2>Do whatever you want when you want to.</h2>
-      <a href="/demo/viewtasks.php"><div class="ui huge primary button">Get Started <i class="right arrow icon"></i></div></a>
-    </div>
-
   </div>
 
-  <div class="ui vertical stripe segment">
-    <div class="ui left aligned stackable fourteen column grid container">
-      
-      <div class="two wide column"></div>
-      <div class="five wide column">
-        <h3 class="ui header" style="color: grey;">How to Get Started</h3>          
-      </div>            
-      
-      <div class="seven wide column">         
-        <h2>
-          <div class="ui big grey circular label">1</div> 
-          Create a Task
-        </h2>       
-        <p> Create a Task or any errand </p> <br>       
-        <h2>      
-          <div class="ui big grey circular label aligned left ">2</div> 
-          Match a Tasker
-        </h2>
-        <p> You'll be able to select a skilled Tasker who bidded for your Task </p> <br>
-        <h2> 
-          <div class="ui big grey circular label">3</div> 
-          Get it Done 
-        </h2>         
-        <p> Your Tasker arrives and completes the job for you </p> <br>
-
-        <div class="row">
-          <div class="center aligned column">
-            <a class="ui huge button" href='/demo/addtasks.php'>Create a Task</a>
-          </div>
-        </div>
-      </div>
-              
-    </div>
+  <div class="my_container">
+    <form method ="post">  
+      <table class="ui celled table">
+        <thead>
+          <th> Bid </th>
+          <th> Task Type </th>
+          <th> Task Details </th>
+          <th> Taskee Email </th>
+          <th> Status </th>
+          <th> Created Date and Time </th>
+          <th> Start Date and Time </th>
+          <th> End Date and Time </th>
+          <th> Location </th>
+        </thead>
+        <tbody>
+          <?php showTasks(); ?> 
+        </tbody>
+      </table>
+        <button class ="ui right floated large teal button" id = "bid_submit" > Bid! </button>
+        </br>
+    </form>
   </div>
-
-  <div class="ui vertical stripe segment">  
-    <div class="ui text container">
-      <h3 class="ui header">Easily add and manage tasks with Task Sourcing</h3>
-      <p>Have already created a task? <br> Select a Tasker bidder to complete your task now!</p>
-      <a class="ui large button" href='/demo/viewcreatedtasks.php'>View Created Tasks!</a>
-    </div>    
-  </div>
+</div>
 
 
+
+  <!-- Footer -->
   <div class="ui inverted vertical footer segment">
     <div class="ui container">
       <div class="ui stackable inverted divided equal height stackable grid">
         <div class="three wide column">
           <h4 class="ui inverted header">Discover</h4>
           <div class="ui inverted link list">
-            <a href='/demo/taskersignup.php' class="item">Become a Tasker</a>            
+            <a href='/demo/taskeesignup.php' class="item">Sign up to Create Tasks</a>
           </div>
         </div>
-        <div class="three wide column"></div>
+        <div class="three wide column">
+          
+        </div>
         <div class="seven wide column">          
           <h4 class="ui inverted header">Navigate</h4>
           <div class="ui inverted link list">
-            <a href='/demo/viewcreatedtasks.php' class="item">My Created Tasks</a>            
-            <a href='/demo/addtasks.php' class="item">Create a Task</a>            
+            <a href='/demo/bidtasks.php' class="item">List of Available Tasks</a>            
+            <a href='/demo/viewrunningtasks.php' class="item">My Running Tasks</a>            
           </div>
         </div>
-        <br>
-        <div class = "row">        
-          &copy; 2018&nbsp;<b>Task Sourcing</b>&nbsp;| Created by &nbsp;<b>Jonathan Kennard Lawrence Wei Ping</b>        
-        </div>
-        
       </div>
     </div>
   </div>
-</div>
 
 </body>
-
 </html>

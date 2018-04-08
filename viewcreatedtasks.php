@@ -62,15 +62,15 @@
               </div>
             </div>
             <div class='actions'>
-              <button class='ui primary blue button' id='editBtn'>
+              <button class='ui primary button' id='editBtn'>
               Edit
               </button>
-              <button class='ui primary blue button' id='viewBidBtn'>
+              <button class='ui primary button' id='viewBidBtn'>
               View bidders
               </button>
-              <div class='ui approve red icon button' type='button' id='deleteTask'> 
+              <button class='ui secondary button' id='deleteBtn'> 
                 Delete Task 
-              </div>
+              </button>
             </div>
           </div>";
     }
@@ -156,6 +156,21 @@
               var obj = JSON.parse(data);
               console.log('clicked');
               window.location.replace("/demo/viewmytaskbids.php");
+            }
+          });
+      })
+    })
+   
+   $(document).ready(function() {
+      $("#deleteBtn").click(function() {
+          $.ajax({
+            url: '/demo/deletetask.php',
+            type: "POST",
+            data: { taskid: currentTaskIDSelected},
+            success: function(data){
+              var obj = JSON.parse(data);
+              console.log(obj);
+              window.location.replace("/demo/viewcreatedtasks.php");
             }
           });
       })
@@ -308,23 +323,24 @@
     <div class="ui container">
       <div class="ui stackable inverted divided equal height stackable grid">
         <div class="three wide column">
-          <h4 class="ui inverted header">About</h4>
+          <h4 class="ui inverted header">Discover</h4>
           <div class="ui inverted link list">
-            <a href="#" class="item">Sitemap</a>
-            <a href="#" class="item">Contact Us</a>
+            <a href='/demo/taskersignup.php' class="item">Become a Tasker</a>            
           </div>
         </div>
-        <div class="three wide column">
-          <h4 class="ui inverted header">Services</h4>
+        <div class="three wide column"></div>
+        <div class="seven wide column">          
+          <h4 class="ui inverted header">Navigate</h4>
           <div class="ui inverted link list">
-            <a href="#" class="item">DNA FAQ</a>
-            <a href="#" class="item">How To Access</a>
+            <a href='/demo/viewcreatedtasks.php' class="item">My Created Tasks</a>            
+            <a href='/demo/addtasks.php' class="item">Create a Task</a>            
           </div>
         </div>
-        <div class="seven wide column">
-          <h4 class="ui inverted header">Footer Header</h4>
-          <p>Extra space for a call to action inside the footer that could help re-engage users.</p>
+        <br>
+        <div class = "row">        
+          &copy; 2018&nbsp;<b>Task Sourcing</b>&nbsp;| Created by &nbsp;<b>Jonathan Kennard Lawrence Wei Ping</b>        
         </div>
+        
       </div>
     </div>
   </div>

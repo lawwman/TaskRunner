@@ -280,6 +280,7 @@
             data: {date: dateInputJSON, endDate: dateEndInputJSON},
             success: function(data){
               console.log(data);
+              window.location.replace("/demo/viewcreatedtasks.php");
             }
           });
         }
@@ -489,11 +490,11 @@
 </form> 
 
 
-<button id="autoButton" class="ui floated red button" >
+<button id="autoButton" class="ui right floated red button" >
   Select for me!
 </button>
 <button id="manualButton" class="ui right floated blue button" >
-  manual
+  Manual
 </button>
 
 <br><br><br><br><br>

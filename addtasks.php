@@ -84,6 +84,13 @@
       /* prevent horizontal scrollbar */
       overflow-x: hidden;
     }
+
+    .footer.segment {
+      padding: 5em 0em;
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+    }
   </style>
 
   <!-- Following script block shows how to get implement autocomplete with suggestions from a local js file-->
@@ -216,7 +223,7 @@
           <a class="toc item">
             <i class="sidebar icon"></i>
           </a>
-          <a class="active item">Home</a>
+          <a class="item" href="/demo/index.php">Home</a>
           <a class="item" href="/demo/viewcreatedtasks.php">View Created Tasks</a>
           <a class="item" href="/demo/addtasks.php">Add Task</a>        
           <div class="right item">
