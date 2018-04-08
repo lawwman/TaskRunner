@@ -27,8 +27,10 @@
   $db = pg_connect("host=127.0.0.1 port=5432 dbname=project1 user=postgres password=1234") or die('Could not connect: ' . pg_last_error());
   $taskerInfo = pg_query($db, "SELECT * FROM Taskers WHERE email = '" . $_SESSION['userEmail'] . "'");
   if ($taskerInfo) {
-    $displayPhone = pg_fetch_result($taskerInfo, 0, 4);
-    $displayZipcode = pg_fetch_result($taskerInfo, 0, 8);
+    $displayPhone = pg_fetch_result($taskerInfo, 0, 5);
+    $displayZipcode = pg_fetch_result($taskerInfo, 0, 11);
+    $displayStreetAd = pg_fetch_result($taskerInfo, 0, 9);
+    $displayUnitNum = pg_fetch_result($taskerInfo, 0, 10);
   }  
   pg_close($db);
 
@@ -168,6 +170,24 @@
                 prompt  : 'Please enter your zipcode'
               }
             ]
+          },
+          streetad: {
+            identifier  : 'streetad',
+            rules: [
+              {
+                type    : 'empty',
+                prompt  : 'Please enter your street address'
+              }
+            ]
+          },
+          unitnum: {
+            identifier  : 'unitnum',
+            rules: [
+              {
+              type      : 'empty',
+              prompt    : 'Please enter your unit number'
+              }
+            ]
           }
       });
     });
@@ -286,12 +306,22 @@
     <div class="ui bottom attached tab segment active" data-tab="first">
       <form class="ui form contact" action="/demo/edittaskerprofile.php" method="POST" >
         <div class="fields">                                 
-          <div class="four wide field">
+          <div class="eight wide field">
+            <h4 class="ui dividing header">Phone number</h4>
             <input type="text" name="phone" placeholder="Phone" value='<?php echo $displayPhone; ?>'>
-          </div>        
-          <div class="four wide field">
+          </div>
+          <div class="eight wide field">
+            <h4 class="ui dividing header">Zip code</h4>
             <input type="text" name="zipcode" placeholder="Zipcode" value='<?php echo $displayZipcode; ?>'>
-          </div>  
+          </div>          
+          <div class="eight wide field">
+            <h4 class="ui dividing header">Street address</h4>
+            <input type="text" name="streetad" placeholder="Street address (e.g. Bishan, Yishun)" value='<?php echo $displayStreetAd; ?>'>
+          </div> 
+          <div class="eight wide field">
+            <h4 class="ui dividing header">Unit number</h4>
+            <input type="text" name="unitnum" placeholder="Unit Number" value='<?php echo $displayUnitNum; ?>'>
+          </div>   
         </div>
         <input type="submit" name="saveContact" value="Save Changes" class="ui button primary" tabindex="0" />
         <div class="ui error message"></div>
