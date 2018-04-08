@@ -27,14 +27,14 @@
   $db = pg_connect("host=127.0.0.1 port=5432 dbname=project1 user=postgres password=1234") or die('Could not connect: ' . pg_last_error());
   $taskeeInfo = pg_query($db, "SELECT * FROM Taskees WHERE email = '" . $_SESSION['userEmail'] . "'");
   if ($taskeeInfo) {
-    $displayContact = pg_fetch_result($taskeeInfo, 0, 4);
+    $displayPhone = pg_fetch_result($taskeeInfo, 0, 4);
     $displayZipcode = pg_fetch_result($taskeeInfo, 0, 8);
   }  
   pg_close($db);
 
   if (isset($_POST['saveContact'])) {
     $db = pg_connect("host=127.0.0.1 port=5432 dbname=project1 user=postgres password=1234") or die('Could not connect: ' . pg_last_error());
-    $phone = $_POST['contact'];
+    $phone = $_POST['phone'];
     $zipcode = $_POST['zipcode'];
     $updateQuery = "UPDATE Taskees SET (phone, zipcode) = ('$phone', '$zipcode') WHERE email = '" . $_SESSION['userEmail'] . "'";
     $result = pg_query($db, $updateQuery);
@@ -67,6 +67,10 @@
     } else {
       echo "<script>alert('old password does not match!')</script>";
     }
+  }
+
+  if (isset($_POST['saveBilling'])) {
+    consoleLog('save billing');
   }
 ?>
 
@@ -135,8 +139,8 @@
 
   $(document).ready(function() {
       $('.ui.form.contact').form({
-          contact: {
-            identifier  : 'contact',
+          phone: {
+            identifier  : 'phone',
             rules: [
               {
                 type    : 'empty',
@@ -186,6 +190,55 @@
           }
       });
     });
+
+  $(document).ready(function() {
+    $('.ui.form.billing').form({
+      creditNum: {
+        identifier : 'creditNum',
+        rules: [
+          {
+            type   : 'empty',
+            prompt : 'Please enter a credit card number'
+          }
+        ]
+      },
+      creditSecurity: {
+        identifier : 'creditSecurity',
+        rules: [
+          {
+            type   : 'empty',
+            prompt : 'Please enter a security number'
+          },
+          {
+            type   : 'length[3]',
+            prompt : 'Please enter a 3 digit security number'
+          }
+        ]
+      },
+      expiryMonth: {
+        identifier : 'expiryMonth',
+        rules: [
+          {
+            type   : 'empty',
+            prompt : 'Please input an expiry month'
+          }
+        ]
+      },
+      expiryYear: {
+        identifier : 'expiryYear',
+        rules: [
+          {
+            type   : 'empty',
+            prompt : 'Please input an expiry year'
+          },
+          {
+            type   : 'length[4]',
+            prompt : 'Please input a valid year'
+          }
+        ]
+      }
+    });
+  });
   </script>
 </head>
 
@@ -209,86 +262,88 @@
   </div>
 
   <div class="ui container">
-  <br><br>
-  <h2 class="ui dividing header">Edit Profile Page</h2>
+    <br><br>
+    <h2 class="ui dividing header">Edit Profile Page</h2>
 
-  <div class="ui top attached tabular menu">
-    <a class="item active" data-tab="first">Change contact number / address</a>
-    <a class="item" data-tab="second">Change password</a>
-    <a class="item" data-tab="third">Change Credit Card info</a>
-  </div>
+    <div class="ui top attached tabular menu">
+      <a class="item active" data-tab="first">Change contact number / address</a>
+      <a class="item" data-tab="second">Change password</a>
+      <a class="item" data-tab="third">Change Credit Card info</a>
+    </div>
 
-  <div class="ui bottom attached tab segment active" data-tab="first">
-    <form class="ui form contact" action="/demo/edittaskeeprofile.php" method="POST" >
-      <div class="fields">                                 
-        <div class="four wide field">
-          <input type="text" name="contact" placeholder="Phone" value='<?php echo $displayContact; ?>'>
-        </div>        
-        <div class="four wide field">
-          <input type="text" name="zipcode" placeholder="Address Zipcode" value='<?php echo $displayZipcode; ?>'>
-        </div>  
-      </div>
-      <input type="submit" name="saveContact" value="Save Changes" class="ui button primary" tabindex="0" />
-      <div class="ui error message"></div>
-    </form>
-  </div>
-
-  <div class="ui bottom attached tab segment" data-tab="second">
-    <form class="ui form pw" action="/demo/edittaskeeprofile.php" method="POST" >
-      <div class="fields"> 
-        <div class="three wide field">
-          <input type="password" name="oldpw" placeholder="Enter Old Password">
-        </div>                                     
-        <div class="three wide field">
-          <input type="password" name="newpw" placeholder="Enter New Password">
-        </div>  
-      </div>
-      <input type="submit" name="savePassword" value="Save Changes" class="ui button primary" tabindex="0" />
-      <div class="ui error message"></div>
-    </form>
-  </div>
-
-  <div class="ui bottom attached tab segment" data-tab="third">
-    <form class="ui form billing" action="/demo/edittaskeeprofile.php" method="POST" >
-      <h4 class="ui dividing header">Billing Information</h4>
-      <div class="fields">
-        <div class="seven wide field">
-          <label>Card Number</label>
-          <input type="text" name="creditNum" maxlength="16" placeholder="Card Number">
+    <div class="ui bottom attached tab segment active" data-tab="first">
+      <form class="ui form contact" action="/demo/edittaskeeprofile.php" method="POST" >
+        <div class="fields">                                 
+          <div class="four wide field">
+            <input type="text" name="phone" placeholder="Phone" value='<?php echo $displayPhone; ?>'>
+          </div>        
+          <div class="four wide field">
+            <input type="text" name="zipcode" placeholder="Zipcode" value='<?php echo $displayZipcode; ?>'>
+          </div>  
         </div>
-        <div class="three wide field">
-          <label>CVC</label>
-          <input type="text" name="creditSecurity" maxlength="3" placeholder="CVC">
+        <input type="submit" name="saveContact" value="Save Changes" class="ui button primary" tabindex="0" />
+        <div class="ui error message"></div>
+      </form>
+    </div>
+
+    <div class="ui bottom attached tab segment" data-tab="second">
+      <form class="ui form pw" action="/demo/edittaskeeprofile.php" method="POST" >
+        <div class="fields"> 
+          <div class="three wide field">
+            <input type="password" name="oldpw" placeholder="Enter Old Password">
+          </div>                                     
+          <div class="three wide field">
+            <input type="password" name="newpw" placeholder="Enter New Password">
+          </div>  
         </div>
-        <div class="six wide field">
-          <label>Expiration</label>
-          <div class="two fields">
-            <div class="field">
-              <select class="ui fluid search dropdown" name="expiryMonth">
-                <option value="">Month</option>
-                <option value="1">January</option>
-                <option value="2">February</option>
-                <option value="3">March</option>
-                <option value="4">April</option>
-                <option value="5">May</option>
-                <option value="6">June</option>
-                <option value="7">July</option>
-                <option value="8">August</option>
-                <option value="9">September</option>
-                <option value="10">October</option>
-                <option value="11">November</option>
-                <option value="12">December</option>
-              </select>
-            </div>
-            <div class="field">
-              <input type="text" name="expiryYear" maxlength="4" placeholder="Year">
+        <input type="submit" name="savePassword" value="Save Changes" class="ui button primary" tabindex="0" />
+        <div class="ui error message"></div>
+      </form>
+    </div>
+
+    <div class="ui bottom attached tab segment" data-tab="third">
+      <form class="ui form billing" action="/demo/edittaskeeprofile.php" method="POST" >
+        <h4 class="ui dividing header">Billing Information</h4>
+        <div class="fields">
+          <div class="seven wide field">
+            <label>Card Number</label>
+            <input type="text" name="creditNum" maxlength="16" placeholder="Card Number">
+          </div>
+          <div class="three wide field">
+            <label>CVC</label>
+            <input type="text" name="creditSecurity" maxlength="3" placeholder="CVC">
+          </div>
+          <div class="six wide field">
+            <label>Expiration</label>
+            <div class="two fields">
+              <div class="field">
+                <select class="ui fluid search dropdown" name="expiryMonth">
+                  <option value="">Month</option>
+                  <option value="1">January</option>
+                  <option value="2">February</option>
+                  <option value="3">March</option>
+                  <option value="4">April</option>
+                  <option value="5">May</option>
+                  <option value="6">June</option>
+                  <option value="7">July</option>
+                  <option value="8">August</option>
+                  <option value="9">September</option>
+                  <option value="10">October</option>
+                  <option value="11">November</option>
+                  <option value="12">December</option>
+                </select>
+              </div>
+              <div class="field">
+                <input type="text" name="expiryYear" maxlength="4" placeholder="Year">
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </form>
+        <input type="submit" name="saveBilling" value="Save Changes" class="ui button primary" tabindex="0" />
+        <div class="ui error message"></div>
+      </form>
+    </div>
   </div>
-</div>
 </body>
 
 </html>
