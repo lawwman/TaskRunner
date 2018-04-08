@@ -10,7 +10,7 @@
     consoleLog('hi');
   }
 
-  redirectIfNot('taskee');
+  redirectIfNot('tasker');
   
   function showUser() {
     if (isLoggedIn()) {
@@ -65,7 +65,7 @@
     $(document).ready(function() {
       $('#signOut').click(function() {
         $.ajax({
-          url: '/demo/taskeedashboard.php?argument=signOut',
+          url: '/demo/taskerdashboard.php?argument=signOut',
           success: function(html){
             location.reload();
           }
@@ -82,7 +82,7 @@
     }
 
     .masthead.segment {
-      min-height: 700px;
+      min-height: 200px;
       padding: 1em 0em;
     }
     .masthead .logo.item img {
@@ -184,15 +184,6 @@
         </div>
       </div>
     </div>
-
-    <div class="ui text container">
-      <h1 class="ui inverted header">
-        Task Sourcing
-      </h1>
-      <h2>Do whatever you want when you want to.</h2>
-      <a href="/demo/viewtasks.php"><div class="ui huge primary button">Get Started <i class="right arrow icon"></i></div></a>
-    </div>
-
   </div>
 
   <div class="ui vertical stripe segment">
@@ -200,44 +191,41 @@
       
       <div class="two wide column"></div>
       <div class="five wide column">
-        <h3 class="ui header" style="color: grey;">How to Get Started</h3>          
+        <h3 class="ui header" style="color: grey;">Welcome to the world of task sourcing!</h3>          
       </div>            
       
       <div class="seven wide column">         
         <h2>
           <div class="ui big grey circular label">1</div> 
-          Bid for a Task
+          Select skill
         </h2>       
-        <p> View a list of Tasks and select one to bid for </p> <br>       
+        <p> You begin by selecting a skill! It can be whatever you are good at! </p>       
         <h2>      
           <div class="ui big grey circular label aligned left ">2</div> 
-          Wait to be Matched
+          Proficiency
         </h2>
-        <p> A Taskee will match you for the task if your skills are deemed fit </p> <br>
+        <p> Select a proficiency level! It should be a rough estimate of how good you are! </p>
         <h2> 
-          <div class="ui big grey circular label">3</div> 
-          Get it Done 
+          <div class="ui big grey circular label aligned left">3</div> 
+          Rate 
         </h2>         
-        <p> You complete the job for your Taskee and get paid </p> <br>
+        <p> Finally, select the hourly rates for your selected skill! </p>
+        <h2>      
+          <div class="ui big grey circular label ">4</div> 
+          Pitch
+        </h2>
+        <p> Write a good pitch about your skill! </p>
+      </div>
 
-        <div class="row">
-          <div class="center aligned column">
-            <a class="ui huge button" href='/demo/addtasks.php'>Create a Task</a>
-          </div>
-        </div>
+      <!-- Skills select area-->
+      <div class="ui container">
+        
+
+
       </div>
               
     </div>
   </div>
-
-  <div class="ui vertical stripe segment">  
-    <div class="ui text container">
-      <h3 class="ui header">Need to find a way to pass time?</h3>
-      <p>How about make use of your skills and earn extra cash by completing tasks! Select a task at any time of your preference to bid for!</p>
-      <a class="ui large button" href='/demo/bidtasks.php'>Bid for tasks now!</a>
-    </div>    
-  </div>
-
 
   <div class="ui inverted vertical footer segment">
     <div class="ui container">
