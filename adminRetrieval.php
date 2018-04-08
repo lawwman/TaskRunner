@@ -40,4 +40,15 @@
     pg_close($db);
     return $arr;
   }
+
+  function retrieveData($table, $direction, $offset) {
+    if ($direction == "forward") {
+      return getNextRows($offset, $table);
+      
+    } else {
+      return getPrevRows($offset, $table);
+    }
+  }
+  
+  echo json_encode(retrieveData($_GET['table'], $_GET['dir'], $_GET['off']));
 ?>

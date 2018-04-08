@@ -11,6 +11,7 @@ DROP FUNCTION IF EXISTS getSkillsCursor;
 DROP FUNCTION IF EXISTS getBidsCursor;
 DROP FUNCTION IF EXISTS getTaskeesCursor;
 DROP FUNCTION IF EXISTS getTaskersCursor;
+DROP FUNCTION IF EXISTS getAvailableTasker(varchar, TIMESTAMP, TIMESTAMP);
 
 DROP SEQUENCE IF EXISTS idGen;
 
@@ -38,7 +39,6 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- Cursor functions 
 CREATE FUNCTION getTasksCursor(refcursor) RETURNS refcursor AS $$
 BEGIN
 	OPEN $1 SCROLL FOR SELECT * FROM Tasks;
@@ -187,6 +187,14 @@ CREATE TABLE Bids (
   	CONSTRAINT discrete_status CHECK(status in ('rejected', 'pending', 'accepted')),
 	PRIMARY KEY(taskerEmail, taskeeEmail, task_id)
 );
+
+--Arguments are Skill name, task startdate and task enddate (in order)
+CREATE FUNCTION getAvailableTasker(VARCHAR, TIMESTAMP, TIMESTAMP) RETURNS VARCHAR AS $$
+select t.email from Taskers t inner join hasSkills HS on HS.tEmail = t.email where not exists
+(select * from tasks t2 where t2.taskeremail = t.email and t2.status = 'pending' and ((t2.enddatetime > $2 and t2.startdatetime < $3) or (t2.enddatetime < $3 and t2.startdatetime > $2)
+or (t2.enddatetime > $3 and t2.startdatetime < $2)))
+and HS.sname = $1 ORDER BY HS.profLevel, HS.hrate ASC;
+$$ LANGUAGE SQL;
 
 
 COPY Skills FROM '..\..\apps\demo\htdocs\sql\setup\data\skills.csv' DELIMITER ',' CSV HEADER;
