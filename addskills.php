@@ -56,6 +56,7 @@
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/transition.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/label.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/item.css">
+  <link rel="stylesheet" type="text/css" href="semantic/dist/components/form.css">
 
   <script src="assets/jquery-3.3.1.min"></script>
   <script src="semantic/dist/components/transition.js"></script>
@@ -98,7 +99,7 @@
     var selectedOptions = []; //To store the selected options
     var count = 0;
     var id = "removeTag";
-    var validateMsg = false; //boolean variation if validation message is showing
+
    $(document).ready(function() {
       $('#suggestionFromLocalSource').autocomplete({
         source: availableTags,
@@ -108,32 +109,19 @@
           var label = ui.item.label;
           selectedOptions.push(label); //store selected function
           console.log(selectedOptions);
-          count++; //increment count to give unique id to each tag!
-          $('#skillsList').append('<div class="ui image label">'+ label + '<i id="' + id + count + '" class="delete icon removeTag"></i></div>');
-
-          //function when option tag is clicked
-          $("#" + id+ count).click(function() {
-            var toRemove = $(this).parent().text(); //get option
-            selectedOptions = selectedOptions.filter(function(item) {
-              return item != toRemove;
-            });
-            console.log(selectedOptions);
-
-            //finally, remove tag.
-            $(this).parent().remove(); 
-          });
         }
       });
       // do not submit form. Manually insert link.
     $('#localForm').on('submit', function(){
       event.preventDefault();
-      if (selectedOptions.length === 0 && !validateMsg) {
-        $('#autocompleteValidation').append('<div class="ui pointing red basic label"><p>Please select an option</p></div>');
-        validateMsg = true;
-      }
-      return false;
       });
     });
+
+   $(document).ready(function() {
+    $('#toggleForm').on('submit', function(){
+      event.preventDefault();
+      });
+   })
   </script>
 
 
@@ -293,6 +281,24 @@
           <input id="suggestionFromLocalSource">
         </form>
         <br><br><br>
+
+        <div class="ui fields" id="toggleInput">
+          <form class="ui form" id="toggleForm">
+            <div class="field">
+              <label>Pitch</label>
+              <input type="text" id="pitchInput" placeholder="How good are you sir?">
+            </div>
+            <div class="field">
+              <label>Hourly rate</label>
+              <input type="text" name="rateInput" placeholder="8? 10?">
+            </div>
+            <div class="field">
+              <label>Proficiency</label>
+              <input type="text" name="profInput" placeholder="Your mastery of low wage skills">
+            </div>
+            <div class="ui primary button">Next</div>
+          </form>
+        </div>
         <h2 class="ui dividing header"></h2>
       </div>
     </div>
