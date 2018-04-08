@@ -166,7 +166,7 @@ CREATE TABLE Tasks (
 
     loc VARCHAR(100) NOT NULL,
 
-  CHECK ((taskerEmail IS DISTINCT FROM NULL AND status <> 'not bidded' AND status <> 'bidded') 
+    CHECK ((taskerEmail IS DISTINCT FROM NULL AND status <> 'not bidded' AND status <> 'bidded') 
            OR (taskerEmail IS NOT DISTINCT FROM NULL AND (status = 'not bidded' OR status = 'bidded' OR status = 'deleted'))),
            
 	-- 'pending completion' refers to tasks that have been accepted
