@@ -283,7 +283,7 @@
         <a class="toc item">
           <i class="sidebar icon"></i>
         </a>
-        <a class="active item">Home</a>
+        <a class="item" href="/demo/index.php">Home</a>
         <a class="item" href="/demo/bidtasks.php">View Available Tasks to Bid</a>
         <a class="item" href="/demo/viewrunningtasks.php">View Bidded Tasks</a>
         <div class="right item">
