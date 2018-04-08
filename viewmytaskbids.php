@@ -13,7 +13,7 @@
   function showUser() {
     if (isLoggedIn()) {
       echo '
-      <div class="ui dropdown inverted button">Hello, '. $_SESSION['userName'] . '</div>
+      <div class="ui dropdown inverted button" id="editProfile">Hello, '. $_SESSION['userName'] . '</div>
       <div class="ui dropdown inverted button" id="signOut" formaction="/demo/signup.php">Sign Out</div>
       ';
     } else {
@@ -160,6 +160,9 @@
             window.location.replace("/demo/index.php");
           }
         });
+      });
+      $('#editProfile').click(function() {
+        window.location.replace('/demo/edittaskeeprofile.php');
       });
     })
 

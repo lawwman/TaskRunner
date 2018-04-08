@@ -15,7 +15,7 @@
   function showUser() {
     if (isLoggedIn()) {
       echo '
-      <div class="ui dropdown inverted button">Hello, '. $_SESSION['userName'] . '</div>
+      <div class="ui dropdown inverted button" id="editProfile">Hello, '. $_SESSION['userName'] . '</div>
       <div class="ui dropdown inverted button" id="signOut">Sign Out</div>
       ';
       consoleLog($_SESSION['userEmail']);
@@ -70,6 +70,10 @@
             location.reload();
           }
         });
+      });
+      
+      $('#editProfile').click(function() {
+        window.location.replace('/demo/edittaskerprofile.php');
       });
     })
   </script>
