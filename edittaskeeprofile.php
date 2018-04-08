@@ -24,6 +24,13 @@
       <a class='ui inverted button' href='/demo/taskersignup.php'>Become a Tasker</a>";
     }
   }
+  $db = pg_connect("host=127.0.0.1 port=5432 dbname=project1 user=postgres password=1234") or die('Could not connect: ' . pg_last_error());
+  $taskeeInfo = pg_query($db, "SELECT * FROM Taskees WHERE email = '" . $_SESSION['userEmail'] . "'");
+  if ($taskeeInfo) {
+    $displayContact = pg_fetch_result($taskeeInfo, 0, 4);
+    $displayZipcode = pg_fetch_result($taskeeInfo, 0, 8);
+  }  
+  pg_close($db);
 
   if (isset($_POST['saveContact'])) {
     $db = pg_connect("host=127.0.0.1 port=5432 dbname=project1 user=postgres password=1234") or die('Could not connect: ' . pg_last_error());
@@ -37,6 +44,7 @@
     } else {
       consoleLog("failed to update.");
     }
+    pg_close($db);
   }
 
   if (isset($_POST['savePassword'])) {
@@ -196,10 +204,10 @@
     <form class="ui form contact" action="/demo/edittaskeeprofile.php" method="POST" >
       <div class="fields">                                 
         <div class="four wide field">
-          <input type="text" name="contact" placeholder="Phone">
+          <input type="text" name="contact" placeholder="Phone" value='<?php echo $displayContact; ?>'>
         </div>        
         <div class="four wide field">
-          <input type="text" name="zipcode" placeholder="Address Zipcode">
+          <input type="text" name="zipcode" placeholder="Address Zipcode" value='<?php echo $displayZipcode; ?>'>
         </div>  
       </div>
       <input type="submit" name="saveContact" value="Save Changes" class="ui button primary" tabindex="0" />
