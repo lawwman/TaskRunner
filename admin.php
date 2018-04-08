@@ -128,15 +128,33 @@
         data: { table: tableName, dir: direction, off: offset}, 
         dataType: 'json',
         success: function (data) {
-          perform(data);
+          populateTable(data, tableName);
         }
       });
     }
-    function perform(data) {
+
+    function populateTable(data, tableName) {
+      let table = document.getElementById(tableName);
+      console.log(table);
+      $.each(data, function(k,v) {
+        let row = table.insertRow(1);
+        let generatedRow = `
+          <td> 
+          <div class= 'ui checkbox'> 
+            <input type = 'checkbox' name = 'checked[]' value='` + k + `'>
+          </div>
+          </td>`;
+        $.each(v, function(attr,val) {
+          generatedRow = generatedRow + `<td>` + val + '</td>';
+        });
+
+        row.innerHTML = generatedRow;
+        console.log(row);
+        console.log(k);
+        console.log(v);
+      });
       return data;
     }
-
-    let retrievedData = retrieveData("tasks", "forward", 1);
 
     // performs sign out functionality.
     $(document).ready(function() {
@@ -148,7 +166,8 @@
           }
         });
       });
-
+      
+      let retrievedData = retrieveData("tasks", "forward", 1);
     })
   </script>
 
@@ -270,20 +289,21 @@
     </h2>               
     
     <form method ="post">  
-      <table class="ui celled table">
+      <table class="ui celled table" id="tasks">
         <thead>
           <th> Select </th>        
-          <th> Skill </th>
+          <th> Task Id </th>
+          <th> Task Type </th>
           <th> Task Details </th>
           <th> Task Creator </th>          
-          <th> Selected Tasker </th>
+          <th> Tasker Assigned </th>
           <th> Status </th>
           <th> Created Date and Time </th>
           <th> Start Date and Time </th>
           <th> End Date and Time </th>
+          <th> Location </th>
         </thead>
         <tbody>
-          <?php showTasks(); ?> 
         </tbody>
       </table>
       
@@ -298,7 +318,7 @@
       <button class ="ui right floated tiny teal button" name = "bid_submit" type="submit"> + </button>
     </h2>
     <form method ="post">  
-      <table class="ui celled table">
+      <table class="ui celled table" id="taskers">
         <thead>
           <th> Select </th>
           <th> Tasker Email </th>
@@ -311,7 +331,6 @@
           <th> isStaff </th>
         </thead>
         <tbody>
-          <?php showTasks(); ?>  <!-- change to showTaskers--> 
         </tbody>
       </table>        
         <br>
@@ -323,7 +342,7 @@
       <button class ="ui right floated tiny teal button" name = "bid_submit" type="submit"> + </button>
     </h2>
     <form method ="post">  
-      <table class="ui celled table">
+      <table class="ui celled table" id="taskees">
         <thead>
           <th> Select </th>
           <th> Taskee Email </th>
@@ -334,7 +353,6 @@
           <th> isStaff </th>          
         </thead>
         <tbody>
-          <?php showTasks(); ?>  <!-- change to showTaskees--> 
         </tbody>
       </table>        
         <br>
@@ -346,14 +364,13 @@
       <button class ="ui right floated tiny teal button" name = "bid_submit" type="submit"> + </button>
     </h2>
     <form method ="post">  
-      <table class="ui celled table">
+      <table class="ui celled table" id="skills">
         <thead>
           <th> Select </th>
           <th> Skill Name </th>
           <th> Skill Details </th>          
         </thead>
         <tbody>
-          <?php showTasks(); ?>  <!-- change to showSkills--> 
         </tbody>
       </table>        
         <br>
@@ -365,7 +382,7 @@
       <button class ="ui right floated tiny teal button" name = "bid_submit" type="submit"> + </button>
     </h2>    
     <form method ="post">  
-      <table class="ui celled table">
+      <table class="ui celled table" id="bids">
         <thead>
           <th> Select </th>
           <th> Taskee Email </th>
@@ -374,7 +391,6 @@
           <th> Bid Date and Time </th>          
         </thead>
         <tbody>
-          <?php showTasks(); ?>  <!-- change to showBids-->
         </tbody>
       </table>        
         <br>
