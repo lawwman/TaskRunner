@@ -68,9 +68,9 @@
       if ($table == "tasks") {
         $query = $query . "task_id = " . $record[0]; 
       } else if ($table == "taskees") {
-        $query = $query . "taskeeEmail = '" . $record[0] . "'"; 
+        $query = $query . "email = '" . $record[0] . "'"; 
       } else if ($table == "taskers") {
-        $query = $query . "taskersEmail = '" . $record[0] . "'"; 
+        $query = $query . "email = '" . $record[0] . "'"; 
       } else if ($table == "bids") {
         $query = $query . "task_id = " . $record[0] . " AND taskeeEmail = '" . $record[1] . "' AND taskerEmail = '" . $record[2] . "'";
       } else if ($table == "skills") {

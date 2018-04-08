@@ -172,7 +172,28 @@
         }
       });
     }
-
+/*
+    function refreshTable(table) {
+      let taskData = retrieveData("tasks", "forward", 0);
+      let bidData = retrieveData("bids", "forward", 0);
+      let taskeeData = retrieveData("taskees", "forward", 0);
+      let taskerData = retrieveData("taskers", "forward", 0);
+      let skillData = retrieveData("skills", "forward", 0);
+    }
+    
+    function refreshTables() {
+      updateTableMaxPages("tasks");
+      updateTableMaxPages("bids");
+      updateTableMaxPages("taskees");
+      updateTableMaxPages("taskers");
+      updateTableMaxPages("skills");
+      updateButtons("tasks");
+      updateButtons("bids");
+      updateButtons("taskees");
+      updateButtons("taskers");
+      updateButtons("skills");
+    }
+*/
     // performs sign out functionality.
     $(document).ready(function() {
       $('#signOut').click(function() {
@@ -395,9 +416,9 @@
     <br>
 
     <h2>View/Manage Taskers
-      <button class ="ui right floated tiny teal button" name = "bid_submit" type="submit"> Edit User - Tasker </button>
-      <button class ="ui right floated tiny teal button" name = "bid_submit" type="submit"> – </button>          
-      <button class ="ui right floated tiny teal button" name = "bid_submit" type="submit"> + </button>
+    <button class ="ui right floated tiny teal button edit-btn" id="taskers-edit"> Edit Tasker </button>
+      <button class ="ui right floated tiny teal button delete-btn" id="taskers-delete"> – </button>          
+      <button class ="ui right floated tiny teal button add-btn" id="taskers-add"> + </button>   
     </h2>
     <table class="ui fixed single line celled table" id="taskers">
       <thead>
@@ -441,9 +462,9 @@
     <br>
 
     <h2>View/Manage Taskees
-      <button class ="ui right floated tiny teal button" name = "bid_submit" type="submit"> Edit User - Taskee </button>
-      <button class ="ui right floated tiny teal button" name = "bid_submit" type="submit"> – </button>          
-      <button class ="ui right floated tiny teal button" name = "bid_submit" type="submit"> + </button>
+      <button class ="ui right floated tiny teal button edit-btn" id="taskees-edit"> Edit Taskee </button>
+      <button class ="ui right floated tiny teal button delete-btn" id="taskees-delete"> – </button>          
+      <button class ="ui right floated tiny teal button add-btn" id="taskees-add"> + </button>   
     </h2> 
 
     <table class="ui fixed single line celled table" id="taskees">
@@ -486,9 +507,9 @@
     <br>
 
     <h2>View/Manage Skills
-      <button class ="ui right floated tiny teal button" name = "bid_submit" type="submit"> Edit Skill </button>
-      <button class ="ui right floated tiny teal button" name = "bid_submit" type="submit"> – </button>          
-      <button class ="ui right floated tiny teal button" name = "bid_submit" type="submit"> + </button>
+      <button class ="ui right floated tiny teal button edit-btn" id="skills-edit"> Edit Skill </button>
+      <button class ="ui right floated tiny teal button delete-btn" id="skills-delete"> – </button>          
+      <button class ="ui right floated tiny teal button add-btn" id="skills-add"> + </button>   
     </h2>
     <table class="ui fixed single line celled table" id="skills">
       <thead>
@@ -520,9 +541,9 @@
     <br>
 
     <h2>View/Manage Bids
-      <button class ="ui right floated tiny teal button" name = "bid_submit" type="submit"> Edit Bid </button>
-      <button class ="ui right floated tiny teal button" name = "bid_submit" type="submit"> – </button>          
-      <button class ="ui right floated tiny teal button" name = "bid_submit" type="submit"> + </button>
+      <button class ="ui right floated tiny teal button edit-btn" id="bids-edit"> Edit Bid </button>
+      <button class ="ui right floated tiny teal button delete-btn" id="bids-delete"> – </button>          
+      <button class ="ui right floated tiny teal button add-btn" id="bids-add"> + </button>   
     </h2>      
     <table class="ui fixed single line celled table" id="bids">
       <thead>
