@@ -105,17 +105,22 @@
   
   $(document).ready(function() {
     $('.ui.form').form({
-      fields: {
-        username: {
-          identifier  : 'username',
+      fields: {        
+        
+        email: {
+          identifier  : 'email',
           rules: [
             {
               type   : 'empty',
-              prompt : 'Please enter a valid username'
+              prompt : 'Please enter your e-mail'
             },
+            {
+              type   : 'email',
+              prompt : 'Please enter a valid e-mail'
+            }
           ]
         },
-        
+
         password: {
           identifier  : 'password',
           rules: [
@@ -137,7 +142,7 @@
             {
               type   : 'empty',
               prompt : 'Please enter your first name'
-            },
+            }
           ]
         }, 
 
@@ -149,26 +154,7 @@
               prompt : 'Please enter your last name'
             }
           ]
-        },
-
-        email: {
-          identifier  : 'email',
-          rules: [
-            {
-              type   : 'empty',
-              prompt : 'Please enter your e-mail'
-            },
-            {
-              type   : 'email',
-              prompt : 'Please enter a valid e-mail'
-            }
-          ]
-        },
-
-        date: {
-          identifier  : 'birthdate',
-          rules: []
-        }, 
+        },        
 
         contact: {
           identifier  : 'contact',
@@ -176,7 +162,7 @@
             {
               type   : 'empty',
               prompt : 'Please enter your contact number'
-            },
+            }
           ]
         }, 
 
@@ -186,7 +172,7 @@
             {
               type   : 'empty',
               prompt : 'Please enter your occupation'
-            },
+            }
           ]
         },
 
@@ -196,11 +182,92 @@
             {
               type   : 'checked',
               prompt : 'Please accept the Terms and Conditions'
+            }
+          ]
+        },
+        
+        streetAddr: {
+          identifier  : 'streetAddr',
+          rules: [
+            {
+              type   : 'empty',
+              prompt : 'Please enter your Street Address'
+            }
+          ]
+        },
+
+        unitNum: {
+          identifier  : 'unitNum',
+          rules: [
+            {
+              type   : 'empty',
+              prompt : 'Please enter your Unit Number'
+            }
+          ]
+        },
+        
+        zipcode: {
+          identifier  : 'zipcode',
+          rules: [
+            {
+              type   : 'empty',
+              prompt : 'Please enter your zipcode'
             },
+            {
+              type   : 'length[6]',
+              prompt : 'Your zipcode must be 6 characters'
+            }
+          ]
+        },
+
+        creditNum: {
+          identifier  : 'creditNum',
+          rules: [
+            {
+              type   : 'empty',
+              prompt : 'Please enter your card number'
+            },
+            {
+              type   : 'length[16]',
+              prompt : 'Your card number must be 16 characters'
+            }
+          ]
+        },
+
+        creditSecurity: {
+          identifier  : 'creditSecurity',
+          rules: [
+            {
+              type   : 'empty',
+              prompt : 'Please enter your CVC'
+            },
+            {
+              type   : 'length[3]',
+              prompt : 'Your CVC must be 3 characters'
+            }
+          ]
+        },
+
+        expiryYear: {
+          identifier  : 'expiryYear',
+          rules: [
+            {
+              type   : 'empty',
+              prompt : 'Please enter your Expiry Year'
+            }
+          ]
+        }, 
+
+        expiryMonth: {
+          identifier  : 'expiryMonth',
+          rules: [
+            {
+              type   : 'empty',
+              prompt : 'Please select Expiry Month'
+            }
           ]
         }
-      
-      
+
       }
     });
   });
@@ -243,7 +310,7 @@
         </div>        
         
         <div class="fields">
-          <div class="eight wide field">
+          <div class="eight wide field">            
             <input type="date" name="birthdate" value='<?php echo isset($_POST['birthdate']) ? $_POST['birthdate'] : ''; ?>'>
           </div>                          
                     
