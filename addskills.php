@@ -138,15 +138,6 @@
    })
 
    $(document).ready(function() {
-      $('.removeBtn').click(function() {
-        console.log($(this).find('.hideTask').val());
-        var item = $(this).parents('.item');
-       console.log(item);
-       item.remove();
-      });
-    })
-
-   $(document).ready(function() {
     $('#addBtn').click(function() {
       //validate inputs
       skillPitch = $('#pitchInput').val();
@@ -196,8 +187,19 @@
             $('#skillsList').append('<div class="item"><div class="ui small image"><img src="/demo/skillpic.png"></div><div class="content"><div class="header">' + selectedSkill + '</div><div class="meta"><span>Hourly rate: ' + hourlyRate + '</span><span>Proficiency: ' + profLevel + '</span></div><div class="description"><p>' + skillPitch  +'</p></div><div class="extra"><div class="ui right floated red button removeBtn"><input type="hidden" value="' +selectedSkill + '" class="hideTask">remove skill<i class="right chevron icon"></i></div></div></div></div>');
             $('.removeBtn').click(function() {
               console.log($(this).find('.hideTask').val());
+              var skillToRemove = $(this).find('.hideTask').val();
               var item = $(this).parents('.item');
-             item.remove();
+              item.remove();
+              $.ajax({
+                url: '/demo/removeskillsfromdb.php',
+                type: 'POST',
+                data: { skill : JSON.stringify(skillToRemove) },
+                dataType: 'json',
+                success: function(data) {
+                  console.log(data.abc);
+                }
+              });
+
             });
             }
           }
