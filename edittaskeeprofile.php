@@ -70,7 +70,19 @@
   }
 
   if (isset($_POST['saveBilling'])) {
-    consoleLog('save billing');
+    $db = pg_connect("host=127.0.0.1 port=5432 dbname=project1 user=postgres password=1234") or die('Could not connect: ' . pg_last_error());
+    $creditNum = $_POST['creditNum'];
+    $creditSecurity = $_POST['creditSecurity'];
+    $creditExpiry = date($_POST['expiryYear'] . '-' . $_POST['expiryMonth'] . '-01');
+    $updateQuery = "UPDATE Taskees SET (creditnum, creditsecurity, creditexpiry) = ('$creditNum', '$creditSecurity', '$creditExpiry') WHERE email = '" . $_SESSION['userEmail'] . "'";
+    $result = pg_query($db, $updateQuery);
+    if ($result) {
+      consoleLog("card info updated successfully.");
+      header('Location: /demo/edittaskeeprofile.php');
+    } else {
+      consoleLog("failed to update.");
+    }
+    pg_close($db);
   }
 ?>
 
