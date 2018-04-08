@@ -109,7 +109,7 @@
           selectedOptions.push(label); //store selected function
           console.log(selectedOptions);
           count++; //increment count to give unique id to each tag!
-          $('#skillItem').append('<div class="ui image label">'+ label + '<i id="' + id + count + '" class="delete icon removeTag"></i></div>');
+          $('#skillsList').append('<div class="ui image label">'+ label + '<i id="' + id + count + '" class="delete icon removeTag"></i></div>');
 
           //function when option tag is clicked
           $("#" + id+ count).click(function() {
@@ -286,67 +286,39 @@
     <!-- Suggestions from a local source-->
     <div class="ui container"></div> <br>
     <div class="six wide column">
-      <h2 class="ui dividing header">Select a skill here!</h2>
+      <h2 class="ui dividing header">Add a skill here!</h2>
       <div class="ui-widget">
         <form id="localForm">
           <label >Select Skills: </label>
           <input id="suggestionFromLocalSource">
         </form>
-
-        <br>
-        <!--item for skills selected--> 
-
-
-        <!--validation for autocorrect-->
-        <div id="autocompleteValidation"></div>
+        <br><br><br>
+        <h2 class="ui dividing header"></h2>
       </div>
     </div>
   </div>
 
   <div class="ui middle aligned center aligned grid inverted">
-     <div class="ui items">
+    <br><br>
+     <div class="ui divided items" id="skillsList">
       <div class="item">
         <div class="ui small image">
-          <img src="/demo/steve.jpg">
+          <img src="/demo/skillpic.png">
         </div>
         <div class="content">
-          <div class="header">Arrowhead Valley Camp</div>
+          <div class="header">Skill name</div>
           <div class="meta">
-            <span class="price">$1200</span>
-            <span class="stay">1 Month</span>
+            <span>Hourly rate</span>
+            <span>Proficiency</span>
           </div>
           <div class="description">
-            <p></p>
+            <p>Pitch</p>
           </div>
-        </div>
-      </div>
-      <div class="item">
-        <div class="ui small image">
-          <img src="/demo/steve.jpg">
-        </div>
-        <div class="content">
-          <div class="header">Buck's Homebrew Stayaway</div>
-          <div class="meta">
-            <span class="price">$1000</span>
-            <span class="stay">2 Weeks</span>
-          </div>
-          <div class="description">
-            <p></p>
-          </div>
-        </div>
-      </div>
-      <div class="item">
-        <div class="ui small image">
-          <img src="/demo/steve.jpg">
-        </div>
-        <div class="content">
-          <div class="header">Astrology Camp</div>
-          <div class="meta">
-            <span class="price">$1600</span>
-            <span class="stay">6 Weeks</span>
-          </div>
-          <div class="description">
-            <p></p>
+          <div class="extra">
+            <div class="ui right floated red button">
+              remove skill
+              <i class="right chevron icon"></i>
+            </div>
           </div>
         </div>
       </div>
