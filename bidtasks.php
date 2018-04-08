@@ -23,18 +23,24 @@
 
   function showTasks() {
       // Connect to the database. Please change the password in the following line accordingly
-    $db = pg_connect("host=127.0.0.1 port=5432 dbname=project1 user=postgres password=1234") or die('Could not connect ' . pg_last_error());
     $taskerEmail = $_SESSION['userEmail'];
-    $query ="SELECT * FROM tasks t1 WHERE (t1.status = 'not bidded' OR t1.status = 'bidded') AND NOT EXISTS ( SELECT '1' FROM tasks t2 WHERE t2.taskeremail = '$taskerEmail' AND t2.enddatetime >= t1.startdatetime ) ";
-   $result = pg_query($db, $query);
+    $db     = pg_connect("host=127.0.0.1 port=5432 dbname=project1 user=postgres password=1234"); 
+    $result = pg_query($db, "
+      SELECT * FROM tasks t1 WHERE (t1.status = 'not bidded' OR t1.status = 'bidded') AND 
+      NOT EXISTS ( SELECT '1' FROM tasks t2 WHERE t2.taskeremail = '$taskerEmail' AND 
+      ((t2.enddatetime > t1.startdatetime AND t2.startdatetime < t1.enddatetime) OR 
+       (t2.enddatetime < t1.enddatetime AND t2.startdatetime > t1.startdatetime) OR
+       (t2.enddatetime > t1.enddatetime AND t2.startdatetime < t1.startdatetime))
+      ) AND
+      NOT EXISTS ( SELECT '1' FROM bids b WHERE b.task_id = t1.task_id AND b.taskeremail = '$taskerEmail' AND b.status = 'pending') ");
     while ($row = pg_fetch_assoc($result)) {
       echo "<tr>
       <td> 
         <div class= 'ui checkbox'> 
-          <input type = 'checkbox' id = 'checked[]' value='$row[task_id]'>
+          <input type = 'checkbox' name = 'checkboxTicked' value='$row[task_id]'>
         </div>
       </td>
-      <td> $row[ttype] </td>
+      <td> $row[ttype]</td>
       <td> $row[task_details] </td> 
       <td> $row[taskeeemail] </td>
       <td> $row[status] </td>
@@ -46,31 +52,6 @@
     }
   }
 
- function sumbitTask() {
-      // Connect to the database. Please change the password in the following line accordingly
-
-  $db = pg_connect("host=127.0.0.1 port=5432 dbname=project1 user=postgres password=1234") or die('Could not connect ' . pg_last_error()); 
-
-    if(isset($_POST['bid_submit'])) {
-      foreach($_POST['checked'] as $taskid) {
-        $result = pg_query($db, "SELECT * FROM tasks WHERE task_id = '$taskid' ");
-        while($row = pg_fetch_assoc($result)) {
-          $taskingid = $row['taskid'];
-          $taskeeemail = $row['taskeeemail'];
-          $taskeremail = $_SESSION['userEmail'];
-          $statusTask = 'bidded';
-          $statusBid = 'pending';
-          date_default_timezone_set('Asia/Singapore');
-          $bidddatetime = date('Y-m-d H:i:s');
-
-          BEGIN;
-          pg_query($db,"INSERT INTO bids VALUES($taskingid, '$taskeeemail', '$taskeremail', '$statusBid', '$biddatetime') ");
-          pg_query($db, "UPDATE tasks SET status = '$statusTask' WHERE task_id = '$taskid' ");
-          COMMIT;
-        }
-      }
-    }
-  }
 ?>
 
 <html>
@@ -103,6 +84,7 @@
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/modal.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/dimmer.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/table.css">  
+  <!-- <link rel="stylesheet" type="text/css" href="semantic/dist/components/checkbox.css">  --> 
 
   <script src="assets/jquery-3.3.1.min"></script>
   <script src="semantic/dist/components/transition.js"></script>
@@ -123,6 +105,33 @@
       });
     })
   </script>
+
+  <script>
+    var allTaskid= new Array();
+
+    $(document).ready(function(){
+      $('#bid_submit').click(function() {
+        
+        $('input:checkbox[name="checkboxTicked"]:checked').each(function(){
+            allTaskid.push(this.value);
+          });
+
+        var taskidJSON = JSON.stringify(allTaskid);
+
+        $.ajax({
+          url:'/demo/taskerbid.php',
+          type: 'POST',
+          dataType: 'json',
+          data: {taskid: taskidJSON},
+          success: function(data){
+            //window.location.replace("/demo/taskerdashboard.php");
+            console.log(data.abc);
+          }
+        });
+      });
+    })
+  </script>
+  
 
   <style type="text/css">
 
@@ -228,7 +237,7 @@
           <i class="sidebar icon"></i>
         </a>
         <a class="item" href="/demo/index.php">Home</a>
-          <a class ="item" href="/demo/viewcreatedtasks.php"> View Created Tasks</a>
+          <a class ="item" href="/demo/bidtasks.php"> View available tasks to bid</a>
           <a class ="item" href="/demo/viewrunningtasks.php"> View tasks I am running</a>
         <div class="right item">
           <?php showUser(); ?> 
@@ -237,8 +246,7 @@
     </div>
   </div>
 
-  <br>
-  <div class="ui container">
+  <div class="my_container">
     <form method ="post">  
       <table class="ui celled table">
         <thead>
@@ -253,15 +261,14 @@
           <th> Location </th>
         </thead>
         <tbody>
-           <?php showTasks(); ?>
+          <?php showTasks(); ?> 
         </tbody>
       </table>
-        <button class ="ui right floated large teal button" id = "bid_submit" type="submit"> Bid! </button>
+        <button class ="ui right floated large teal button" id = "bid_submit" > Bid! </button>
+        </br>
     </form>
-      <?php sumbitTask(); ?> 
   </div>
 </div>
-<br><br><br><br>
 
 
 
