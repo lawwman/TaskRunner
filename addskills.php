@@ -394,50 +394,6 @@
   <div class="ui middle aligned center aligned grid inverted">
     <br><br>
      <div class="ui divided items" id="skillsList">
-      <div class="item">
-        <div class="ui small image">
-          <img src="/demo/skillpic.png">
-        </div>
-        <div class="content">
-          <div class="header">Skill name</div>
-          <div class="meta">
-            <span>Hourly rate</span>
-            <span>Proficiency</span>
-          </div>
-          <div class="description">
-            <p>Pitch</p>
-          </div>
-          <div class="extra">
-            <div class="ui right floated red button removeBtn">
-              <input type='hidden' value='hi' class='hideTask'>
-              remove skill
-              <i class="right chevron icon"></i>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="item">
-        <div class="ui small image">
-          <img src="/demo/skillpic.png">
-        </div>
-        <div class="content">
-          <div class="header">asdfsdafasdf</div>
-          <div class="meta">
-            <span>Hourly rate</span>
-            <span>Proficiency</span>
-          </div>
-          <div class="description">
-            <p>Pitch</p>
-          </div>
-          <div class="extra">
-            <div class="ui right floated red button removeBtn">
-              <input type='hidden' value='hi' class='hideTask'>
-              remove skill
-              <i class="right chevron icon"></i>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   </div>
 
