@@ -26,9 +26,9 @@
     pg_query($db, "BEGIN") or die("Could not start transaction\n");
     $query =  "SELECT get" . $tableName . "Cursor('tempcursor')";
     $res2 = pg_query($db, $query);
-    $query = "MOVE FORWARD " . (($pageNum - 1) * $GLOBALS['numRecordToRetrieve'] + 1) . " tempcursor";
+    $query = "MOVE FORWARD " . (($pageNum - 2) * $GLOBALS['numRecordToRetrieve']) . " tempcursor";
     $res1 = pg_query($db, $query);
-    $query = "FETCH BACKWARD " . ($GLOBALS['numRecordToRetrieve']) . " tempcursor";
+    $query = "FETCH FORWARD " . ($GLOBALS['numRecordToRetrieve']) . " tempcursor";
     $res1 = pg_query($db, $query);
     if ($res1 and $res2) {
       pg_query($db, "COMMIT") or die("Transaction commit failed");
