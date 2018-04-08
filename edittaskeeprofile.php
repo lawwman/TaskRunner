@@ -48,7 +48,25 @@
   }
 
   if (isset($_POST['savePassword'])) {
-    consoleLog($_POST['newpw']);
+    $db = pg_connect("host=127.0.0.1 port=5432 dbname=project1 user=postgres password=1234") or die('Could not connect: ' . pg_last_error());
+    $taskeeInfo = pg_query($db, "SELECT * FROM Taskees WHERE email = '" . $_SESSION['userEmail'] . "'");
+    $oldHash = pg_fetch_result($taskeeInfo, 0, 3);
+    $oldpw = $_POST['oldpw'];
+    if (password_verify($oldpw, $oldHash)) {
+      consoleLog("password matches");
+      $newpw = password_hash($_POST['newpw'], PASSWORD_DEFAULT); 
+      $updateQuery = "UPDATE Taskees SET pword = '$newpw' WHERE email = '" . $_SESSION['userEmail'] . "'";
+      $result = pg_query($db, $updateQuery);
+      if ($result) {
+        consoleLog("password updated successfully.");
+        header('Location: /demo/edittaskeeprofile.php');
+      } else {
+        consoleLog("failed to update.");
+      }
+      pg_close($db);
+    } else {
+      echo "<script>alert('old password does not match!')</script>";
+    }
   }
 ?>
 
@@ -219,10 +237,10 @@
     <form class="ui form pw" action="/demo/edittaskeeprofile.php" method="POST" >
       <div class="fields"> 
         <div class="three wide field">
-          <input type="text" name="oldpw" placeholder="Enter Old Password">
+          <input type="password" name="oldpw" placeholder="Enter Old Password">
         </div>                                     
         <div class="three wide field">
-          <input type="text" name="newpw" placeholder="Enter New Password">
+          <input type="password" name="newpw" placeholder="Enter New Password">
         </div>  
       </div>
       <input type="submit" name="savePassword" value="Save Changes" class="ui button primary" tabindex="0" />
