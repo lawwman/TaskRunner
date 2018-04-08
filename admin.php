@@ -135,7 +135,6 @@
 
     function populateTable(data, tableName) {
       let table = document.getElementById(tableName);
-      console.log(table);
       $.each(data, function(k,v) {
         let row = table.insertRow(1);
         let generatedRow = `
@@ -149,9 +148,6 @@
         });
 
         row.innerHTML = generatedRow;
-        console.log(row);
-        console.log(k);
-        console.log(v);
       });
       return data;
     }
@@ -166,8 +162,12 @@
           }
         });
       });
-      
-      let retrievedData = retrieveData("tasks", "forward", 1);
+
+      let taskData = retrieveData("tasks", "forward", 0);
+      let bidData = retrieveData("bids", "forward", 0);
+      let taskeeData = retrieveData("taskees", "forward", 0);
+      let taskerData = retrieveData("taskers", "forward", 0);
+      let skillData = retrieveData("skills", "forward", 0);
     })
   </script>
 
