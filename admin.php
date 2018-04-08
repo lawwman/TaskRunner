@@ -21,39 +21,6 @@
     }
   }
 
-  function showTasks() { //to edit
-      // Connect to the database. Please change the password in the following line accordingly
-    $db     = pg_connect("host=127.0.0.1 port=5432 dbname=project1 user=postgres password=1234"); 
-    $result = pg_query($db, "SELECT * FROM tasks where status = 'not bidded'");
-    while ($row = pg_fetch_assoc($result)) {
-      echo "<tr>
-      <td> 
-        <div class= 'ui checkbox'> 
-          <input type = 'checkbox' name = 'checked[]' value='$row[task_id]'>
-        </div>
-      </td>
-      <td> $row[task_name]</td>
-      <td> $row[task_details] </td> 
-      <td> $row[creator] </td>
-      <td> $row[reward] </td>
-      <td> $row[status] </td>
-      <td> $row[createddatetime] </td>
-      </tr>";
-    }
-  }
-
-  function showTaskers() { //to implement
-  }
-
-  function showTaskees() { //to implement
-  }
-
-  function showSkills() { //to implement
-  }
-
-  function showBids() { //to implement
-  }
-
   function submitTask() {
       // Connect to the database. Please change the password in the following line accordingly
 
@@ -140,13 +107,13 @@
       $.each(data, function(k,v) {
         let row = table.insertRow(1);
         let generatedRow = `
-          <td> 
+          <td title=> 
           <div class= 'ui checkbox'> 
             <input type = 'checkbox' name = 'checked[]' value='` + k + `'>
           </div>
           </td>`;
         $.each(v, function(attr,val) {
-          generatedRow = generatedRow + `<td>` + val + '</td>';
+          generatedRow = generatedRow + `<td title=` + val + `>` + val + '</td>';
         });
 
         row.innerHTML = generatedRow;
@@ -264,10 +231,14 @@
        line-height: 3em;       
     }
 
-    #number {
-      width: 4em;
+    .number {
+      width: 4em;      
+    }
+    
+    input::placeholder{
       text-align: center; 
     }
+
 
 
   </style>
@@ -301,19 +272,21 @@
     </h2>               
     
     <form method ="post">  
-      <table class="ui celled table" id="tasks">
+      <table class="ui fixed single line celled table" id="tasks">
         <thead>
-          <th> Select </th>        
-          <th> Task Id </th>
-          <th> Task Type </th>
-          <th> Task Details </th>
-          <th> Task Creator </th>          
-          <th> Tasker Assigned </th>
-          <th> Status </th>
-          <th> Created Date and Time </th>
-          <th> Start Date and Time </th>
-          <th> End Date and Time </th>
-          <th> Location </th>
+          <tr>
+            <th> Select </th>        
+            <th> Task Id </th>
+            <th> Task Type </th>
+            <th> Task Details </th>
+            <th> Task Creator </th>          
+            <th> Tasker Assigned </th>
+            <th> Status </th>
+            <th> Created Date and Time </th>
+            <th>Start Date and Time </th>
+            <th> End Date and Time </th>
+            <th> Location </th>
+          </tr>
         </thead>
         <tbody>
         </tbody>
@@ -327,7 +300,7 @@
               <i class= "caret left icon"></i>
             </button> &ensp;
           
-            <input type="text" placeholder="1" type="number" id="number">
+            <input type="text" placeholder="1" type="number" class="number">
             &ensp; <div class="pagenum">of 50</div> &ensp;
           
             <button class ="ui tiny compact button">
@@ -347,7 +320,7 @@
       <button class ="ui right floated tiny teal button" name = "bid_submit" type="submit"> + </button>
     </h2>
     <form method ="post">  
-      <table class="ui celled table" id="taskers">
+      <table class="ui fixed single line celled table" id="taskers">
         <thead>
           <th> Select </th>
           <th> Tasker Email </th>
@@ -377,7 +350,7 @@
               <i class= "caret left icon"></i>
             </button> &ensp;
           
-            <input type="text" placeholder="1" type="number" id="number">
+            <input type="text" placeholder="1" type="number" class="number">
             &ensp; <div class="pagenum">of 50</div> &ensp;
           
             <button class ="ui tiny compact button">
@@ -396,7 +369,7 @@
       <button class ="ui right floated tiny teal button" name = "bid_submit" type="submit"> + </button>
     </h2>
     <form method ="post">  
-      <table class="ui celled table" id="taskees">
+      <table class="ui fixed single line celled table" id="taskees">
         <thead>
           <th> Select </th>
           <th> Taskee Email </th>
@@ -423,7 +396,7 @@
               <i class= "caret left icon"></i>
             </button> &ensp;
           
-            <input type="text" placeholder="1" type="number" id="number">
+            <input type="text" placeholder="1" type="number" class="number">
             &ensp; <div class="pagenum">of 50</div> &ensp;
           
             <button class ="ui tiny compact button">
@@ -442,7 +415,7 @@
       <button class ="ui right floated tiny teal button" name = "bid_submit" type="submit"> + </button>
     </h2>
     <form method ="post">  
-      <table class="ui celled table" id="skills">
+      <table class="ui fixed single line celled table" id="skills">
         <thead>
           <th> Select </th>
           <th> Skill Name </th>
@@ -460,7 +433,7 @@
               <i class= "caret left icon"></i>
             </button> &ensp;
           
-            <input type="text" placeholder="1" type="number" id="number">
+            <input type="text" placeholder="1" type="number" class="number">
             &ensp; <div class="pagenum">of 50</div> &ensp;
           
             <button class ="ui tiny compact button">
@@ -479,7 +452,7 @@
       <button class ="ui right floated tiny teal button" name = "bid_submit" type="submit"> + </button>
     </h2>    
     <form method ="post">  
-      <table class="ui celled table" id="bids">
+      <table class="ui fixed single line celled table" id="bids">
         <thead>
           <th> Select </th>
           <th> Task Id </th>
@@ -500,7 +473,7 @@
               <i class= "caret left icon"></i>
             </button> &ensp;
           
-            <input type="text" placeholder="1" type="number" id="number">
+            <input type="text" placeholder="1" type="number" class="number">
             &ensp; <div class="pagenum">of 50</div> &ensp;
           
             <button class ="ui tiny compact button">
