@@ -190,6 +190,9 @@
 
     .footer.segment {
       padding: 5em 0em;
+      position: absolute;
+      bottom: 0;
+      width: 100%;
     }
 
     .secondary.pointing.menu .toc.item {
@@ -237,8 +240,8 @@
           <i class="sidebar icon"></i>
         </a>
         <a class="item" href="/demo/index.php">Home</a>
-          <a class ="item" href="/demo/bidtasks.php"> View available tasks to bid</a>
-          <a class ="item" href="/demo/viewrunningtasks.php"> View tasks I am running</a>
+          <a class="item" href="/demo/bidtasks.php">View Available Tasks to Bid</a>
+          <a class="item" href="/demo/viewrunningtasks.php">View Tasks I Am Running</a>
         <div class="right item">
           <?php showUser(); ?> 
         </div>
@@ -277,22 +280,20 @@
     <div class="ui container">
       <div class="ui stackable inverted divided equal height stackable grid">
         <div class="three wide column">
-          <h4 class="ui inverted header">About</h4>
+          <h4 class="ui inverted header">Discover</h4>
           <div class="ui inverted link list">
-            <a href="#" class="item">Sitemap</a>
-            <a href="#" class="item">Contact Us</a>
+            <a href='/demo/taskeesignup.php' class="item">Sign up to Create Tasks</a>
           </div>
         </div>
         <div class="three wide column">
-          <h4 class="ui inverted header">Services</h4>
-          <div class="ui inverted link list">
-            <a href="#" class="item">DNA FAQ</a>
-            <a href="#" class="item">How To Access</a>
-          </div>
+          
         </div>
-        <div class="seven wide column">
-          <h4 class="ui inverted header">Footer Header</h4>
-          <p>Extra space for a call to action inside the footer that could help re-engage users.</p>
+        <div class="seven wide column">          
+          <h4 class="ui inverted header">Navigate</h4>
+          <div class="ui inverted link list">
+            <a href='/demo/bidtasks.php' class="item">List of Available Tasks</a>            
+            <a href='/demo/viewrunningtasks.php' class="item">My Running Tasks</a>            
+          </div>
         </div>
       </div>
     </div>

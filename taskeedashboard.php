@@ -254,7 +254,7 @@
             <a href='/demo/addtasks.php' class="item">Create a Task</a>            
           </div>
         </div>
-        
+        <br>
         <div class = "row">        
           &copy; 2018&nbsp;<b>Task Sourcing</b>&nbsp;| Created by &nbsp;<b>Jonathan Kennard Lawrence Wei Ping</b>        
         </div>
