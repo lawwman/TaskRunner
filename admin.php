@@ -169,31 +169,31 @@
         dataType: 'json',
         success: function (data) {
           maxPages.innerHTML = data;
+          updateButtons(tableName);
         }
       });
     }
-/*
-    function refreshTable(table) {
-      let taskData = retrieveData("tasks", "forward", 0);
-      let bidData = retrieveData("bids", "forward", 0);
-      let taskeeData = retrieveData("taskees", "forward", 0);
-      let taskerData = retrieveData("taskers", "forward", 0);
-      let skillData = retrieveData("skills", "forward", 0);
+
+    function refreshTable(tableName) {
+      let pageNo = document.getElementById(tableName + "-page-no");
+      let maxPages = document.getElementById(tableName + "-max-pages");
+      $.ajax({ 
+        type: 'GET', 
+        url: '/demo/adminRetrieval.php', 
+        data: { func: "get-max-pages", table: tableName}, 
+        dataType: 'json',
+        success: function (data) {
+          maxPages.innerHTML = data;
+          if (data < pageNo.value) {
+            pageNo.value = data;
+          }
+          updateButtons(tableName);
+          clearTable(tableName);
+          retrieveData(tableName, "forward", pageNo.value - 1);
+        }
+      });
     }
-    
-    function refreshTables() {
-      updateTableMaxPages("tasks");
-      updateTableMaxPages("bids");
-      updateTableMaxPages("taskees");
-      updateTableMaxPages("taskers");
-      updateTableMaxPages("skills");
-      updateButtons("tasks");
-      updateButtons("bids");
-      updateButtons("taskees");
-      updateButtons("taskers");
-      updateButtons("skills");
-    }
-*/
+
     // performs sign out functionality.
     $(document).ready(function() {
       $('#signOut').click(function() {
@@ -222,6 +222,11 @@
       $('.delete-btn').click(function() {
         let idArr = this.id.split("-");
         deleteData(idArr[0]);
+        if (deleteData) {
+          refreshTable(idArr[0]);
+        } else {
+          alert("deletion failed");
+        }
       });
 
       let taskData = retrieveData("tasks", "forward", 0);
@@ -234,11 +239,6 @@
       updateTableMaxPages("taskees");
       updateTableMaxPages("taskers");
       updateTableMaxPages("skills");
-      updateButtons("tasks");
-      updateButtons("bids");
-      updateButtons("taskees");
-      updateButtons("taskers");
-      updateButtons("skills");
     })
   </script>
 
