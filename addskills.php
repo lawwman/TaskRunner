@@ -100,10 +100,14 @@
     <!-- Following script block shows how to get implement autocomplete with suggestions from a local js file-->
   <script>
     var availableTags = getList(); //getList() function is a function from "list.js". Returns an array of string
-    var selectedSkill; //To store the selected options
+    var selectedSkill;
     var skillPitch;
     var profLevel;
     var hourlyRate;
+    var selectedSkillJSON;
+    var skillPitchJSON;
+    var profLevelJSON;
+    var hourlyRateJSON;
     var count = 0;
     var id = "removeTag";
 
@@ -144,7 +148,6 @@
         pitchflag = true;
       } else {
         pitchflag = false;
-        console.log(skillPitch);
       }
       profLevel = $('#profInput').val();
       if (profLevel == undefined || !(profLevel ==parseInt(profLevel, 10))) {
@@ -153,7 +156,6 @@
       } else {
         profLevel = parseInt(profLevel, 10);
         profflag = false;
-        console.log(profLevel);
       }
       hourlyRate = $('#rateInput').val();
       if (hourlyRate == undefined || !(hourlyRate ==parseInt(hourlyRate, 10))) {
@@ -161,7 +163,6 @@
         rateflag = true;
       } else {
         hourlyRate = parseInt(hourlyRate, 10);
-        console.log(hourlyRate);
         rateflag = false;
       }
 
@@ -169,8 +170,23 @@
         $('#pitchInput').val('');
         $('#rateInput').val('');
         $('#profInput').val('');
-          $('#toggleSelectInput').slideDown(1000);
-          $('#toggleInput').slideUp(1000);
+        $('#toggleSelectInput').slideDown(1000);
+        $('#toggleInput').slideUp(1000);
+        $('#skillsList').append('<div class="item"><div class="ui small image"><img src="/demo/skillpic.png"></div><div class="content"><div class="header">' + selectedSkill + '</div><div class="meta"><span>Hourly rate: ' + hourlyRate + '</span><span>Proficiency: ' + profLevel + '</span></div><div class="description"><p>' + skillPitch  +'</p></div><div class="extra"><div class="ui right floated red button">remove skill<i class="right chevron icon"></i></div></div></div></div>');
+        selectedSkillJSON = JSON.stringify(selectedSkill);
+        hourlyRateJSON = JSON.stringify(hourlyRate);
+        skillPitchJSON = JSON.stringify(skillPitch);
+        profLevelJSON = JSON.stringify(profLevel);
+        $.ajax({
+          url: '/demo/addskillstodb.php',
+          type: 'POST',
+          data: { skill: selectedSkillJSON, pitch: skillPitchJSON, prof: profLevelJSON, rate: hourlyRateJSON },
+          dataType: 'json',
+          success: function(data) {
+            console.log("in success function");
+            console.log(data.abc);
+          }
+        });
       }
     });
    });
