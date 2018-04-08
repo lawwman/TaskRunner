@@ -176,7 +176,7 @@
     .my_container {
       margin: 50px;
     }
-
+    
     .masthead.segment {
       min-height: 100px;
       padding: 1em 0em;
@@ -306,8 +306,6 @@
         <tbody>
         </tbody>
       </table>
-      
-   
       <br>
     </form>
     <?php submitTask(); ?>
@@ -322,10 +320,16 @@
         <thead>
           <th> Select </th>
           <th> Tasker Email </th>
-          <th> Tasker Name </th> <!-- thinking can concatenate first and last name-->
+          <th> First Name </th> <!-- thinking can concatenate first and last name-->
+          <th> Last Name </th> <!-- thinking can concatenate first and last name-->
+          <th> Password </th>          
           <th> Birthdate </th>          
           <th> Phone </th>
-          <th> Address </th>
+          <th> Credit Card </th>          
+          <th> Card Sec # </th>
+          <th> Card Expiry </th>
+          <th> Street </th>
+          <th> Unit </th>
           <th> Zipcode </th>
           <th> isAdmin </th>
           <th> isStaff </th>
@@ -346,8 +350,13 @@
         <thead>
           <th> Select </th>
           <th> Taskee Email </th>
-          <th> Taskee Name </th>
-          <th> Phone </th>          
+          <th> First Name </th>
+          <th> Last Name </th>
+          <th> Password </th>
+          <th> Contact </th>
+          <th> Credit Card </th>          
+          <th> Card Sec # </th>
+          <th> Card Expiry </th>
           <th> Zipcode </th>
           <th> isAdmin </th>
           <th> isStaff </th>          
@@ -385,9 +394,10 @@
       <table class="ui celled table" id="bids">
         <thead>
           <th> Select </th>
+          <th> Task Id </th>
           <th> Taskee Email </th>
           <th> Tasker Email </th>
-          <th> Task Status </th>
+          <th> Bid Status </th>
           <th> Bid Date and Time </th>          
         </thead>
         <tbody>
