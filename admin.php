@@ -20,63 +20,6 @@
       <a class='ui inverted button' href='/demo/signup.php'>Sign Up</a>";
     }
   }
-
-  function showTasks() { //to edit
-      // Connect to the database. Please change the password in the following line accordingly
-    $db     = pg_connect("host=127.0.0.1 port=5432 dbname=project1 user=postgres password=1234"); 
-    $result = pg_query($db, "SELECT * FROM tasks where status = 'not bidded'");
-    while ($row = pg_fetch_assoc($result)) {
-      echo "<tr>
-      <td> 
-        <div class= 'ui checkbox'> 
-          <input type = 'checkbox' name = 'checked[]' value='$row[task_id]'>
-        </div>
-      </td>
-      <td> $row[task_name]</td>
-      <td> $row[task_details] </td> 
-      <td> $row[creator] </td>
-      <td> $row[reward] </td>
-      <td> $row[status] </td>
-      <td> $row[createddatetime] </td>
-      </tr>";
-    }
-  }
-
-  function showTaskers() { //to implement
-  }
-
-  function showTaskees() { //to implement
-  }
-
-  function showSkills() { //to implement
-  }
-
-  function showBids() { //to implement
-  }
-
-  function submitTask() {
-      // Connect to the database. Please change the password in the following line accordingly
-
-  $db = pg_connect("host=127.0.0.1 port=5432 dbname=project1 user=postgres password=1234") or die('Could not connect ' . pg_last_error()); 
-
-    if(isset($_POST['bid_submit'])) {
-      foreach($_POST['checked'] as $taskid) {
-        $result = pg_query($db, "SELECT * FROM tasks WHERE task_id = '$taskid' ");
-        while($row = pg_fetch_assoc($result)) {
-          $taskid = $row['task_id'];
-          $creator = $row['creator'];
-          $runner = $_SESSION['user'];
-          $status = 'pending';
-          date_default_timezone_set('Asia/Singapore');
-          $createddatetime = date('Y-m-d H:i:s');
-          BEGIN;
-          pg_query($db,"INSERT INTO bids VALUES($taskid, '$creator', '$runner', '$status', '$createddatetime') ");
-          pg_query($db, "UPDATE tasks SET runner = '$runner' , status = '$status' WHERE task_id = '$taskid' ");
-          COMMIT;
-        }
-      }
-    }
-  }
 ?>
 
 <html>
@@ -154,6 +97,22 @@
       return data;
     }
 
+    function clearTable(tableName) {
+      let table = document.getElementById(tableName);
+      while (table.rows.length > 1) {
+        table.deleteRow(1);
+      }
+    }
+
+    function updateTable(tableName, direction) {
+      clearTable(tableName);
+      let pageNo = document.getElementById(tableName + "-page-no");
+      console.log(pageNo);
+      let newData = retrieveData(tableName, direction, pageNo.value);
+      console.log(tableName);
+      pageNo.value = parseInt(pageNo.value) + 1;
+    }
+
     // performs sign out functionality.
     $(document).ready(function() {
       $('#signOut').click(function() {
@@ -164,6 +123,14 @@
           }
         });
       });
+
+      $('.next').click(function() {
+        let curr = document.getElementById("tasks-page-no");
+        let idArr = this.id.split("-");
+        updateTable(idArr[0], "forward");
+      });
+
+      console.log("test5");
 
       let taskData = retrieveData("tasks", "forward", 0);
       let bidData = retrieveData("bids", "forward", 0);
@@ -269,6 +236,11 @@
       text-align: center; 
     }
 
+    #tasks-page-no {
+      width: 4em;
+      text-align: center;
+    }
+
 
   </style>
 </head>
@@ -299,219 +271,204 @@
       <button class ="ui right floated tiny teal button" name = "bid_submit" type="submit"> – </button>          
       <button class ="ui right floated tiny teal button" name = "bid_submit" type="submit"> + </button>   
     </h2>               
-    
-    <form method ="post">  
-      <table class="ui celled table" id="tasks">
-        <thead>
-          <th> Select </th>        
-          <th> Task Id </th>
-          <th> Task Type </th>
-          <th> Task Details </th>
-          <th> Task Creator </th>          
-          <th> Tasker Assigned </th>
-          <th> Status </th>
-          <th> Created Date and Time </th>
-          <th> Start Date and Time </th>
-          <th> End Date and Time </th>
-          <th> Location </th>
-        </thead>
-        <tbody>
-        </tbody>
-      </table>
-      
-      <div class="ui container">
-        <div align="center">
-          <div class="ui input focus">            
-            
-            <button class= "ui tiny compact button">
-              <i class= "caret left icon"></i>
-            </button> &ensp;
-          
-            <input type="text" placeholder="1" type="number" id="number">
-            &ensp; <div class="pagenum">of 50</div> &ensp;
-          
-            <button class ="ui tiny compact button">
-              <i class= "caret right icon"></i>
-            </button>        
-          </div>
-        </div> 
-      </div>
 
-      <br>
-    </form>
-    <?php submitTask(); ?>
+    <table class="ui celled table" id="tasks">
+      <thead>
+        <th> Select </th>        
+        <th> Task Id </th>
+        <th> Task Type </th>
+        <th> Task Details </th>
+        <th> Task Creator </th>          
+        <th> Tasker Assigned </th>
+        <th> Status </th>
+        <th> Created Date and Time </th>
+        <th> Start Date and Time </th>
+        <th> End Date and Time </th>          
+        <th> Location </th>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+      
+    <div class="ui container">
+      <div align="center">
+        <div class="ui input focus">            
+            
+          <button class= "ui tiny compact button">
+            <i class= "caret left icon"></i>
+          </button> &ensp;
+        
+          <input type="text" value="1" type="number" id="tasks-page-no">
+          &ensp; <div class="pagenum">of 50</div> &ensp;
+        
+          <button class ="ui tiny compact button next" id="tasks-next">
+            <i class= "caret right icon"></i>
+          </button>        
+        </div>
+      </div> 
+    </div>
+    <br>
 
     <h2>View/Manage Taskers
       <button class ="ui right floated tiny teal button" name = "bid_submit" type="submit"> Edit User - Tasker </button>
       <button class ="ui right floated tiny teal button" name = "bid_submit" type="submit"> – </button>          
       <button class ="ui right floated tiny teal button" name = "bid_submit" type="submit"> + </button>
     </h2>
-    <form method ="post">  
-      <table class="ui celled table" id="taskers">
-        <thead>
-          <th> Select </th>
-          <th> Tasker Email </th>
-          <th> First Name </th> <!-- thinking can concatenate first and last name-->
-          <th> Last Name </th> <!-- thinking can concatenate first and last name-->
-          <th> Password </th>          
-          <th> Birthdate </th>          
-          <th> Phone </th>
-          <th> Credit Card </th>          
-          <th> Card Sec # </th>
-          <th> Card Expiry </th>
-          <th> Street </th>
-          <th> Unit </th>
-          <th> Zipcode </th>
-          <th> isAdmin </th>
-          <th> isStaff </th>
-        </thead>
-        <tbody>
-        </tbody>
-      </table>
+    <table class="ui celled table" id="taskers">
+      <thead>
+        <th> Select </th>
+        <th> Tasker Email </th>
+        <th> First Name </th> <!-- thinking can concatenate first and last name-->
+        <th> Last Name </th> <!-- thinking can concatenate first and last name-->
+        <th> Password </th>          
+        <th> Birthdate </th>          
+        <th> Phone </th>
+        <th> Credit Card </th>          
+        <th> Card Sec # </th>
+        <th> Card Expiry </th>
+        <th> Street </th>
+        <th> Unit </th>
+        <th> Zipcode </th>
+        <th> isAdmin </th>
+        <th> isStaff </th>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
 
-      <div class="ui container">
-        <div align="center">
-          <div class="ui input focus">            
-            
-            <button class= "ui tiny compact button">
-              <i class= "caret left icon"></i>
-            </button> &ensp;
+    <div class="ui container">
+      <div align="center">
+        <div class="ui input focus">            
           
-            <input type="text" placeholder="1" type="number" id="number">
-            &ensp; <div class="pagenum">of 50</div> &ensp;
-          
-            <button class ="ui tiny compact button">
-              <i class= "caret right icon"></i>
-            </button>        
-          </div>
-        </div> 
-      </div>
-
-      <br>
-    </form>
+          <button class ="ui tiny compact button" id="-next">
+            <i class= "caret left icon"></i>
+          </button> &ensp;
+        
+          <input type="text" value="1" type="number" id="taskers-page-no">
+          &ensp; <div class="pagenum">of 50</div> &ensp;
+        
+          <button class ="ui tiny compact button next" id="taskers-next">
+            <i class= "caret right icon"></i>
+          </button>        
+        </div>
+      </div> 
+    </div>
+    <br>
 
     <h2>View/Manage Taskees
       <button class ="ui right floated tiny teal button" name = "bid_submit" type="submit"> Edit User - Taskee </button>
       <button class ="ui right floated tiny teal button" name = "bid_submit" type="submit"> – </button>          
       <button class ="ui right floated tiny teal button" name = "bid_submit" type="submit"> + </button>
-    </h2>
-    <form method ="post">  
-      <table class="ui celled table" id="taskees">
-        <thead>
-          <th> Select </th>
-          <th> Taskee Email </th>
-          <th> First Name </th>
-          <th> Last Name </th>
-          <th> Password </th>
-          <th> Contact </th>
-          <th> Credit Card </th>          
-          <th> Card Sec # </th>
-          <th> Card Expiry </th>
-          <th> Zipcode </th>
-          <th> isAdmin </th>
-          <th> isStaff </th>          
-        </thead>
-        <tbody>
-        </tbody>
-      </table>        
-      
-      <div class="ui container">
-        <div align="center">
-          <div class="ui input focus">            
-            
-            <button class= "ui tiny compact button">
-              <i class= "caret left icon"></i>
-            </button> &ensp;
-          
-            <input type="text" placeholder="1" type="number" id="number">
-            &ensp; <div class="pagenum">of 50</div> &ensp;
-          
-            <button class ="ui tiny compact button">
-              <i class= "caret right icon"></i>
-            </button>        
-          </div>
-        </div> 
-      </div>
+    </h2> 
 
-      <br>
-    </form>
+    <table class="ui celled table" id="taskees">
+      <thead>
+        <th> Select </th>
+        <th> Taskee Email </th>
+        <th> First Name </th>
+        <th> Last Name </th>
+        <th> Password </th>
+        <th> Contact </th>
+        <th> Credit Card </th>          
+        <th> Card Sec # </th>
+        <th> Card Expiry </th>
+        <th> Zipcode </th>
+        <th> isAdmin </th>
+        <th> isStaff </th>          
+      </thead>
+      <tbody>
+      </tbody>
+    </table>        
+    
+    <div class="ui container">
+      <div align="center">
+        <div class="ui input focus">            
+          
+          <button class= "ui tiny compact button">
+            <i class= "caret left icon"></i>
+          </button> &ensp;
+        
+          <input type="text" value="1" type="number" id="taskees-page-no">
+          &ensp; <div class="pagenum">of 50</div> &ensp;
+        
+          <button class ="ui tiny compact button next" id="taskees-next">
+            <i class= "caret right icon"></i>
+          </button>        
+        </div>
+      </div> 
+    </div>
+
+    <br>
 
     <h2>View/Manage Skills
       <button class ="ui right floated tiny teal button" name = "bid_submit" type="submit"> Edit Skill </button>
       <button class ="ui right floated tiny teal button" name = "bid_submit" type="submit"> – </button>          
       <button class ="ui right floated tiny teal button" name = "bid_submit" type="submit"> + </button>
     </h2>
-    <form method ="post">  
-      <table class="ui celled table" id="skills">
-        <thead>
-          <th> Select </th>
-          <th> Skill Name </th>
-          <th> Skill Details </th>          
-        </thead>
-        <tbody>
-        </tbody>
-      </table>        
-      
-      <div class="ui container">
-        <div align="center">
-          <div class="ui input focus">            
-            
-            <button class= "ui tiny compact button">
-              <i class= "caret left icon"></i>
-            </button> &ensp;
+    <table class="ui celled table" id="skills">
+      <thead>
+        <th> Select </th>
+        <th> Skill Name </th>
+        <th> Skill Details </th>          
+      </thead>
+      <tbody>
+      </tbody>
+    </table>        
+    
+    <div class="ui container">
+      <div align="center">
+        <div class="ui input focus">            
           
-            <input type="text" placeholder="1" type="number" id="number">
-            &ensp; <div class="pagenum">of 50</div> &ensp;
-          
-            <button class ="ui tiny compact button">
-              <i class= "caret right icon"></i>
-            </button>        
-          </div>
-        </div> 
-      </div>
-
-      <br>
-    </form>
+          <button class= "ui tiny compact button">
+            <i class= "caret left icon"></i>
+          </button> &ensp;
+        
+          <input type="text" value="1" type="number" id="skills-page-no">
+          &ensp; <div class="pagenum">of 50</div> &ensp;
+        
+          <button class ="ui tiny compact button next" id="skills-next">
+            <i class= "caret right icon"></i>
+          </button>        
+        </div>
+      </div> 
+    </div>
+    <br>
 
     <h2>View/Manage Bids
       <button class ="ui right floated tiny teal button" name = "bid_submit" type="submit"> Edit Bid </button>
       <button class ="ui right floated tiny teal button" name = "bid_submit" type="submit"> – </button>          
       <button class ="ui right floated tiny teal button" name = "bid_submit" type="submit"> + </button>
-    </h2>    
-    <form method ="post">  
-      <table class="ui celled table" id="bids">
-        <thead>
-          <th> Select </th>
-          <th> Task Id </th>
-          <th> Taskee Email </th>
-          <th> Tasker Email </th>
-          <th> Bid Status </th>
-          <th> Bid Date and Time </th>          
-        </thead>
-        <tbody>
-        </tbody>
-      </table>        
-      
-      <div class="ui container">
-        <div align="center">
-          <div class="ui input focus">            
+    </h2>      
+    <table class="ui celled table" id="bids">
+      <thead>
+        <th> Select </th>
+        <th> Task Id </th>
+        <th> Taskee Email </th>
+        <th> Tasker Email </th>
+        <th> Bid Status </th>
+        <th> Bid Date and Time </th>          
+      </thead>
+      <tbody>
+      </tbody>
+    </table>        
+    
+    <div class="ui container">
+      <div align="center">
+        <div class="ui input focus">            
             
-            <button class= "ui tiny compact button">
-              <i class= "caret left icon"></i>
-            </button> &ensp;
-          
-            <input type="text" placeholder="1" type="number" id="number">
-            &ensp; <div class="pagenum">of 50</div> &ensp;
-          
-            <button class ="ui tiny compact button">
-              <i class= "caret right icon"></i>
-            </button>        
-          </div>
-        </div> 
-      </div>
-
-      <br>
-    </form>
+          <button class= "ui tiny compact button next" id="bids-next">
+            <i class= "caret left icon"></i>
+          </button> &ensp;
+        
+          <input type="text" value="1" type="number" class="number" id="bids-page-no">
+          &ensp; <div class="pagenum">of 50</div> &ensp;
+          <button class ="ui tiny compact button next" id="bids-next">
+            <i class= "caret right icon"></i>
+          </button>        
+        </div>
+      </div> 
+    </div>
+    <br>
     </table>
   </div>
 </div>

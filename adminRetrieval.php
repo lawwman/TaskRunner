@@ -2,12 +2,12 @@
   require('debugging.php');
   $numRecordToRetrieve = 5;
 
-  function getNextRows($offset, $tableName) {
+  function getNextRows($pageNum, $tableName) {
     $db = pg_connect("host=127.0.0.1 port=5432 dbname=project1 user=postgres password=1234") or die('Could not connect: ' . pg_last_error()); 
     pg_query($db, "BEGIN") or die("Could not start transaction\n");
     $query =  "SELECT get" . $tableName . "Cursor('tempcursor')";
     $res2 = pg_query($db, $query);
-    $query = "MOVE FORWARD " . ($offset * $GLOBALS['numRecordToRetrieve']) . " tempcursor";
+    $query = "MOVE FORWARD " . ($pageNum * $GLOBALS['numRecordToRetrieve']) . " tempcursor";
     $res1 = pg_query($db, $query);
     $res1 = pg_query($db, "FETCH FORWARD " . $GLOBALS['numRecordToRetrieve'] . " tempcursor");
     if ($res1 and $res2) {
@@ -21,12 +21,12 @@
     return $arr;
   }
 
-  function getPrevRows($offset, $tableName) {
+  function getPrevRows($pageNum, $tableName) {
     $db = pg_connect("host=127.0.0.1 port=5432 dbname=project1 user=postgres password=1234") or die('Could not connect: ' . pg_last_error()); 
     pg_query($db, "BEGIN") or die("Could not start transaction\n");
     $query =  "SELECT get" . $tableName . "Cursor('tempcursor')";
     $res2 = pg_query($db, $query);
-    $query = "MOVE FORWARD " . ($offset * $GLOBALS['numRecordToRetrieve'] + 1) . " tempcursor";
+    $query = "MOVE FORWARD " . (($pageNum - 1) * $GLOBALS['numRecordToRetrieve']) . " tempcursor";
     $res1 = pg_query($db, $query);
     $query = "FETCH BACKWARD " . ($GLOBALS['numRecordToRetrieve']) . " tempcursor";
     $res1 = pg_query($db, $query);
@@ -41,12 +41,12 @@
     return $arr;
   }
 
-  function retrieveData($table, $direction, $offset) {
+  function retrieveData($table, $direction, $pageNum) {
     if ($direction == "forward") {
-      return getNextRows($offset, $table);
+      return getNextRows($pageNum, $table);
       
     } else {
-      return getPrevRows($offset, $table);
+      return getPrevRows($pageNum, $table);
     }
   }
   
