@@ -36,11 +36,11 @@
     $db = pg_connect("host=127.0.0.1 port=5432 dbname=project1 user=postgres password=1234") or die('Could not connect: ' . pg_last_error());
     $phone = $_POST['phone'];
     $zipcode = $_POST['zipcode'];
-    $updateQuery = "UPDATE Taskees SET (phone, zipcode) = ('$phone', '$zipcode') WHERE email = '" . $_SESSION['userEmail'] . "'";
+    $updateQuery = "UPDATE Taskers SET (phone, zipcode) = ('$phone', '$zipcode') WHERE email = '" . $_SESSION['userEmail'] . "'";
     $result = pg_query($db, $updateQuery);
     if ($result) {
       consoleLog("contact and address updated successfully.");
-      header('Location: /demo/edittaskeeprofile.php');
+      header('Location: /demo/edittaskerprofile.php');
     } else {
       consoleLog("failed to update.");
     }
@@ -49,17 +49,17 @@
 
   if (isset($_POST['savePassword'])) {
     $db = pg_connect("host=127.0.0.1 port=5432 dbname=project1 user=postgres password=1234") or die('Could not connect: ' . pg_last_error());
-    $taskeeInfo = pg_query($db, "SELECT * FROM Taskees WHERE email = '" . $_SESSION['userEmail'] . "'");
-    $oldHash = pg_fetch_result($taskeeInfo, 0, 3);
+    $taskerInfo = pg_query($db, "SELECT * FROM Taskers WHERE email = '" . $_SESSION['userEmail'] . "'");
+    $oldHash = pg_fetch_result($taskerInfo, 0, 3);
     $oldpw = $_POST['oldpw'];
     if (password_verify($oldpw, $oldHash)) {
       consoleLog("password matches");
       $newpw = password_hash($_POST['newpw'], PASSWORD_DEFAULT); 
-      $updateQuery = "UPDATE Taskees SET pword = '$newpw' WHERE email = '" . $_SESSION['userEmail'] . "'";
+      $updateQuery = "UPDATE Taskers SET pword = '$newpw' WHERE email = '" . $_SESSION['userEmail'] . "'";
       $result = pg_query($db, $updateQuery);
       if ($result) {
         consoleLog("password updated successfully.");
-        header('Location: /demo/edittaskeeprofile.php');
+        header('Location: /demo/edittaskerprofile.php');
       } else {
         consoleLog("failed to update.");
       }
@@ -74,11 +74,11 @@
     $creditNum = $_POST['creditNum'];
     $creditSecurity = $_POST['creditSecurity'];
     $creditExpiry = date($_POST['expiryYear'] . '-' . $_POST['expiryMonth'] . '-01');
-    $updateQuery = "UPDATE Taskees SET (creditnum, creditsecurity, creditexpiry) = ('$creditNum', '$creditSecurity', '$creditExpiry') WHERE email = '" . $_SESSION['userEmail'] . "'";
+    $updateQuery = "UPDATE Taskers SET (creditnum, creditsecurity, creditexpiry) = ('$creditNum', '$creditSecurity', '$creditExpiry') WHERE email = '" . $_SESSION['userEmail'] . "'";
     $result = pg_query($db, $updateQuery);
     if ($result) {
       consoleLog("card info updated successfully.");
-      header('Location: /demo/edittaskeeprofile.php');
+      header('Location: /demo/edittaskerprofile.php');
     } else {
       consoleLog("failed to update.");
     }
@@ -138,7 +138,7 @@
   $(document).ready(function() {
     $('#signOut').click(function() {
       $.ajax({
-        url: '/demo/taskeedashboard.php?argument=signOut',
+        url: '/demo/taskerdashboard.php?argument=signOut',
         success: function(html){
           location.reload();
         }
@@ -264,8 +264,8 @@
           <i class="sidebar icon"></i>
         </a>
         <a class="active item">Home</a>
-        <a class="item" href="/demo/viewcreatedtasks.php">View Created Tasks</a>
-        <a class="item" href="/demo/addtasks.php">Add Task</a>        
+        <a class="item" href="/demo/bidtasks.php">View Available Tasks to Bid</a>
+        <a class="item" href="/demo/viewrunningtasks.php">View Bidded Tasks</a>
         <div class="right item">
           <?php showUser(); ?> 
         </div>
@@ -284,7 +284,7 @@
     </div>
 
     <div class="ui bottom attached tab segment active" data-tab="first">
-      <form class="ui form contact" action="/demo/edittaskeeprofile.php" method="POST" >
+      <form class="ui form contact" action="/demo/edittaskerprofile.php" method="POST" >
         <div class="fields">                                 
           <div class="four wide field">
             <input type="text" name="phone" placeholder="Phone" value='<?php echo $displayPhone; ?>'>
@@ -299,7 +299,7 @@
     </div>
 
     <div class="ui bottom attached tab segment" data-tab="second">
-      <form class="ui form pw" action="/demo/edittaskeeprofile.php" method="POST" >
+      <form class="ui form pw" action="/demo/edittaskerprofile.php" method="POST" >
         <div class="fields"> 
           <div class="three wide field">
             <input type="password" name="oldpw" placeholder="Enter Old Password">
@@ -314,7 +314,7 @@
     </div>
 
     <div class="ui bottom attached tab segment" data-tab="third">
-      <form class="ui form billing" action="/demo/edittaskeeprofile.php" method="POST" >
+      <form class="ui form billing" action="/demo/edittaskerprofile.php" method="POST" >
         <h4 class="ui dividing header">Billing Information</h4>
         <div class="fields">
           <div class="seven wide field">
