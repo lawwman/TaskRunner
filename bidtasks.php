@@ -144,7 +144,7 @@
     }
 
     .masthead.segment {
-      min-height: 200px;
+      min-height: 100px;
       padding: 1em 0em;
     }
     .masthead .logo.item img {
@@ -193,7 +193,7 @@
     }
 
     .footer.segment {
-      padding: 5em 0em;
+      padding: 1em 0em;
       position: absolute;
       bottom: 0;
       width: 100%;
@@ -244,7 +244,7 @@
           <i class="sidebar icon"></i>
         </a>
         <a class="item" href="/demo/index.php">Home</a>
-          <a class="item" href="/demo/bidtasks.php">View Available Tasks to Bid</a>
+          <a class="active item" href="/demo/bidtasks.php">View Available Tasks to Bid</a>
           <a class="item" href="/demo/viewrunningtasks.php">View Tasks I Am Running</a>
         <div class="right item">
           <?php showUser(); ?> 
