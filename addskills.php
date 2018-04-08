@@ -141,25 +141,36 @@
       skillPitch = $('#pitchInput').val();
       if (skillPitch == undefined) {
         alert('Please enter pitch!');
+        pitchflag = true;
       } else {
-        $('#pitchInput').val('');
+        pitchflag = false;
         console.log(skillPitch);
       }
       profLevel = $('#profInput').val();
       if (profLevel == undefined || !(profLevel ==parseInt(profLevel, 10))) {
         alert('Please enter valid proficiency level! i.e integer values');
+        profflag = true;
       } else {
-        $('#profInput').val('');
         profLevel = parseInt(profLevel, 10);
+        profflag = false;
         console.log(profLevel);
       }
       hourlyRate = $('#rateInput').val();
       if (hourlyRate == undefined || !(hourlyRate ==parseInt(hourlyRate, 10))) {
         alert('Please enter valid hourly rate! i.e. integer values');
+        rateflag = true;
       } else {
-        $('#rateInput').val('');
         hourlyRate = parseInt(hourlyRate, 10);
         console.log(hourlyRate);
+        rateflag = false;
+      }
+
+      if (!pitchflag && !profflag && !rateflag) {
+        $('#pitchInput').val('');
+        $('#rateInput').val('');
+        $('#profInput').val('');
+          $('#toggleSelectInput').slideDown(1000);
+          $('#toggleInput').slideUp(1000);
       }
     });
    });
