@@ -104,6 +104,24 @@
       }
     }
 
+    function updateButtons(tableName) {
+      let nextBtn = document.getElementById(tableName + "-next");
+      let prevBtn = document.getElementById(tableName + "-prev");
+      let pageNo = document.getElementById(tableName + "-page-no");
+      if (pageNo.value <= 1) {
+        prevBtn.style.visibility = "hidden";
+      } else {
+        prevBtn.style.visibility = "visible";
+      }
+      let maxPages = document.getElementById(tableName + "-max-pages");
+      if (pageNo.value >= maxPages.innerHTML) {
+        nextBtn.style.visibility = "hidden";
+      } else {
+        nextBtn.style.visibility = "visible";
+      }
+      
+    }
+
     function updateTable(tableName, direction) {
       clearTable(tableName);
       let pageNo = document.getElementById(tableName + "-page-no");
@@ -143,16 +161,16 @@
         let curr = document.getElementById("tasks-page-no");
         let idArr = this.id.split("-");
         updateTable(idArr[0], "forward");
+        updateButtons(idArr[0]);
       });
 
       $('.prev').click(function() {
         let curr = document.getElementById("tasks-page-no");
         let idArr = this.id.split("-");
         updateTable(idArr[0], "backward");
+        updateButtons(idArr[0]);
       });
-
-      console.log("test");
-
+      
       let taskData = retrieveData("tasks", "forward", 0);
       let bidData = retrieveData("bids", "forward", 0);
       let taskeeData = retrieveData("taskees", "forward", 0);
@@ -163,7 +181,12 @@
       updateTableMaxPages("taskees");
       updateTableMaxPages("taskers");
       updateTableMaxPages("skills");
-      console.log("hello java");
+      updateButtons("tasks");
+      updateButtons("bids");
+      updateButtons("taskees");
+      updateButtons("taskers");
+      updateButtons("skills");
+      console.log("hello java2");
     })
   </script>
 
