@@ -108,8 +108,6 @@
     var skillPitchJSON;
     var profLevelJSON;
     var hourlyRateJSON;
-    var count = 0;
-    var id = "removeTag";
 
     var pitchflag = false;
     var rateflag = false;
@@ -186,7 +184,10 @@
               alert('Skill already exists');
             } else {
               console.log(data.abc);
-            $('#skillsList').append('<div class="item"><div class="ui small image"><img src="/demo/skillpic.png"></div><div class="content"><div class="header">' + selectedSkill + '</div><div class="meta"><span>Hourly rate: ' + hourlyRate + '</span><span>Proficiency: ' + profLevel + '</span></div><div class="description"><p>' + skillPitch  +'</p></div><div class="extra"><div class="ui right floated red button">remove skill<i class="right chevron icon"></i></div></div></div></div>');
+            $('#skillsList').append('<div class="item"><div class="ui small image"><img src="/demo/skillpic.png"></div><div class="content"><div class="header">' + selectedSkill + '</div><div class="meta"><span>Hourly rate: ' + hourlyRate + '</span><span>Proficiency: ' + profLevel + '</span></div><div class="description"><p>' + skillPitch  +'</p></div><div class="extra"><div class="ui right floated red button removeBtn"><input type="hidden" value="' +selectedSkill + '" class="hideTask">remove skill<i class="right chevron icon"></i></div></div></div></div>');
+            $('.removeBtn').click(function() {
+              console.log($(this).find('.hideTask').val());
+            });
             }
           }
         });
@@ -394,7 +395,8 @@
             <p>Pitch</p>
           </div>
           <div class="extra">
-            <div class="ui right floated red button">
+            <div class="ui right floated red button removeBtn">
+              <input type='hidden' value='hi' class='hideTask'>
               remove skill
               <i class="right chevron icon"></i>
             </div>
