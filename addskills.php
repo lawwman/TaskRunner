@@ -107,6 +107,10 @@
     var count = 0;
     var id = "removeTag";
 
+    var pitchflag = false;
+    var rateflag = false;
+    var profflag = false;
+
    $(document).ready(function() {
       $('#suggestionFromLocalSource').autocomplete({
         source: availableTags,
@@ -142,17 +146,19 @@
         console.log(skillPitch);
       }
       profLevel = $('#profInput').val();
-      if (profLevel == undefined || !Number.isInteger(profLevel)) {
+      if (profLevel == undefined || !(profLevel ==parseInt(profLevel, 10))) {
         alert('Please enter valid proficiency level! i.e integer values');
       } else {
         $('#profInput').val('');
+        profLevel = parseInt(profLevel, 10);
         console.log(profLevel);
       }
       hourlyRate = $('#rateInput').val();
-      if (hourlyRate == undefined || !Number.isInteger(hourlyRate)) {
+      if (hourlyRate == undefined || !(hourlyRate ==parseInt(hourlyRate, 10))) {
         alert('Please enter valid hourly rate! i.e. integer values');
       } else {
         $('#rateInput').val('');
+        hourlyRate = parseInt(hourlyRate, 10);
         console.log(hourlyRate);
       }
     });
