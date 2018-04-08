@@ -8,10 +8,12 @@
     logout();
   }
 
+  redirectIfNot('taskee');
+
   function showUser() {
     if (isLoggedIn()) {
       echo '
-      <div class="ui dropdown inverted button">Hello, '. $_SESSION['user'] . '</div>
+      <div class="ui dropdown inverted button">Hello, '. $_SESSION['userName'] . '</div>
       <div class="ui dropdown inverted button" id="signOut" formaction="/demo/signup.php">Sign Out</div>
       ';
     } else {
@@ -285,6 +287,34 @@
           console.log("dates are not valid");
         }
       });
+
+      $('#autoButton').click(function() {
+        checkStartValidation();
+        checkEndValidation();
+        compareDateValidation();
+        createValidationMsg();
+        if (!startNotValidFlag && !endNotValidFlag && !compareFlag) {
+          var seconds = ":00";
+          dateInput = startYear + '-' + startMnth + '-' + startDay + " " + startTime + seconds;
+          dateEndInput = endYear + '-' + endMnth + '-' + endDay + " " + endTime + seconds;
+          dateInputJSON = JSON.stringify(dateInput);
+          dateEndInputJSON = JSON.stringify(dateEndInput);
+           $.ajax({
+            url: '/demo/submitautoquery.php',
+            type: 'POST',
+            dataType: 'json',
+            data: {date: dateInputJSON, endDate: dateEndInputJSON},
+            success: function(data){
+              console.log(data.abc);
+              alert(data.abc);
+              window.location.replace("/demo/viewcreatedtasks.php");
+            }
+          });
+        }
+        if (startNotValidFlag || endNotValidFlag || compareFlag) {
+          console.log("dates are not valid");
+        }
+      });
     
     });
   </script>
@@ -393,9 +423,9 @@
       <a class="toc item">
         <i class="sidebar icon"></i>
       </a>
-      <a class="item" href="/demo/index.php">Home</a>
-        <a class ="item" href="/demo/viewcreatedtasks.php"> View Created Tasks</a>
-        <a class ="item" href="/demo/viewrunningtasks.php"> View tasks I am running</a>
+      <a class="active item">Home</a>
+      <a class="item" href="/demo/viewcreatedtasks.php">View Created Tasks</a>
+      <a class="item" href="/demo/addtasks.php">Add Task</a>        
       <div class="right item">
         <?php showUser(); ?> 
       </div>
@@ -459,10 +489,10 @@
 </form> 
 
 
-<div class="ui right floated button">
-  Select for me
-</div> 
-<button id="manualButton" class="ui right floated button" >
+<button id="autoButton" class="ui floated red button" >
+  Select for me!
+</button>
+<button id="manualButton" class="ui right floated blue button" >
   manual
 </button>
 

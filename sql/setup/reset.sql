@@ -1,18 +1,85 @@
 DROP TABLE IF EXISTS Tasks CASCADE;
-DROP TABLE IF EXISTS Users CASCADE;
 DROP TABLE IF EXISTS Bids CASCADE;
-
 DROP TABLE IF EXISTS Taskees CASCADE;
 DROP TABLE IF EXISTS Taskers CASCADE;
 DROP TABLE IF EXISTS Skills CASCADE;
 DROP TABLE IF EXISTS HasSkills CASCADE;
 
-DROP FUNCTION IF EXISTS getTaskCursor;
-DROP FUNCTION IF EXISTS getHasSkillCursor;
-DROP FUNCTION IF EXISTS getSkillCursor;
-DROP FUNCTION IF EXISTS getBidCursor;
-DROP FUNCTION IF EXISTS getTaskeeCursor;
-DROP FUNCTION IF EXISTS getTaskerCursor;
+DROP FUNCTION IF EXISTS getTasksCursor;
+DROP FUNCTION IF EXISTS getHasSkillsCursor;
+DROP FUNCTION IF EXISTS getSkillsCursor;
+DROP FUNCTION IF EXISTS getBidsCursor;
+DROP FUNCTION IF EXISTS getTaskeesCursor;
+DROP FUNCTION IF EXISTS getTaskersCursor;
+DROP FUNCTION IF EXISTS getAvailableTasker(varchar, TIMESTAMP, TIMESTAMP);
+
+DROP SEQUENCE IF EXISTS idGen;
+
+DROP FUNCTION IF EXISTS getUniqueTaskId;
+
+-- SQL Functions to be used in the database 
+CREATE SEQUENCE idGen
+START WITH 1
+INCREMENT BY 1
+MINVALUE 1
+NO MAXVALUE
+CACHE 1;
+
+CREATE FUNCTION getUniqueTaskId() RETURNS BIGINT AS $$
+DECLARE 
+	num BIGINT := nextval('idGen');
+BEGIN
+	CREATE VIEW TaskId AS SELECT task_id FROM Tasks;
+    LOOP
+        EXIT WHEN NOT EXISTS(SELECT task_id FROM TaskId WHERE task_id = num);
+        num = nextval('idGen');
+    END LOOP;
+    DROP VIEW TaskId;
+    RETURN num;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE FUNCTION getTasksCursor(refcursor) RETURNS refcursor AS $$
+BEGIN
+	OPEN $1 SCROLL FOR SELECT * FROM Tasks;
+    RETURN $1;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE FUNCTION getBidsCursor(refcursor) RETURNS refcursor AS $$
+BEGIN
+	OPEN $1 SCROLL FOR SELECT * FROM Bids;
+    RETURN $1;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE FUNCTION getHasSkillsCursor(refcursor) RETURNS refcursor AS $$
+BEGIN
+	OPEN $1 SCROLL FOR SELECT * FROM HasSkills;
+    RETURN $1;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE FUNCTION getSkillsCursor(refcursor) RETURNS refcursor AS $$
+BEGIN
+	OPEN $1 SCROLL FOR SELECT * FROM Skills;
+    RETURN $1;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE FUNCTION getTaskeesCursor(refcursor) RETURNS refcursor AS $$
+BEGIN
+	OPEN $1 SCROLL FOR SELECT * FROM Taskees;
+    RETURN $1;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE FUNCTION getTaskersCursor(refcursor) RETURNS refcursor AS $$
+BEGIN
+	OPEN $1 SCROLL FOR SELECT * FROM Taskers;
+    RETURN $1;
+END;
+$$ LANGUAGE plpgsql;
 
 CREATE TABLE Taskees (
     email VARCHAR(100) PRIMARY KEY,
@@ -84,7 +151,7 @@ CREATE TABLE HasSkills (
 );
 
 CREATE TABLE Tasks (
-	task_id VARCHAR(100) PRIMARY KEY, -- BIGINT so that can contain more than 4 bil accounts (in case single user creates multiple accs)
+	task_id BIGINT PRIMARY KEY DEFAULT getUniqueTaskid(), -- BIGINT so that can contain more than 4 bil accounts (in case single user creates multiple accs)
     ttype VARCHAR(50) NOT NULL REFERENCES Skills,
 	task_details VARCHAR(3000), -- Details of task 
 	
@@ -110,7 +177,7 @@ CREATE TABLE Tasks (
 );
 
 CREATE TABLE Bids (
-	task_id VARCHAR(100) NOT NULL REFERENCES Tasks, 
+	task_id BIGINT NOT NULL REFERENCES Tasks, 
     taskeeEmail VARCHAR(100) NOT NULL REFERENCES Taskees,
     taskerEmail VARCHAR(100) NOT NULL REFERENCES Taskers,
 	
@@ -121,48 +188,14 @@ CREATE TABLE Bids (
 	PRIMARY KEY(taskerEmail, taskeeEmail, task_id)
 );
 
--- SQL Functions to be used in the database 
-CREATE FUNCTION getTaskCursor(refcursor) RETURNS refcursor AS $$
-BEGIN
-	OPEN $1 FOR SELECT * FROM tasks;
-    RETURN $1;
-END;
-$$ LANGUAGE plpgsql;
+--Arguments are Skill name, task startdate and task enddate (in order)
+CREATE FUNCTION getAvailableTasker(VARCHAR, TIMESTAMP, TIMESTAMP) RETURNS VARCHAR AS $$
+select t.email from Taskers t inner join hasSkills HS on HS.tEmail = t.email where not exists
+(select * from tasks t2 where t2.taskeremail = t.email and t2.status = 'pending' and ((t2.enddatetime > $2 and t2.startdatetime < $3) or (t2.enddatetime < $3 and t2.startdatetime > $2)
+or (t2.enddatetime > $3 and t2.startdatetime < $2)))
+and HS.sname = $1 ORDER BY HS.profLevel, HS.hrate ASC;
+$$ LANGUAGE SQL;
 
-CREATE FUNCTION getBidCursor(refcursor) RETURNS refcursor AS $$
-BEGIN
-	OPEN $1 FOR SELECT * FROM tasks;
-    RETURN $1;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE FUNCTION getHasSkillCursor(refcursor) RETURNS refcursor AS $$
-BEGIN
-	OPEN $1 FOR SELECT * FROM tasks;
-    RETURN $1;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE FUNCTION getSkillCursor(refcursor) RETURNS refcursor AS $$
-BEGIN
-	OPEN $1 FOR SELECT * FROM tasks;
-    RETURN $1;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE FUNCTION getTaskeeCursor(refcursor) RETURNS refcursor AS $$
-BEGIN
-	OPEN $1 FOR SELECT * FROM tasks;
-    RETURN $1;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE FUNCTION getTaskerCursor(refcursor) RETURNS refcursor AS $$
-BEGIN
-	OPEN $1 FOR SELECT * FROM tasks;
-    RETURN $1;
-END;
-$$ LANGUAGE plpgsql;
 
 COPY Skills FROM '..\..\apps\demo\htdocs\sql\setup\data\skills.csv' DELIMITER ',' CSV HEADER;
 COPY Taskees FROM '..\..\apps\demo\htdocs\sql\setup\data\taskees.csv' DELIMITER ',' CSV HEADER;

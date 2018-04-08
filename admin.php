@@ -120,6 +120,40 @@
   <script src="semantic/dist/components/package.js"></script>
 
   <script>
+
+    var result = [];
+
+    function retrieveData(tableName, direction, offset) {
+      return $.ajax({ 
+        type: 'GET', 
+        url: '/demo/adminRetrieval.php', 
+        data: { table: tableName, dir: direction, off: offset}, 
+        dataType: 'json',
+        success: function (data) {
+          populateTable(data, tableName);
+        }
+      });
+    }
+
+    function populateTable(data, tableName) {
+      let table = document.getElementById(tableName);
+      $.each(data, function(k,v) {
+        let row = table.insertRow(1);
+        let generatedRow = `
+          <td> 
+          <div class= 'ui checkbox'> 
+            <input type = 'checkbox' name = 'checked[]' value='` + k + `'>
+          </div>
+          </td>`;
+        $.each(v, function(attr,val) {
+          generatedRow = generatedRow + `<td>` + val + '</td>';
+        });
+
+        row.innerHTML = generatedRow;
+      });
+      return data;
+    }
+
     // performs sign out functionality.
     $(document).ready(function() {
       $('#signOut').click(function() {
@@ -130,6 +164,12 @@
           }
         });
       });
+
+      let taskData = retrieveData("tasks", "forward", 0);
+      let bidData = retrieveData("bids", "forward", 0);
+      let taskeeData = retrieveData("taskees", "forward", 0);
+      let taskerData = retrieveData("taskers", "forward", 0);
+      let skillData = retrieveData("skills", "forward", 0);
     })
   </script>
 
@@ -138,7 +178,7 @@
     .my_container {
       margin: 50px;
     }
-
+    
     .masthead.segment {
       min-height: 100px;
       padding: 1em 0em;
@@ -261,20 +301,21 @@
     </h2>               
     
     <form method ="post">  
-      <table class="ui celled table">
+      <table class="ui celled table" id="tasks">
         <thead>
           <th> Select </th>        
-          <th> Skill </th>
+          <th> Task Id </th>
+          <th> Task Type </th>
           <th> Task Details </th>
           <th> Task Creator </th>          
-          <th> Selected Tasker </th>
+          <th> Tasker Assigned </th>
           <th> Status </th>
           <th> Created Date and Time </th>
           <th> Start Date and Time </th>
           <th> End Date and Time </th>
+          <th> Location </th>
         </thead>
         <tbody>
-          <?php showTasks(); ?> 
         </tbody>
       </table>
       
@@ -306,20 +347,25 @@
       <button class ="ui right floated tiny teal button" name = "bid_submit" type="submit"> + </button>
     </h2>
     <form method ="post">  
-      <table class="ui celled table">
+      <table class="ui celled table" id="taskers">
         <thead>
           <th> Select </th>
           <th> Tasker Email </th>
-          <th> Tasker Name </th> <!-- thinking can concatenate first and last name-->
+          <th> First Name </th> <!-- thinking can concatenate first and last name-->
+          <th> Last Name </th> <!-- thinking can concatenate first and last name-->
+          <th> Password </th>          
           <th> Birthdate </th>          
           <th> Phone </th>
-          <th> Address </th>
+          <th> Credit Card </th>          
+          <th> Card Sec # </th>
+          <th> Card Expiry </th>
+          <th> Street </th>
+          <th> Unit </th>
           <th> Zipcode </th>
           <th> isAdmin </th>
           <th> isStaff </th>
         </thead>
         <tbody>
-          <?php showTasks(); ?>  <!-- change to showTaskers--> 
         </tbody>
       </table>
 
@@ -350,18 +396,22 @@
       <button class ="ui right floated tiny teal button" name = "bid_submit" type="submit"> + </button>
     </h2>
     <form method ="post">  
-      <table class="ui celled table">
+      <table class="ui celled table" id="taskees">
         <thead>
           <th> Select </th>
           <th> Taskee Email </th>
-          <th> Taskee Name </th>
-          <th> Phone </th>          
+          <th> First Name </th>
+          <th> Last Name </th>
+          <th> Password </th>
+          <th> Contact </th>
+          <th> Credit Card </th>          
+          <th> Card Sec # </th>
+          <th> Card Expiry </th>
           <th> Zipcode </th>
           <th> isAdmin </th>
           <th> isStaff </th>          
         </thead>
         <tbody>
-          <?php showTasks(); ?>  <!-- change to showTaskees--> 
         </tbody>
       </table>        
       
@@ -392,14 +442,13 @@
       <button class ="ui right floated tiny teal button" name = "bid_submit" type="submit"> + </button>
     </h2>
     <form method ="post">  
-      <table class="ui celled table">
+      <table class="ui celled table" id="skills">
         <thead>
           <th> Select </th>
           <th> Skill Name </th>
           <th> Skill Details </th>          
         </thead>
         <tbody>
-          <?php showTasks(); ?>  <!-- change to showSkills--> 
         </tbody>
       </table>        
       
@@ -430,16 +479,16 @@
       <button class ="ui right floated tiny teal button" name = "bid_submit" type="submit"> + </button>
     </h2>    
     <form method ="post">  
-      <table class="ui celled table">
+      <table class="ui celled table" id="bids">
         <thead>
           <th> Select </th>
+          <th> Task Id </th>
           <th> Taskee Email </th>
           <th> Tasker Email </th>
-          <th> Task Status </th>
+          <th> Bid Status </th>
           <th> Bid Date and Time </th>          
         </thead>
         <tbody>
-          <?php showTasks(); ?>  <!-- change to showBids-->
         </tbody>
       </table>        
       
@@ -463,7 +512,7 @@
 
       <br>
     </form>
-
+    </table>
   </div>
 </div>
 
