@@ -110,12 +110,14 @@
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/dimmer.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/table.css">  
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/label.css"> 
+  <link rel="stylesheet" type="text/css" href="semantic/dist/components/input.css"> 
 
   <script src="assets/jquery-3.3.1.min"></script>
   <script src="semantic/dist/components/transition.js"></script>
   <script src="semantic/dist/components/dropdown.js"></script>
   <script src="semantic/dist/components/modal.js"></script>
   <script src="semantic/dist/components/dimmer.js"></script>
+  <script src="semantic/dist/components/package.js"></script>
 
   <script>
     // performs sign out functionality.
@@ -218,6 +220,16 @@
       }
     }
 
+    .pagenum {
+       line-height: 3em;       
+    }
+
+    #number {
+      width: 4em;
+      text-align: center; 
+    }
+
+
   </style>
 </head>
 
@@ -266,7 +278,24 @@
         </tbody>
       </table>
       
-   
+      <div class="ui container">
+        <div align="center">
+          <div class="ui input focus">            
+            
+            <button class= "ui tiny compact button">
+              <i class= "caret left icon"></i>
+            </button> &ensp;
+          
+            <input type="text" placeholder="1" type="number" id="number">
+            &ensp; <div class="pagenum">of 50</div> &ensp;
+          
+            <button class ="ui tiny compact button">
+              <i class= "caret right icon"></i>
+            </button>        
+          </div>
+        </div> 
+      </div>
+
       <br>
     </form>
     <?php submitTask(); ?>
@@ -292,8 +321,27 @@
         <tbody>
           <?php showTasks(); ?>  <!-- change to showTaskers--> 
         </tbody>
-      </table>        
-        <br>
+      </table>
+
+      <div class="ui container">
+        <div align="center">
+          <div class="ui input focus">            
+            
+            <button class= "ui tiny compact button">
+              <i class= "caret left icon"></i>
+            </button> &ensp;
+          
+            <input type="text" placeholder="1" type="number" id="number">
+            &ensp; <div class="pagenum">of 50</div> &ensp;
+          
+            <button class ="ui tiny compact button">
+              <i class= "caret right icon"></i>
+            </button>        
+          </div>
+        </div> 
+      </div>
+
+      <br>
     </form>
 
     <h2>View/Manage Taskees
@@ -316,7 +364,26 @@
           <?php showTasks(); ?>  <!-- change to showTaskees--> 
         </tbody>
       </table>        
-        <br>
+      
+      <div class="ui container">
+        <div align="center">
+          <div class="ui input focus">            
+            
+            <button class= "ui tiny compact button">
+              <i class= "caret left icon"></i>
+            </button> &ensp;
+          
+            <input type="text" placeholder="1" type="number" id="number">
+            &ensp; <div class="pagenum">of 50</div> &ensp;
+          
+            <button class ="ui tiny compact button">
+              <i class= "caret right icon"></i>
+            </button>        
+          </div>
+        </div> 
+      </div>
+
+      <br>
     </form>
 
     <h2>View/Manage Skills
@@ -335,7 +402,26 @@
           <?php showTasks(); ?>  <!-- change to showSkills--> 
         </tbody>
       </table>        
-        <br>
+      
+      <div class="ui container">
+        <div align="center">
+          <div class="ui input focus">            
+            
+            <button class= "ui tiny compact button">
+              <i class= "caret left icon"></i>
+            </button> &ensp;
+          
+            <input type="text" placeholder="1" type="number" id="number">
+            &ensp; <div class="pagenum">of 50</div> &ensp;
+          
+            <button class ="ui tiny compact button">
+              <i class= "caret right icon"></i>
+            </button>        
+          </div>
+        </div> 
+      </div>
+
+      <br>
     </form>
 
     <h2>View/Manage Bids
@@ -356,7 +442,26 @@
           <?php showTasks(); ?>  <!-- change to showBids-->
         </tbody>
       </table>        
-        <br>
+      
+      <div class="ui container">
+        <div align="center">
+          <div class="ui input focus">            
+            
+            <button class= "ui tiny compact button">
+              <i class= "caret left icon"></i>
+            </button> &ensp;
+          
+            <input type="text" placeholder="1" type="number" id="number">
+            &ensp; <div class="pagenum">of 50</div> &ensp;
+          
+            <button class ="ui tiny compact button">
+              <i class= "caret right icon"></i>
+            </button>        
+          </div>
+        </div> 
+      </div>
+
+      <br>
     </form>
 
   </div>
