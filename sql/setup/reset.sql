@@ -11,7 +11,6 @@ DROP FUNCTION IF EXISTS getSkillsCursor;
 DROP FUNCTION IF EXISTS getBidsCursor;
 DROP FUNCTION IF EXISTS getTaskeesCursor;
 DROP FUNCTION IF EXISTS getTaskersCursor;
-
 DROP FUNCTION IF EXISTS getAvailableTasker(varchar, TIMESTAMP, TIMESTAMP);
 
 DROP SEQUENCE IF EXISTS idGen;
@@ -42,42 +41,42 @@ $$ LANGUAGE plpgsql;
 
 CREATE FUNCTION getTasksCursor(refcursor) RETURNS refcursor AS $$
 BEGIN
-	OPEN $1 FOR SELECT * FROM Tasks;
+	OPEN $1 SCROLL FOR SELECT * FROM Tasks;
     RETURN $1;
 END;
 $$ LANGUAGE plpgsql;
 
 CREATE FUNCTION getBidsCursor(refcursor) RETURNS refcursor AS $$
 BEGIN
-	OPEN $1 FOR SELECT * FROM Bids;
+	OPEN $1 SCROLL FOR SELECT * FROM Bids;
     RETURN $1;
 END;
 $$ LANGUAGE plpgsql;
 
 CREATE FUNCTION getHasSkillsCursor(refcursor) RETURNS refcursor AS $$
 BEGIN
-	OPEN $1 FOR SELECT * FROM HasSkills;
+	OPEN $1 SCROLL FOR SELECT * FROM HasSkills;
     RETURN $1;
 END;
 $$ LANGUAGE plpgsql;
 
 CREATE FUNCTION getSkillsCursor(refcursor) RETURNS refcursor AS $$
 BEGIN
-	OPEN $1 FOR SELECT * FROM Skills;
+	OPEN $1 SCROLL FOR SELECT * FROM Skills;
     RETURN $1;
 END;
 $$ LANGUAGE plpgsql;
 
 CREATE FUNCTION getTaskeesCursor(refcursor) RETURNS refcursor AS $$
 BEGIN
-	OPEN $1 FOR SELECT * FROM Taskees;
+	OPEN $1 SCROLL FOR SELECT * FROM Taskees;
     RETURN $1;
 END;
 $$ LANGUAGE plpgsql;
 
 CREATE FUNCTION getTaskersCursor(refcursor) RETURNS refcursor AS $$
 BEGIN
-	OPEN $1 FOR SELECT * FROM Taskers;
+	OPEN $1 SCROLL FOR SELECT * FROM Taskers;
     RETURN $1;
 END;
 $$ LANGUAGE plpgsql;
