@@ -118,6 +118,26 @@
   <script src="semantic/dist/components/dimmer.js"></script>
 
   <script>
+
+    var result = [];
+
+    function retrieveData(tableName, direction, offset) {
+      return $.ajax({ 
+        type: 'GET', 
+        url: '/demo/adminRetrieval.php', 
+        data: { table: tableName, dir: direction, off: offset}, 
+        dataType: 'json',
+        success: function (data) {
+          perform(data);
+        }
+      });
+    }
+    function perform(data) {
+      return data;
+    }
+
+    let retrievedData = retrieveData("tasks", "forward", 1);
+
     // performs sign out functionality.
     $(document).ready(function() {
       $('#signOut').click(function() {
@@ -128,6 +148,7 @@
           }
         });
       });
+
     })
   </script>
 
