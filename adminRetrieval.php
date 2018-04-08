@@ -59,9 +59,41 @@
     return (int) ceil(((float) $count[0]['count']) /  $GLOBALS['numRecordToRetrieve']);
   }
 
+  function deleteRecords($table, $records) {
+    $success = true;
+
+    $db = pg_connect("host=127.0.0.1 port=5432 dbname=project1 user=postgres password=1234") or die('Could not connect: ' . pg_last_error()); 
+    foreach($records as $record) {
+      $query = "DELETE FROM " . $table . " WHERE ";
+      if ($table == "tasks") {
+        $query = $query . "task_id = " . $record[0]; 
+      } else if ($table == "taskees") {
+        $query = $query . "email = '" . $record[0] . "'"; 
+      } else if ($table == "taskers") {
+        $query = $query . "email = '" . $record[0] . "'"; 
+      } else if ($table == "bids") {
+        $query = $query . "task_id = " . $record[0] . " AND taskeeEmail = '" . $record[1] . "' AND taskerEmail = '" . $record[2] . "'";
+      } else if ($table == "skills") {
+        $query = $query . "sname = '". $record[0] . "'";
+      }
+      $res = pg_query($db, $query);
+      if ($res == false) {
+        $success = false;
+      }
+    }
+
+    pg_close($db);
+    return $success;
+  }
+
   if ($_GET['func'] == "retrieve-data") {
     echo json_encode(retrieveData($_GET['table'], $_GET['dir'], $_GET['off']));
   } else if ($_GET['func'] == 'get-max-pages') {
     echo json_encode(getNumPages($_GET['table']));
+  } else if ($_GET['func'] == 'delete-records') {
+    $records = $_GET['arguments'];
+    $table = $_GET['table'];
+    $success = deleteRecords($table, $records);
+    echo json_encode($success);
   }
 ?>

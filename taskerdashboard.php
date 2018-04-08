@@ -10,7 +10,7 @@
     consoleLog('hi');
   }
 
-  redirectIfNot('taskee');
+  redirectIfNot('tasker');
   
   function showUser() {
     if (isLoggedIn()) {
@@ -65,7 +65,7 @@
     $(document).ready(function() {
       $('#signOut').click(function() {
         $.ajax({
-          url: '/demo/taskeedashboard.php?argument=signOut',
+          url: '/demo/taskerdashboard.php?argument=signOut',
           success: function(html){
             location.reload();
           }

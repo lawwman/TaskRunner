@@ -119,7 +119,34 @@
       } else {
         nextBtn.style.visibility = "visible";
       }
-      
+    }
+
+    function deleteData(tableName) {
+      let records = [];
+      let table = document.getElementById(tableName);
+      for (let i = 1; i < table.rows.length; i++) {
+        let checkbox = table.rows[i].cells[0].getElementsByTagName("input")[0];
+        if (checkbox.checked) {
+          let vals = table.rows[i].cells;
+          let list = [];
+          for (let j = 1; j < vals.length; j++) {
+            list.push(vals[j].innerHTML);
+          }
+          records.push(list);
+        }
+      }
+
+      if (records.length > 0) {
+        $.ajax({ 
+          type: 'GET', 
+          url: '/demo/adminRetrieval.php', 
+          data: { func: "delete-records", table: tableName, arguments: records}, 
+          dataType: 'json',
+          success: function (data) {
+            console.log(data);
+          }
+        });
+      }
     }
 
     function updateTable(tableName, direction) {
@@ -142,6 +169,27 @@
         dataType: 'json',
         success: function (data) {
           maxPages.innerHTML = data;
+          updateButtons(tableName);
+        }
+      });
+    }
+
+    function refreshTable(tableName) {
+      let pageNo = document.getElementById(tableName + "-page-no");
+      let maxPages = document.getElementById(tableName + "-max-pages");
+      $.ajax({ 
+        type: 'GET', 
+        url: '/demo/adminRetrieval.php', 
+        data: { func: "get-max-pages", table: tableName}, 
+        dataType: 'json',
+        success: function (data) {
+          maxPages.innerHTML = data;
+          if (data < pageNo.value) {
+            pageNo.value = data;
+          }
+          updateButtons(tableName);
+          clearTable(tableName);
+          retrieveData(tableName, "forward", pageNo.value - 1);
         }
       });
     }
@@ -170,7 +218,17 @@
         updateTable(idArr[0], "backward");
         updateButtons(idArr[0]);
       });
-      
+
+      $('.delete-btn').click(function() {
+        let idArr = this.id.split("-");
+        deleteData(idArr[0]);
+        if (deleteData) {
+          refreshTable(idArr[0]);
+        } else {
+          alert("deletion failed");
+        }
+      });
+
       let taskData = retrieveData("tasks", "forward", 0);
       let bidData = retrieveData("bids", "forward", 0);
       let taskeeData = retrieveData("taskees", "forward", 0);
@@ -181,12 +239,6 @@
       updateTableMaxPages("taskees");
       updateTableMaxPages("taskers");
       updateTableMaxPages("skills");
-      updateButtons("tasks");
-      updateButtons("bids");
-      updateButtons("taskees");
-      updateButtons("taskers");
-      updateButtons("skills");
-      console.log("hello java2");
     })
   </script>
 
@@ -321,9 +373,9 @@
   
   <div class="my_container">
     <h2>View/Manage Tasks
-      <button class ="ui right floated tiny teal button" name = "bid_submit" type="submit"> Edit Task </button>
-      <button class ="ui right floated tiny teal button" name = "bid_submit" type="submit"> – </button>          
-      <button class ="ui right floated tiny teal button" name = "bid_submit" type="submit"> + </button>   
+      <button class ="ui right floated tiny teal button edit-btn" id="tasks-edit"> Edit Task </button>
+      <button class ="ui right floated tiny teal button delete-btn" id="tasks-delete"> – </button>          
+      <button class ="ui right floated tiny teal button add-btn" id="tasks-add"> + </button>   
     </h2>               
 
     <table class="ui fixed single line celled table" id="tasks">
@@ -364,9 +416,9 @@
     <br>
 
     <h2>View/Manage Taskers
-      <button class ="ui right floated tiny teal button" name = "bid_submit" type="submit"> Edit User - Tasker </button>
-      <button class ="ui right floated tiny teal button" name = "bid_submit" type="submit"> – </button>          
-      <button class ="ui right floated tiny teal button" name = "bid_submit" type="submit"> + </button>
+    <button class ="ui right floated tiny teal button edit-btn" id="taskers-edit"> Edit Tasker </button>
+      <button class ="ui right floated tiny teal button delete-btn" id="taskers-delete"> – </button>          
+      <button class ="ui right floated tiny teal button add-btn" id="taskers-add"> + </button>   
     </h2>
     <table class="ui fixed single line celled table" id="taskers">
       <thead>
@@ -410,9 +462,9 @@
     <br>
 
     <h2>View/Manage Taskees
-      <button class ="ui right floated tiny teal button" name = "bid_submit" type="submit"> Edit User - Taskee </button>
-      <button class ="ui right floated tiny teal button" name = "bid_submit" type="submit"> – </button>          
-      <button class ="ui right floated tiny teal button" name = "bid_submit" type="submit"> + </button>
+      <button class ="ui right floated tiny teal button edit-btn" id="taskees-edit"> Edit Taskee </button>
+      <button class ="ui right floated tiny teal button delete-btn" id="taskees-delete"> – </button>          
+      <button class ="ui right floated tiny teal button add-btn" id="taskees-add"> + </button>   
     </h2> 
 
     <table class="ui fixed single line celled table" id="taskees">
@@ -455,9 +507,9 @@
     <br>
 
     <h2>View/Manage Skills
-      <button class ="ui right floated tiny teal button" name = "bid_submit" type="submit"> Edit Skill </button>
-      <button class ="ui right floated tiny teal button" name = "bid_submit" type="submit"> – </button>          
-      <button class ="ui right floated tiny teal button" name = "bid_submit" type="submit"> + </button>
+      <button class ="ui right floated tiny teal button edit-btn" id="skills-edit"> Edit Skill </button>
+      <button class ="ui right floated tiny teal button delete-btn" id="skills-delete"> – </button>          
+      <button class ="ui right floated tiny teal button add-btn" id="skills-add"> + </button>   
     </h2>
     <table class="ui fixed single line celled table" id="skills">
       <thead>
@@ -489,9 +541,9 @@
     <br>
 
     <h2>View/Manage Bids
-      <button class ="ui right floated tiny teal button" name = "bid_submit" type="submit"> Edit Bid </button>
-      <button class ="ui right floated tiny teal button" name = "bid_submit" type="submit"> – </button>          
-      <button class ="ui right floated tiny teal button" name = "bid_submit" type="submit"> + </button>
+      <button class ="ui right floated tiny teal button edit-btn" id="bids-edit"> Edit Bid </button>
+      <button class ="ui right floated tiny teal button delete-btn" id="bids-delete"> – </button>          
+      <button class ="ui right floated tiny teal button add-btn" id="bids-add"> + </button>   
     </h2>      
     <table class="ui fixed single line celled table" id="bids">
       <thead>
