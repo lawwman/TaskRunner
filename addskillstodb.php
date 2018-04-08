@@ -14,7 +14,7 @@
 			$stringVal = "skill has been created";
 	  		echo json_encode(array("abc" => $stringVal));
       	} else {
-      		$stringVal = "failed" . $skillname . $pitch . $prof . $rate;
+      		$stringVal = "failed";
 	  		echo json_encode(array("abc" => $stringVal));
       	}
 	}
