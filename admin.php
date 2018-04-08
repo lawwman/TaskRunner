@@ -83,13 +83,13 @@
       $.each(data, function(k,v) {
         let row = table.insertRow(1);
         let generatedRow = `
-          <td> 
+          <td title=> 
           <div class= 'ui checkbox'> 
             <input type = 'checkbox' name = 'checked[]' value='` + k + `'>
           </div>
           </td>`;
         $.each(v, function(attr,val) {
-          generatedRow = generatedRow + `<td>` + val + '</td>';
+          generatedRow = generatedRow + `<td title=` + val + `>` + val + '</td>';
         });
 
         row.innerHTML = generatedRow;
@@ -262,6 +262,17 @@
     .pagenum {
        line-height: 3em;       
     }
+
+    .number {
+      width: 4em;      
+    }
+    
+    input::placeholder{
+      text-align: center; 
+    }
+
+
+
   </style>
 </head>
 
@@ -292,7 +303,7 @@
       <button class ="ui right floated tiny teal button" name = "bid_submit" type="submit"> + </button>   
     </h2>               
 
-    <table class="ui celled table" id="tasks">
+    <table class="ui fixed single line celled table" id="tasks">
       <thead>
         <th> Select </th>        
         <th> Task Id </th>
@@ -334,7 +345,7 @@
       <button class ="ui right floated tiny teal button" name = "bid_submit" type="submit"> – </button>          
       <button class ="ui right floated tiny teal button" name = "bid_submit" type="submit"> + </button>
     </h2>
-    <table class="ui celled table" id="taskers">
+    <table class="ui fixed single line celled table" id="taskers">
       <thead>
         <th> Select </th>
         <th> Tasker Email </th>
@@ -381,7 +392,7 @@
       <button class ="ui right floated tiny teal button" name = "bid_submit" type="submit"> + </button>
     </h2> 
 
-    <table class="ui celled table" id="taskees">
+    <table class="ui fixed single line celled table" id="taskees">
       <thead>
         <th> Select </th>
         <th> Taskee Email </th>
@@ -425,7 +436,7 @@
       <button class ="ui right floated tiny teal button" name = "bid_submit" type="submit"> – </button>          
       <button class ="ui right floated tiny teal button" name = "bid_submit" type="submit"> + </button>
     </h2>
-    <table class="ui celled table" id="skills">
+    <table class="ui fixed single line celled table" id="skills">
       <thead>
         <th> Select </th>
         <th> Skill Name </th>
@@ -459,7 +470,7 @@
       <button class ="ui right floated tiny teal button" name = "bid_submit" type="submit"> – </button>          
       <button class ="ui right floated tiny teal button" name = "bid_submit" type="submit"> + </button>
     </h2>      
-    <table class="ui celled table" id="bids">
+    <table class="ui fixed single line celled table" id="bids">
       <thead>
         <th> Select </th>
         <th> Task Id </th>
@@ -493,8 +504,6 @@
     </table>
   </div>
 </div>
-
-
 
   <!-- Footer -->
   <div class="ui inverted vertical footer segment">
