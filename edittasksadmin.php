@@ -382,7 +382,7 @@
           dataType: 'json',
           data: {admin: isAdmin, tasker: taskerJSON, start: startJSON, end: endJSON, ttype: ttypeJSON, details: detailsJSON, loc: locJSON},
           success: function(data){
-            // console.log('sent');
+            alert(data.abc);
             window.location.replace("/demo/admin.php");
             console.log(data.abc);  
           }
