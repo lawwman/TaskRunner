@@ -12,7 +12,7 @@
   function showUser() {
     if (isLoggedIn()) {
       echo '
-      <div class="ui dropdown inverted button">Hello, '. $_SESSION['user'] . '</div>
+      <div class="ui dropdown inverted button">Hello, '. $_SESSION['userName'] . '</div>
       <div class="ui dropdown inverted button" id="signOut" formaction="/demo/signup.php">Sign Out</div>
       ';
     } else {
@@ -607,7 +607,6 @@
     <br>
 
     <h2>View/Manage Bids
-      <button class ="ui right floated tiny teal button edit-btn" id="bids-edit"> Edit Bid </button>
       <button class ="ui right floated tiny teal button delete-btn" id="bids-delete"> – </button>          
       <button class ="ui right floated tiny teal button add-btn" id="bids-add"> + </button>   
     </h2>      
