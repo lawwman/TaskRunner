@@ -416,12 +416,8 @@
             Submit
           </button> 
         </form>
-      
-
-
-      
       </div>
-    </div> <br/>
+    </div>
 
   <!-- Footer -->
   <div class="ui inverted vertical footer segment">
