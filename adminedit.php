@@ -9,10 +9,13 @@
 
 		if ($table == "tasks") {
 			$_SESSION['taskid'] = $records[0][0];
-			$success .= " redirect-tasks-edit";
+			$success .= "redirect-tasks-edit";
 		} else if ($table == "taskees") {
-			$success .= " redirect-taskees-edit";
+			$success .= "redirect-taskees-edit";
 			$_SESSION['taskeeemail_admin_use'] = $records[0][0];
+		} else if ($table == "taskers") {
+			$success .= "redirect-taskers-edit";
+			$_SESSION['taskeremail_admin_use'] = $records[0][0];
 		}
 	}
 	else if ($_GET['func'] == 'isAdmin') {

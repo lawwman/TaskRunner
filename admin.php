@@ -74,6 +74,9 @@
       } else if (redirect[1] == "taskees") {
         console.log(redirect[1]);
         window.location.replace("/demo/edittaskeeprofile.php");
+      } else if (redirect[1] == "taskers") {
+        console.log(redirect[1]);
+        window.location.replace("/demo/edittaskerprofile.php");
       }
     }
 
