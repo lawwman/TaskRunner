@@ -71,6 +71,9 @@
       if (redirect[1] == "tasks") {
         console.log(redirect[1]);
         window.location.replace("/demo/edittasksadmin.php");
+      } else if (redirect[1] == "taskees") {
+        console.log(redirect[1]);
+        window.location.replace("/demo/edittaskeeprofile.php");
       }
     }
 

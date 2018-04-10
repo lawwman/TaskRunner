@@ -33,14 +33,18 @@
    * Redirects user if does nto fulfil $pageCondition
    */
   function redirectIfNot($pageCondition) {
-    // if user is not logged in and the page requires login
-    if (!is_null($pageCondition) && !isLoggedIn()) {
-      if ($_SESSION['userType'] == 'taskee') {
-        header('Location: /demo/taskeelogin.php');
-      } else if ($_SESSION['userType'] == 'tasker') {
-        header('Location: /demo/taskerlogin.php');
-      } else {
-        header('Location: /demo/index.php');
+    if ($_SESSION['isAdmin'] == "T") {
+      //do nothing, admin have full access
+    } else {
+      // if user is not logged in and the page requires login
+      if (!is_null($pageCondition) && !isLoggedIn()) {
+        if ($_SESSION['userType'] == 'taskee') {
+          header('Location: /demo/taskeelogin.php');
+        } else if ($_SESSION['userType'] == 'tasker') {
+          header('Location: /demo/taskerlogin.php');
+        } else {
+          header('Location: /demo/index.php');
+        }
       }
     }
 
