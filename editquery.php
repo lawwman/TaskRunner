@@ -1,5 +1,6 @@
 <?php 
   require('session.php');
+  require('sanitize.php');
   $stringVal = "";
 
 $startJson=$_POST["start"];
@@ -16,6 +17,7 @@ $locUpdate = str_replace('"','',$locUpdateJson);
 
 $detailsUpdateJson = $_POST["details"];
 $detailsUpdate = str_replace('"','',$detailsUpdateJson);
+$detailsUpdate = getValidString($detailsUpdate);
 
 $taskid = $_SESSION['taskid'];
 

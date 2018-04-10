@@ -5,6 +5,7 @@
 <?php
   require('debugging.php');
   require('session.php');
+  require('sanitize.php');
 
   if ($_GET["argument"]=='signOut'){
     logout();
@@ -40,8 +41,8 @@
 
   if (isset($_POST['saveContact'])) {
     $db = pg_connect("host=127.0.0.1 port=5432 dbname=project1 user=postgres password=1234") or die('Could not connect: ' . pg_last_error());
-    $phone = $_POST['phone'];
-    $zipcode = $_POST['zipcode'];
+    $phone = getValidNumeral($_POST['phone']);
+    $zipcode = getValidNumeral($_POST['zipcode']);
     $updateQuery = "UPDATE Taskers SET (phone, zipcode) = ('$phone', '$zipcode') WHERE email = '" . $emailToEdit . "'";
     $result = pg_query($db, $updateQuery);
     if ($result) {
@@ -77,8 +78,8 @@
 
   if (isset($_POST['saveBilling'])) {
     $db = pg_connect("host=127.0.0.1 port=5432 dbname=project1 user=postgres password=1234") or die('Could not connect: ' . pg_last_error());
-    $creditNum = $_POST['creditNum'];
-    $creditSecurity = $_POST['creditSecurity'];
+    $creditNum = getValidNumeral($_POST['creditNum']);
+    $creditSecurity = getValidNumeral($_POST['creditSecurity']);
     $creditExpiry = date($_POST['expiryYear'] . '-' . $_POST['expiryMonth'] . '-01');
     $updateQuery = "UPDATE Taskers SET (creditnum, creditsecurity, creditexpiry) = ('$creditNum', '$creditSecurity', '$creditExpiry') WHERE email = '" . $emailToEdit . "'";
     $result = pg_query($db, $updateQuery);
