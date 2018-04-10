@@ -331,9 +331,9 @@
       url: '/demo/suggestskillsemantic.php',
       type: 'GET',
       success: function(data){
-        var test = JSON.parse(data);
-        test =  test.replace(/(^\.+|\.+$)/mg, '');
-        test = JSON.parse(test);
+        var availableTags = JSON.parse(data);
+        availableTags =  availableTags.replace(/(^\.+|\.+$)/mg, '');
+        availableTags = JSON.parse(availableTags);
         $('.ui.search.task').search({
           source: availableTags
         });
