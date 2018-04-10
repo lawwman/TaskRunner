@@ -5,6 +5,7 @@
 <?php
   require('debugging.php');
   require('session.php');
+  require('sanitize.php');
 
   if ($_GET["argument"]=='signOut'){
     logout();
@@ -24,8 +25,12 @@
       <a class='ui inverted button' href='/demo/taskersignup.php'>Become a Tasker</a>";
     }
   }
+  $emailToEdit = $_SESSION['userEmail'];
+  if ($_SESSION['isAdmin'] == "t") {
+    $emailToEdit = $_SESSION['taskeremail_admin_use'];
+  }
   $db = pg_connect("host=127.0.0.1 port=5432 dbname=project1 user=postgres password=1234") or die('Could not connect: ' . pg_last_error());
-  $taskerInfo = pg_query($db, "SELECT * FROM Taskers WHERE email = '" . $_SESSION['userEmail'] . "'");
+  $taskerInfo = pg_query($db, "SELECT * FROM Taskers WHERE email = '" . $emailToEdit . "'");
   if ($taskerInfo) {
     $displayPhone = pg_fetch_result($taskerInfo, 0, 5);
     $displayZipcode = pg_fetch_result($taskerInfo, 0, 11);
@@ -36,9 +41,11 @@
 
   if (isset($_POST['saveContact'])) {
     $db = pg_connect("host=127.0.0.1 port=5432 dbname=project1 user=postgres password=1234") or die('Could not connect: ' . pg_last_error());
-    $phone = $_POST['phone'];
-    $zipcode = $_POST['zipcode'];
-    $updateQuery = "UPDATE Taskers SET (phone, zipcode) = ('$phone', '$zipcode') WHERE email = '" . $_SESSION['userEmail'] . "'";
+    $phone = getValidNumeral($_POST['phone']);
+    $zipcode = getValidNumeral($_POST['zipcode']);
+    $streetad = getValidString($_POST['streetad']);
+    $unitnum = getValidString($_POST['unitnum']);
+    $updateQuery = "UPDATE Taskers SET (phone, zipcode, streetaddr, unitnum) = ('$phone', '$zipcode', '$streetad', '$unitnum') WHERE email = '" . $emailToEdit . "'";
     $result = pg_query($db, $updateQuery);
     if ($result) {
       consoleLog("contact and address updated successfully.");
@@ -51,13 +58,13 @@
 
   if (isset($_POST['savePassword'])) {
     $db = pg_connect("host=127.0.0.1 port=5432 dbname=project1 user=postgres password=1234") or die('Could not connect: ' . pg_last_error());
-    $taskerInfo = pg_query($db, "SELECT * FROM Taskers WHERE email = '" . $_SESSION['userEmail'] . "'");
+    $taskerInfo = pg_query($db, "SELECT * FROM Taskers WHERE email = '" . $emailToEdit . "'");
     $oldHash = pg_fetch_result($taskerInfo, 0, 3);
     $oldpw = $_POST['oldpw'];
     if (password_verify($oldpw, $oldHash)) {
       consoleLog("password matches");
       $newpw = password_hash($_POST['newpw'], PASSWORD_DEFAULT); 
-      $updateQuery = "UPDATE Taskers SET pword = '$newpw' WHERE email = '" . $_SESSION['userEmail'] . "'";
+      $updateQuery = "UPDATE Taskers SET pword = '$newpw' WHERE email = '" . $emailToEdit . "'";
       $result = pg_query($db, $updateQuery);
       if ($result) {
         consoleLog("password updated successfully.");
@@ -73,10 +80,10 @@
 
   if (isset($_POST['saveBilling'])) {
     $db = pg_connect("host=127.0.0.1 port=5432 dbname=project1 user=postgres password=1234") or die('Could not connect: ' . pg_last_error());
-    $creditNum = $_POST['creditNum'];
-    $creditSecurity = $_POST['creditSecurity'];
+    $creditNum = getValidNumeral($_POST['creditNum']);
+    $creditSecurity = getValidNumeral($_POST['creditSecurity']);
     $creditExpiry = date($_POST['expiryYear'] . '-' . $_POST['expiryMonth'] . '-01');
-    $updateQuery = "UPDATE Taskers SET (creditnum, creditsecurity, creditexpiry) = ('$creditNum', '$creditSecurity', '$creditExpiry') WHERE email = '" . $_SESSION['userEmail'] . "'";
+    $updateQuery = "UPDATE Taskers SET (creditnum, creditsecurity, creditexpiry) = ('$creditNum', '$creditSecurity', '$creditExpiry') WHERE email = '" . $emailToEdit . "'";
     $result = pg_query($db, $updateQuery);
     if ($result) {
       consoleLog("card info updated successfully.");
@@ -147,6 +154,25 @@
       });
     });
    });
+
+  $(document).ready(function() {
+    $.ajax({
+      type: "GET",
+      url: '/demo/adminedit.php',
+      data: { func: "isAdmin"},
+      dataType: 'json',
+      success: function(data) {
+        if (data == "Yes") {
+          console.log("is admin");
+          $('#addBackToAdminPage').append('<button class="ui blue primary button" id="backToAdmin" >back to admin page</button> ');
+          $('#backToAdmin').click(function() {
+            window.location.replace("/demo/admin.php");
+          })
+        }
+      }
+    })
+  });
+
   $(document).ready(function () {
     $('.menu .item').tab();
   })
@@ -384,6 +410,8 @@
         <input type="submit" name="saveBilling" value="Save Changes" class="ui button primary" tabindex="0" />
         <div class="ui error message"></div>
       </form>
+    </div>
+    <div id="addBackToAdminPage">
     </div>
   </div>
 </body>

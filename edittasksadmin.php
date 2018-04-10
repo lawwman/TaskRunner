@@ -52,7 +52,14 @@
                   <textarea id='task_details_updated' rows='2'>$row[task_details]</textarea> 
                 </div>
               </div>
-              
+
+              <div class = 'field'>
+                <label>Tasker </label>
+                <div class='field'>
+                  <textarea id='tasker' rows='2'>$row[taskeremail]</textarea> 
+                </div>
+              </div>
+
               <div class = 'field'>
                 <label>Task Location </label>
                 <div class='ui search loc'>
@@ -178,13 +185,11 @@
           }
         });
       });
-      $('#editProfile').click(function() {
-        window.location.replace('/demo/edittaskeeprofile.php');
-      });
     })
   </script>
 
   <script>
+    var availableTags = getListUI(); //getList() function is a function from "list.js". Returns an array of string
     var locations = getLocList(); //getLocList() function is a function from "locationlist.js". Returns an array of string
     var dateInputStart;
     var timeInputStart;
@@ -197,6 +202,8 @@
     var detailsJSON;
     var loc;
     var locJSON;
+    var tasker;
+    var taskerJSON;
 
     var compareFlag = false;
     var ErrorShowing = false;
@@ -239,6 +246,12 @@
       detailsJSON = JSON.stringify(details);
       loc = $('#locauto').val();
       locJSON = JSON.stringify(loc);
+      tasker = $('#tasker').val();
+      if (tasker == "") {
+        tasker = "not set";
+      }
+      console.log(tasker);
+      taskerJSON = JSON.stringify(tasker);
     }
 
     function convertDatesToJSON() {
@@ -327,21 +340,6 @@
     })
 
     $(document).ready(function() {
-      $.ajax({
-      url: '/demo/suggestskillsemantic.php',
-      type: 'GET',
-      success: function(data){
-        var availableTags = JSON.parse(data);
-        availableTags =  availableTags.replace(/(^\.+|\.+$)/mg, '');
-        availableTags = JSON.parse(availableTags);
-        $('.ui.search.task').search({
-          source: availableTags
-        });
-      }
-      });
-    })
-
-    $(document).ready(function() {
       $('#calendarDateStart').calendar({
         type: 'date'
       });
@@ -362,35 +360,34 @@
         disableMinute: true
       });
 
+      $('.ui.search.task').search({
+        source: availableTags
+      });
+
       $('.ui.search.loc').search({
         source: locations
       });
 
 
       $('#editSubmit').click(function() {
+        event.preventDefault();
         convertFieldsToJSON();
         convertDatesToJSON();
         validateDate();
+        var isAdmin = "isAdmin";
 
          $.ajax({
           url: '/demo/editquery.php',
           type: 'POST',
           dataType: 'json',
-          data: {start: startJSON, end: endJSON, ttype: ttypeJSON, details: detailsJSON, loc: locJSON},
+          data: {admin: isAdmin, tasker: taskerJSON, start: startJSON, end: endJSON, ttype: ttypeJSON, details: detailsJSON, loc: locJSON},
           success: function(data){
-            // console.log('sent');
-            window.location.replace("/demo/viewcreatedtasks.php");
+            alert(data.abc);
+            window.location.replace("/demo/admin.php");
             console.log(data.abc);  
           }
         });
       });
-      
-      $('#testy').click(function() {
-        convertDatesToJSON();
-        validateDate();
-        console.log($('#taskauto').val());
-        console.log($('#locauto').val());
-      })
 
     });
   </script>
@@ -413,8 +410,6 @@
             <span class = "text">My Tasks</span>
             <i class = "dropdown icon"></i>
             <div class = "menu">
-              <a class ="item" href="/demo/viewtasks.php"> View My Tasks</a>
-              <a class ="item" href="/demo/addtasks.php"> Add a Task</a>
             </div>
           </div>          
           <a class="item" href="/demo/viewbids.php">My Bids</a>          

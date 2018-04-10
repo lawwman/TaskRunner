@@ -12,7 +12,7 @@
   function showUser() {
     if (isLoggedIn()) {
       echo '
-      <div class="ui dropdown inverted button">Hello, '. $_SESSION['user'] . '</div>
+      <div class="ui dropdown inverted button">Hello, '. $_SESSION['userName'] . '</div>
       <div class="ui dropdown inverted button" id="signOut" formaction="/demo/signup.php">Sign Out</div>
       ';
     } else {
@@ -65,6 +65,20 @@
   <script>
 
     var result = [];
+
+    function redirectPage(data) {
+      var redirect = data.split('-');
+      if (redirect[1] == "tasks") {
+        console.log(redirect[1]);
+        window.location.replace("/demo/edittasksadmin.php");
+      } else if (redirect[1] == "taskees") {
+        console.log(redirect[1]);
+        window.location.replace("/demo/edittaskeeprofile.php");
+      } else if (redirect[1] == "taskers") {
+        console.log(redirect[1]);
+        window.location.replace("/demo/edittaskerprofile.php");
+      }
+    }
 
     function retrieveData(tableName, direction, offset) {
       return $.ajax({ 
@@ -148,6 +162,40 @@
         });
       }
     }
+
+    //edits the first task that was checked in the check box
+    function editData(tableName) {
+      let records = [];
+      let table = document.getElementById(tableName);
+      for (let i = 1; i < table.rows.length; i++) {
+        let checkbox = table.rows[i].cells[0].getElementsByTagName("input")[0];
+        if (checkbox.checked) {
+          let vals = table.rows[i].cells;
+          let list = [];
+          for (let j = 1; j < vals.length; j++) {
+            list.push(vals[j].innerHTML);
+          }
+          records.push(list);
+          break; //Only want the first tuple that was checked
+        }
+      }
+
+      if (records.length == 1) {
+        $.ajax({ 
+          type: 'GET', 
+          url: '/demo/adminedit.php', 
+          data: { func: "edit-records", table: tableName, arguments: records}, 
+          dataType: 'json',
+          success: function (data) {
+            console.log(data);
+            redirectPage(data);
+          }
+        });
+      }
+    }
+
+
+
 
     function updateTable(tableName, direction) {
       clearTable(tableName);
@@ -233,6 +281,17 @@
           refreshTable(idArr[0]);
         } else {
           alert("deletion failed");
+        }
+      });
+
+
+      $('.edit-btn').click(function() {
+        let idArr = this.id.split("-");
+        editData(idArr[0]);
+        if (editData) {
+          refreshTable(idArr[0]);
+        } else {
+          alert("edit failed");
         }
       });
 
@@ -548,7 +607,6 @@
     <br>
 
     <h2>View/Manage Bids
-      <button class ="ui right floated tiny teal button edit-btn" id="bids-edit"> Edit Bid </button>
       <button class ="ui right floated tiny teal button delete-btn" id="bids-delete"> – </button>          
       <button class ="ui right floated tiny teal button add-btn" id="bids-add"> + </button>   
     </h2>      

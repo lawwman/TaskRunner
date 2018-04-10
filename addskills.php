@@ -25,6 +25,14 @@
       <a class='ui inverted button' href='/demo/taskersignup.php'>Become a Tasker</a>";
     }
   }
+
+  function showSkills() {
+    $db = pg_connect("host=127.0.0.1 port=5432 dbname=project1 user=postgres password=1234"); 
+    $result = pg_query($db, "SELECT * FROM hasSkills WHERE temail = '" .$_SESSION['userEmail']."'");
+    while ($row = pg_fetch_assoc($result)) {
+      echo '<div class="item"><div class="ui small image"><img src="/demo/skillpic.png"></div><div class="content"><div class="header">' . $row['sname'] . '</div><div class="meta"><span>Hourly rate: ' .$row['hrate']. '</span><span>Proficiency: '.$row['proflevel']. '</span></div><div class="description"><p>' .$row['pitch'].'</p></div><div class="extra"><div class="ui right floated red button removeBtn"><input type="hidden" value="'.$row['sname'].'" class="hideTask">remove skill<i class="right chevron icon"></i></div></div></div></div>';
+  }
+  }
   
 ?>
 
@@ -94,7 +102,28 @@
 
     $(document).ready(function() {
       $('#toggleInput').hide();
-    })
+    });
+
+
+   $(document).ready(function() {
+
+      $('.removeBtn').click(function() {
+        console.log($(this).find('.hideTask').val());
+        var skillToRemove = $(this).find('.hideTask').val();
+        var item = $(this).parents('.item');
+        item.remove();
+        $.ajax({
+          url: '/demo/removeskillsfromdb.php',
+          type: 'POST',
+          data: { skill : JSON.stringify(skillToRemove) },
+          dataType: 'json',
+          success: function(data) {
+            console.log(data.abc);
+          }
+        });
+
+      });
+   });
   </script>
 
     <!-- Following script block shows how to get implement autocomplete with suggestions from a local js file-->
@@ -114,10 +143,14 @@
     var profflag = false;
 
    $(document).ready(function() {
-      $('#suggestionFromLocalSource').autocomplete({
-        source: availableTags,
 
-        //when an option is selected
+    var suggestions;
+    //used ajax to get values back from php file.
+    $.ajax({ type: 'GET', url: "suggestSkill.php", success: function(data) {
+      suggestions = JSON.parse(data);
+      $('#suggestionFromLocalSource').autocomplete({
+        source: suggestions,
+          //when an option is selected
         select: function(select, ui) {
           selectedSkill = ui.item.label;
           console.log(selectedSkill);
@@ -125,6 +158,7 @@
           $('#toggleSelectInput').slideUp(1000);
         }
       });
+    }});
       // do not submit form. Manually insert link.
     $('#localForm').on('submit', function(){
       event.preventDefault();
@@ -394,6 +428,7 @@
   <div class="ui middle aligned center aligned grid inverted">
     <br><br>
      <div class="ui divided items" id="skillsList">
+      <?php showSkills() ?>
     </div>
   </div>
 
