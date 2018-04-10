@@ -1,5 +1,5 @@
 <?php
-	require('debugging.php');
+	//require('debugging.php');
 
 	function getSanitizedEmail($email) {
 		return filter_var($email, FILTER_SANITIZE_EMAIL);

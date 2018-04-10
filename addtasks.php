@@ -68,7 +68,6 @@
   <script src="assets/jquery-ui/jquery-ui.min.js"></script>
 
   <!-- list.js is a js file that stores a list of suggestions for the autocomplete function. Needed only if suggestions are from a local source-->
-  <script src="list.js"></script>
   <script src="locationlist.js"></script>
 
   <style type="text/css">
@@ -92,8 +91,6 @@
 
   <!-- Following script block shows how to get implement autocomplete with suggestions from a local js file-->
   <script>
-
-    var availableTags = getList(); //getList() function is a function from "list.js". Returns an array of string
     var locations = getLocList(); //getLocList() function is a function from "locationlist.js". Returns an array of string
     var selectedSkill = ""; //To store the selected options
     var detailsOfTask = ""; //To store the selected options
@@ -105,15 +102,19 @@
     var validateLocation = false;
 
    $(document).ready(function() {
-      $('#suggestionForSkills').autocomplete({
-        source: availableTags,
-
-        //when an option is selected
-        select: function(select, ui) {
-          var label = ui.item.label;
-          selectedSkill = label;
-        }
-      });
+      var suggestions;
+      //used ajax to get values back from php file.
+      $.ajax({ type: 'GET', url: "suggestSkill.php", success: function(data) {
+        suggestions = JSON.parse(data);
+        $('#suggestionForSkills').autocomplete({
+          source: suggestions,
+          //when an option is selected
+          select: function(select, ui) {
+            var label = ui.item.label;
+            selectedSkill = label;
+          }       
+        });
+      }});
       // do not submit form. Manually insert link.
     $('#localSkillsForm').on('submit', function(){
       event.preventDefault();
