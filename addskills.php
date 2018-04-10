@@ -114,10 +114,14 @@
     var profflag = false;
 
    $(document).ready(function() {
-      $('#suggestionFromLocalSource').autocomplete({
-        source: availableTags,
 
-        //when an option is selected
+    var suggestions;
+    //used ajax to get values back from php file.
+    $.ajax({ type: 'GET', url: "suggestSkill.php", success: function(data) {
+      suggestions = JSON.parse(data);
+      $('#suggestionFromLocalSource').autocomplete({
+        source: suggestions,
+          //when an option is selected
         select: function(select, ui) {
           selectedSkill = ui.item.label;
           console.log(selectedSkill);
@@ -125,6 +129,7 @@
           $('#toggleSelectInput').slideUp(1000);
         }
       });
+    }});
       // do not submit form. Manually insert link.
     $('#localForm').on('submit', function(){
       event.preventDefault();

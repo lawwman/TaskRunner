@@ -185,7 +185,6 @@
   </script>
 
   <script>
-    var availableTags = getListUI(); //getList() function is a function from "list.js". Returns an array of string
     var locations = getLocList(); //getLocList() function is a function from "locationlist.js". Returns an array of string
     var dateInputStart;
     var timeInputStart;
@@ -328,6 +327,21 @@
     })
 
     $(document).ready(function() {
+      $.ajax({
+      url: '/demo/suggestskillsemantic.php',
+      type: 'GET',
+      success: function(data){
+        var test = JSON.parse(data);
+        test =  test.replace(/(^\.+|\.+$)/mg, '');
+        test = JSON.parse(test);
+        $('.ui.search.task').search({
+          source: availableTags
+        });
+      }
+      });
+    })
+
+    $(document).ready(function() {
       $('#calendarDateStart').calendar({
         type: 'date'
       });
@@ -346,10 +360,6 @@
         type: 'time',
         ampm: false,
         disableMinute: true
-      });
-
-      $('.ui.search.task').search({
-        source: availableTags
       });
 
       $('.ui.search.loc').search({
