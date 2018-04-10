@@ -43,7 +43,9 @@
     $db = pg_connect("host=127.0.0.1 port=5432 dbname=project1 user=postgres password=1234") or die('Could not connect: ' . pg_last_error());
     $phone = getValidNumeral($_POST['phone']);
     $zipcode = getValidNumeral($_POST['zipcode']);
-    $updateQuery = "UPDATE Taskers SET (phone, zipcode) = ('$phone', '$zipcode') WHERE email = '" . $emailToEdit . "'";
+    $streetad = getValidString($_POST['streetad']);
+    $unitnum = getValidString($_POST['unitnum']);
+    $updateQuery = "UPDATE Taskers SET (phone, zipcode, streetaddr, unitnum) = ('$phone', '$zipcode', '$streetad', '$unitnum') WHERE email = '" . $emailToEdit . "'";
     $result = pg_query($db, $updateQuery);
     if ($result) {
       consoleLog("contact and address updated successfully.");
