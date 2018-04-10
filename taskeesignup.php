@@ -45,8 +45,8 @@
       if ($result) {
         consoleLog($firstName);
         $taskee = 'taskee';
-        $isAdmin = pg_query($db, "SELECT isAdmin FROM Taskers WHERE email='$email'");        
-        $isStaff = pg_query($db, "SELECT isStaff FROM Taskers WHERE email='$email'");
+        $isAdmin = pg_query($db, "SELECT isAdmin FROM Taskees WHERE email='$email'");        
+        $isStaff = pg_query($db, "SELECT isStaff FROM Taskees WHERE email='$email'");
         login($firstName, $taskee, $email, $isAdmin, $isStaff);
         header('Location: /demo/index.php');
       }     
