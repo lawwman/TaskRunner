@@ -33,7 +33,7 @@
    * Redirects user if does nto fulfil $pageCondition
    */
   function redirectIfNot($pageCondition) {
-    if ($_SESSION['isAdmin'] == "T") {
+    if ($_SESSION['isAdmin'] == "t") {
       //do nothing, admin have full access
     } else {
       // if user is not logged in and the page requires login
