@@ -190,6 +190,13 @@
           updateButtons(tableName);
           clearTable(tableName);
           retrieveData(tableName, "forward", pageNo.value - 1);
+
+          if (tableName == "tasks") {
+            refreshTable("bids");
+          } else if (tableName == "taskers" || tableName == "taskees" || tableName == "skills") {
+            refreshTable("tasks");
+            refreshTable("bids");
+          }
         }
       });
     }
