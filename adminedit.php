@@ -8,10 +8,13 @@
 
 		if ($table == "tasks") {
 			$_SESSION['taskid'] = $records[0][0];
-			$success = "set taskid,";
+			$success .= " redirect-tasks-edit";
+		} else if ($table == "taskees") {
+			$success .= " redirect-taskees-edit";
+			
 		}
 
-		$success .= " redirect-tasks-edit";
+
 
 		echo json_encode($success);
 	}
