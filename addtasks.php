@@ -101,7 +101,7 @@
     var validateTaskDetail = false;
     var validateLocation = false;
 
-   $(document).ready(function() {
+    $(document).ready(function() {
       var suggestions;
       //used ajax to get values back from php file.
       $.ajax({ type: 'GET', url: "suggestSkill.php", success: function(data) {
@@ -116,17 +116,17 @@
         });
       }});
       // do not submit form. Manually insert link.
-    $('#localSkillsForm').on('submit', function(){
-      event.preventDefault();
-      if (selectedSkill == "" && !validateTask) {
-        $('#skillsValidation').append('<div class="ui pointing red basic label"><p>Please select an option</p></div>');
-        validateTask = true;
-      }
-      return false;
+      $('#localSkillsForm').on('submit', function(){
+        event.preventDefault();
+        if (selectedSkill == "" && !validateTask) {
+          $('#skillsValidation').append('<div class="ui pointing red basic label"><p>Please select an option</p></div>');
+          validateTask = true;
+        }
+        return false;
       });
     });
 
-   $(document).ready(function() {
+    $(document).ready(function() {
       $('#suggestionForLocation').autocomplete({
         source: locations,
 
@@ -137,13 +137,13 @@
         }
       });
       // do not submit form. Manually insert link.
-    $('#localLocationForm').on('submit', function(){
-      event.preventDefault();
-      if (selectedLoc == "" && !validateLocation) {
-        $('#locationValidation').append('<div class="ui pointing red basic label"><p>Please select an option</p></div>');
-        validateLocation = true;
-      }
-      return false;
+      $('#localLocationForm').on('submit', function(){
+        event.preventDefault();
+        if (selectedLoc == "" && !validateLocation) {
+          $('#locationValidation').append('<div class="ui pointing red basic label"><p>Please select an option</p></div>');
+          validateLocation = true;
+        }
+        return false;
       });
     });
 
