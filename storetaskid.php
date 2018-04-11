@@ -5,4 +5,8 @@
 		$_SESSION['tasktype'] = $_POST['tasktype'];
 		echo json_encode(array("abc" => $_POST['taskid']));
 	}
+	if(isset($_POST['taskeremail'])){
+		$_SESSION['taskeremail'] = $_POST['taskeremail'];
+		echo json_encode(array("abc" => $_POST['taskeremail']));
+	}
 ?>

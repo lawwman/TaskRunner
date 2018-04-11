@@ -50,8 +50,12 @@
         $tasker = 'tasker';
         $isAdmin = pg_query($db, "SELECT isAdmin FROM Taskers WHERE email='$email'");        
         $isStaff = pg_query($db, "SELECT isStaff FROM Taskers WHERE email='$email'");
-        login($firstName, $tasker, $email, $isAdmin, $isStaff);        
-        header('Location: /demo/taskerdashboard.php');
+        if($_SESSION['isAdmin'] == 't'){
+          header('Location: /demo/admin.php');
+        } else {
+          login($firstName, $tasker, $email, $isAdmin, $isStaff);        
+          header('Location: /demo/taskerdashboard.php');
+        }
       }     
     }
   }

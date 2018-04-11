@@ -22,7 +22,11 @@
 
       if (password_verify($password, $hash)) {
         login($firstName, 'taskee', $email, $row[3], $row[4]);
-        header('Location: /demo/taskeedashboard.php');      
+        if($row[3] == 't'){
+          header('Location: /demo/admin.php');  
+        } else {
+          header('Location: /demo/taskeedashboard.php');  
+          }    
       } else {        
         echo '<script language="javascript">';
         echo 'alert("Login failed. Please re-enter your details.")';   
