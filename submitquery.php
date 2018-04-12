@@ -1,5 +1,6 @@
 <?php 
 	require('session.php');
+	require('sanitize.php');
 	$options;
 	$details;
 	$locs;
@@ -24,6 +25,11 @@
 	$date=json_decode($_POST["date"]);
 	$endDate=json_decode($_POST["endDate"]);
 
+	if($_SESSION['isAdmin'] =='t') {
+		$taskeeemail = json_decode($_POST["taskeeemail"]);
+		$taskeeemail = getValidEmail($taskeeemail);
+	}
+
 	//if values are set, proceed with sql statement
 	if(isset($_POST["date"]) && isset($_POST["endDate"]) && isLoggedIn()) {
 		//connect to data base
@@ -33,8 +39,11 @@
 		$createdDateTime = date('Y-m-d H:i:s');
 		$taskee_email = $_SESSION['userEmail'];
 		$status = "not bidded";
-
-		$insertQuery = "INSERT INTO Tasks Values(DEFAULT, '$skill', '$details', '$taskee_email', NULL, '$status', '$createdDateTime', '$date', '$endDate', '$locs')";      
+		if($_SESSION['isAdmin'] == 'f'){
+			$insertQuery = "INSERT INTO Tasks Values(DEFAULT, '$skill', '$details', '$taskee_email', NULL, '$status', '$createdDateTime', '$date', '$endDate', '$locs')";      
+		} else {
+			$insertQuery = "INSERT INTO Tasks Values(DEFAULT, '$skill', '$details', '$taskeeemail', NULL, '$status', '$createdDateTime', '$date', '$endDate', '$locs')";
+		}	
       	$result = pg_query($db, $insertQuery);
       	if ($result) {
 			$stringVal = "Task has been successfully set, Task info: " . $skill . $taskee_email . $status . $details . $locs . $createdDateTime . $date . $endDate;

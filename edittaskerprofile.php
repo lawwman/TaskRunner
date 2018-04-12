@@ -173,6 +173,12 @@
     })
   });
 
+  $(document).ready(function(){
+    $('#toskillspage').click(function(){
+      window.location.replace("/demo/addskills.php");
+    })
+  })
+
   $(document).ready(function () {
     $('.menu .item').tab();
   })
@@ -412,6 +418,11 @@
       </form>
     </div>
     <div id="addBackToAdminPage">
+      <div>
+        <button class="ui primary button" id="toskillspage">
+          Edit Skills
+        </button>
+      </div>
     </div>
   </div>
 </body>

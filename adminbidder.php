@@ -21,41 +21,6 @@
     }
   }
 
-  function showTasks() {
-      // Connect to the database. Please change the password in the following line accordingly
-    if($_SESSION['isAdmin'] == 't'){
-      $taskerEmail = $_SESSION['taskeremail'];
-    } else {
-      $taskerEmail = $_SESSION['userEmail'];
-    }
-    $db     = pg_connect("host=127.0.0.1 port=5432 dbname=project1 user=postgres password=1234"); 
-    $result = pg_query($db, "
-      SELECT * FROM tasks t1 WHERE (t1.status = 'not bidded' OR t1.status = 'bidded') AND 
-      NOT EXISTS ( SELECT '1' FROM tasks t2 WHERE t2.taskeremail = '$taskerEmail' AND 
-      ((t2.enddatetime > t1.startdatetime AND t2.startdatetime < t1.enddatetime) OR 
-       (t2.enddatetime < t1.enddatetime AND t2.startdatetime > t1.startdatetime) OR
-       (t2.enddatetime > t1.enddatetime AND t2.startdatetime < t1.startdatetime))
-      ) AND
-      NOT EXISTS ( SELECT '1' FROM bids b WHERE b.task_id = t1.task_id AND b.taskeremail = '$taskerEmail' AND b.status = 'pending') ");
-    while ($row = pg_fetch_assoc($result)) {
-      echo "<tr>
-      <td> 
-        <div class= 'ui checkbox'> 
-          <input type = 'checkbox' name = 'checkboxTicked' value='$row[task_id]'>
-        </div>
-      </td>
-      <td> $row[ttype]</td>
-      <td> $row[task_details] </td> 
-      <td> $row[taskeeemail] </td>
-      <td> $row[status] </td>
-      <td> $row[createddatetime] </td>
-      <td> $row[startdatetime] </td>
-      <td> $row[enddatetime] </td>
-      <td> $row[loc] </td>
-      </tr>";
-    }
-  }
-
 ?>
 
 <html>
@@ -75,7 +40,6 @@
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/header.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/image.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/menu.css">
-  <link rel="stylesheet" type="text/css" href="semantic/dist/components/card.css">
 
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/divider.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/dropdown.css">
@@ -85,17 +49,13 @@
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/icon.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/sidebar.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/transition.css">
-  <link rel="stylesheet" type="text/css" href="semantic/dist/components/modal.css">
-  <link rel="stylesheet" type="text/css" href="semantic/dist/components/dimmer.css">
-  <link rel="stylesheet" type="text/css" href="semantic/dist/components/table.css">  
-  <link rel="stylesheet" type="text/css" href="semantic/dist/components/label.css"> 
-  <link rel="stylesheet" type="text/css" href="semantic/dist/components/input.css"> 
+  <link rel="stylesheet" type="text/css" href="semantic/dist/components/label.css">
+  <link rel="stylesheet" type="text/css" href="semantic/dist/components/item.css">
+  <link rel="stylesheet" type="text/css" href="semantic/dist/components/form.css">
 
   <script src="assets/jquery-3.3.1.min"></script>
   <script src="semantic/dist/components/transition.js"></script>
   <script src="semantic/dist/components/dropdown.js"></script>
-  <script src="semantic/dist/components/modal.js"></script>
-  <script src="semantic/dist/components/dimmer.js"></script>
 
   <script>
     // performs sign out functionality.
@@ -119,47 +79,38 @@
     var allTaskid= new Array();
 
     $(document).ready(function(){
-      $('#bid_submit').click(function() {
-        
-        $('input:checkbox[name="checkboxTicked"]:checked').each(function(){
-            allTaskid.push(this.value);
-          });
+      $('#adminBtn').click(function() {
+        var taskeremail;
+        var taskeremailJSON;
 
-        var taskidJSON = JSON.stringify(allTaskid);
+        var taskeremailflag = false;
 
-        $.ajax({
-          url:'/demo/taskerbid.php',
-          type: 'POST',
-          dataType: 'json',
-          data: {taskid: taskidJSON},
-          success: function(data){
-            //window.location.replace("/demo/taskerdashboard.php");
-            console.log(data.abc);
-          }
-        });
-      });
+        taskeremail = $('#taskerEmail').val();
 
-      $('#admin_submit').click(function() {
-        
-        $('input:checkbox[name="checked"]:checked').each(function(){
-            allTaskid.push(this.value);
-          });
-
-        var taskidJSON = JSON.stringify(allTaskid);
+       if (taskeremail == undefined || taskeremail == '') {
+        alert('Please enter taskerEmail');
+        taskeremailflag = true;
+        } else {
+         taskeremailflag = false;
+        }
+        if(!taskeremailflag){
+          $('#taskerEmail').val('');
+          taskeremailJSON = JSON.stringify(taskeremail);
 
         $.ajax({
-          url:'/demo/taskerbid.php',
+          url:'/demo/storetaskid.php',
           type: 'POST',
           dataType: 'json',
-          data: {taskid: taskidJSON},
+          data: {taskeremail: taskeremailJSON},
           success: function(data){
-            window.location.replace("/demo/admin.php");
+            window.location.replace("/demo/bidtasks.php");
           }
         });
+        }
       });
     })
-</script>
-
+  </script>
+  
 
   <style type="text/css">
 
@@ -168,7 +119,7 @@
     }
 
     .masthead.segment {
-      min-height: 100px;
+      min-height: 200px;
       padding: 1em 0em;
     }
     .masthead .logo.item img {
@@ -218,6 +169,9 @@
 
     .footer.segment {
       padding: 5em 0em;
+      position: absolute;
+      bottom: 0;
+      width: 100%;
     }
 
     .secondary.pointing.menu .toc.item {
@@ -265,7 +219,7 @@
           <i class="sidebar icon"></i>
         </a>
         <a class="item" href="/demo/index.php">Home</a>
-          <a class="active item" href="/demo/bidtasks.php">View Available Tasks to Bid</a>
+          <a class="item" href="/demo/bidtasks.php">View Available Tasks to Bid</a>
           <a class="item" href="/demo/viewrunningtasks.php">View Tasks I Am Running</a>
         <div class="right item">
           <?php showUser(); ?> 
@@ -274,40 +228,19 @@
     </div>
   </div>
 
-  <div class="my_container">
-    <form method ="post">  
-      <table class="ui fixed single line celled table">
-        <thead>
-          <th> Bid </th>
-          <th> Task Type </th>
-          <th> Task Details </th>
-          <th> Taskee Email </th>
-          <th> Status </th>
-          <th> Created Date and Time </th>
-          <th> Start Date and Time </th>
-          <th> End Date and Time </th>
-          <th> Location </th>
-        </thead>
-        <tbody>
-          <?php showTasks(); ?>
-        </tbody>
-      </table>
-
-      <?php 
-      if($_SESSION['isAdmin'] == 't'){
-        echo '
-        <button class ="ui right floated large teal button" id = "admin_submit" > Bid! </button>
-        ';
-      } else {
-        echo '
-          <button class ="ui right floated large teal button" id = "bid_submit" > Bid! </button>
-        ';
-      }
-      ?>
-        </br>
-      </form>
-  </div>
-</div>
+  <div class='ui middle aligned center aligned grid inverted'>
+    <div class = 'ui container'> </div> <br>
+      <div class='six wide column'>
+      <h2 class = 'ui diving header'> Query for Tasker </h2>
+        <div class = 'ui form'>
+          <div class = 'field'>
+            <label> Tasker Email </label>
+            <input type = 'text' id='taskerEmail' placeholder = 'Tasker Email'>
+          </div>      
+          <div class='ui primary button' id=adminBtn>Get Records</div>       
+        </div>
+      </div>
+   </div>
 
 
 

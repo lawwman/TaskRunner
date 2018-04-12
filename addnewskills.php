@@ -15,18 +15,16 @@
   function showUser() {
     if (isLoggedIn()) {
       echo '
-      <div class="ui dropdown inverted button" id="editProfile">Hello, '. $_SESSION['userName'] . '</div>
+      <div class="ui dropdown inverted button">Hello, '. $_SESSION['userName'] . '</div>
       <div class="ui dropdown inverted button" id="signOut">Sign Out</div>
       ';
       consoleLog($_SESSION['userEmail']);
       consoleLog($_SESSION['userType']);
-      consoleLog($_SESSION['isAdmin']);
     } else {
       echo "<a class='ui inverted button' href='/demo/taskeelogin.php'>Log in</a>
       <a class='ui inverted button' href='/demo/taskersignup.php'>Become a Tasker</a>";
     }
   }
-  
 ?>
 
 <html>
@@ -56,6 +54,8 @@
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/sidebar.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/transition.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/label.css">
+  <link rel="stylesheet" type="text/css" href="semantic/dist/components/item.css">
+  <link rel="stylesheet" type="text/css" href="semantic/dist/components/form.css">
 
   <script src="assets/jquery-3.3.1.min"></script>
   <script src="semantic/dist/components/transition.js"></script>
@@ -72,11 +72,61 @@
           }
         });
       });
-      
-      $('#editProfile').click(function() {
-        window.location.replace('/demo/edittaskerprofile.php');
-      });
     })
+  </script>
+
+    <!-- Following script block shows how to get implement autocomplete with suggestions from a local js file-->
+  <script>
+
+    var newskill;
+    var newskilldesc;
+
+    var newskillJSON;
+    var newskilldescJSON;
+
+    var newskillflag = false;
+    var newskilldescflag = false;
+
+   $(document).ready(function() {
+     $('#adminAddBtn').click(function() {
+    //validate inputs
+    newskill = $('#newSkill').val();
+    newskilldesc = $('#newSkillDesc').val();
+    if (newskill == undefined || newskill == '') {
+        alert('Please enter skills!');
+        newskillflag = true;
+      } else {
+        newskillflag = false;
+      }
+    if (newskilldesc == undefined || newskilldesc == '') {
+        alert('Please enter skill description!');
+        newskilldescflag = true;
+      } else {
+        newskilldescflag = false;
+      }
+      if(!newskillflag && !newskilldescflag){
+        $('#newSkill').val('');
+        $('#newSkillDesc').val('');
+        newskillJSON = JSON.stringify(newskill);
+        newskilldescJSON = JSON.stringify(newskilldesc);
+      $.ajax({
+        url: '/demo/addnewskillstodb.php',
+        type: 'POST',
+        data: { newskill: newskillJSON, newskilldesc: newskilldescJSON},
+        dataType: 'json',
+        success: function(data) {
+          if (data.abc == "failed") {
+            alert('Skill already exists');
+          } else {
+            console.log(data.abc);
+            window.location.replace("/demo/admin.php");
+          }
+        }
+      });
+    }
+  });
+
+   });
   </script>
 
 
@@ -87,7 +137,7 @@
     }
 
     .masthead.segment {
-      min-height: 700px;
+      min-height: 200px;
       padding: 1em 0em;
     }
     .masthead .logo.item img {
@@ -189,79 +239,47 @@
         </div>
       </div>
     </div>
-
-    <div class="ui text container">
-      <h1 class="ui inverted header">
-        Task Sourcing
-      </h1>
-      <h2>Do whatever you want when you want to.</h2>
-      <a href="/demo/bidtasks.php"><div class="ui huge primary button">Get Started <i class="right arrow icon"></i></div></a>
-    </div>
-
   </div>
 
-  <div class="ui vertical stripe segment">
-    <div class="ui left aligned stackable fourteen column grid container">
-      
-      <div class="two wide column"></div>
-      <div class="five wide column">
-        <h3 class="ui header" style="color: grey;">How to Get Started</h3>          
-      </div>            
-      
-      <div class="seven wide column">         
-        <h2>
-          <div class="ui big grey circular label">1</div> 
-          Bid for a Task
-        </h2>       
-        <p> View a list of Tasks and select one to bid for </p> <br>       
-        <h2>      
-          <div class="ui big grey circular label aligned left ">2</div> 
-          Wait to be Matched
-        </h2>
-        <p> A Taskee will match you for the task if your skills are deemed fit </p> <br>
-        <h2> 
-          <div class="ui big grey circular label">3</div> 
-          Get it Done 
-        </h2>         
-        <p> You complete the job for your Taskee and get paid </p> <br>
 
-        <div class="row">
-          <div class="center aligned column">
-            <a class="ui huge button" href='/demo/bidtasks.php'>Bid for Tasks</a>
-          </div>
+  <div class='ui middle aligned center aligned grid inverted'>
+    <div class = 'ui container'> </div> <br>
+      <div class='six wide column'>
+      <h2 class = 'ui diving header'> Add new Skills </h2>
+        <div class = 'ui form'>
+          <div class = 'field'>
+            <label> New Skill </label>
+            <input type = 'text' id='newSkill' placeholder = 'Skill to add'>
+          </div> 
+          <div class = 'field'>
+            <label> Skill Description </label>
+            <input type = 'text' id='newSkillDesc' placeholder = 'Describe the Skill'>
+          </div>     
+          <div class='ui primary button' id=adminAddBtn>Add Skill</div>       
         </div>
       </div>
-              
     </div>
   </div>
+</div>
+<br><br><br>
 
-  <div class="ui vertical stripe segment">  
-    <div class="ui text container">
-      <h3 class="ui header">Need to find a way to pass time?</h3>
-      <p>How about make use of your skills and earn extra cash by completing tasks! Select a task at any time of your preference to bid for!</p>
-      <a class="ui large button" href='/demo/bidtasks.php'>Bid for tasks now!</a>
-    </div>    
-  </div>
-
-
-  <div class="ui inverted vertical footer segment">
-    <div class="ui container">
-      <div class="ui stackable inverted divided equal height stackable grid">
-        <div class="three wide column">
-          <h4 class="ui inverted header">Discover</h4>
-          <div class="ui inverted link list">
-            <a href='/demo/taskeesignup.php' class="item">Sign up to Create Tasks</a>
-          </div>
+<div class="ui inverted vertical footer segment">
+  <div class="ui container">
+    <div class="ui stackable inverted divided equal height stackable grid">
+      <div class="three wide column">
+        <h4 class="ui inverted header">Discover</h4>
+        <div class="ui inverted link list">
+          <a href='/demo/taskeesignup.php' class="item">Sign up to Create Tasks</a>
         </div>
-        <div class="three wide column">
-          
-        </div>
-        <div class="seven wide column">          
-          <h4 class="ui inverted header">Navigate</h4>
-          <div class="ui inverted link list">
-            <a href='/demo/bidtasks.php' class="item">List of Available Tasks</a>            
-            <a href='/demo/viewrunningtasks.php' class="item">My Running Tasks</a>            
-          </div>
+      </div>
+      <div class="three wide column">
+        
+      </div>
+      <div class="seven wide column">          
+        <h4 class="ui inverted header">Navigate</h4>
+        <div class="ui inverted link list">
+          <a href='/demo/bidtasks.php' class="item">List of Available Tasks</a>            
+          <a href='/demo/viewrunningtasks.php' class="item">My Running Tasks</a>            
         </div>
       </div>
     </div>

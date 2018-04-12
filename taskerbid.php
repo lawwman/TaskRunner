@@ -1,5 +1,6 @@
 <?php
   require('session.php');
+  require('sanitize.php');
 
 $taskid = $_POST['taskid'];
 $trimmedTaskid = str_replace(array('[',']','"'), '',$taskid);
@@ -11,7 +12,12 @@ foreach($allTasks as $taskingid){
 $result = pg_query($db, "SELECT * FROM tasks WHERE task_id = '$taskingid' ");
 $row = pg_fetch_assoc($result);
   $creator = $row['taskeeemail'];
-  $runner = $_SESSION['userEmail'];
+  if($_SESSION['isAdmin'] == 't'){
+    $runner = json_decode($_SESSION['taskeremail']);
+    $runner = getValidEmail($runner); 
+  } else {
+    $runner = $_SESSION['userEmail'];
+  }
   $statusBid = 'pending';
   $statusTask = 'bidded';
   date_default_timezone_set('Asia/Singapore');
