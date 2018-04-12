@@ -5,11 +5,13 @@
 <?php
   require('debugging.php');
   require('session.php');
+  require('sanitize.php');
 
   function isUserUnique(&$emailError) {    
     $email = "";
     
     $email = $_POST['email'];
+    $email = getValidEmail($email);
       
     $db = pg_connect("host=127.0.0.1 port=5432 dbname=project1 user=postgres password=1234") or die('Could not connect: ' . pg_last_error()); 
     
@@ -28,17 +30,17 @@
     $emailError = "";
     if (isUserUnique($emailError)) {
       $email = $_POST['email'];
-      $firstName = $_POST['first-name'];
-      $lastName = $_POST['last-name'];
+      $firstName = getValidString($_POST['first-name']);
+      $lastName = getValidString($_POST['last-name']);
       $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
       $birthdate = $_POST['birthdate'];
-      $contact = $_POST['contact'];
-      $creditNum = $_POST['creditNum'];
-      $creditSecurity = $_POST['creditSecurity'];
+      $contact = getValidNumeral($_POST['contact']);
+      $creditNum = getValidNumeral($_POST['creditNum']);
+      $creditSecurity = getValidNumeral($_POST['creditSecurity']);
       $creditExpiry = date($_POST['expiryYear'] . '-' . $_POST['expiryMonth'] . '-01');
-      $unitNum = $_POST['unitNum'];
-      $streetAddr = $_POST['streetAddr'];
-      $zipcode = $_POST['zipcode'];      
+      $unitNum = getValidString($_POST['unitNum']);
+      $streetAddr = getValidString($_POST['streetAddr']);
+      $zipcode = getValidNumeral($_POST['zipcode']);      
 
       $db = pg_connect("host=127.0.0.1 port=5432 dbname=project1 user=postgres password=1234") or die('Could not connect: ' . pg_last_error()); 
 
@@ -48,10 +50,19 @@
       
       if ($result) {        
         $tasker = 'tasker';
-        $isAdmin = pg_query($db, "SELECT isAdmin FROM Taskers WHERE email='$email'");        
+        $res = pg_query($db, "SELECT 1 FROM Taskers WHERE email='$email' and isadmin ='true' ");
+        if(pg_num_rows($res) > 0) {
+          $isAdmin = 't';
+        } else {
+          $isAdmin = 'f';
+        }        
         $isStaff = pg_query($db, "SELECT isStaff FROM Taskers WHERE email='$email'");
-        login($firstName, $tasker, $email, $isAdmin, $isStaff);        
-        header('Location: /demo/taskerdashboard.php');
+        if($_SESSION['isAdmin'] == 't'){
+          header('Location: /demo/admin.php');
+        } else {
+          login($firstName, $tasker, $email, $isAdmin, $isStaff);        
+          header('Location: /demo/addskills.php');
+        }
       }     
     }
   }

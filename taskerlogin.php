@@ -3,12 +3,14 @@
 <?php
   require('debugging.php');
   require('session.php');
+  require('sanitize.php');
   
   redirectIfNot(null);
 
   if (isset($_POST['login'])) {
     $email = $_POST['email'];
-    $password = $_POST['password'];    
+    $email = getValidEmail($email);
+    $password = $_POST['password'];   
     $db = pg_connect("host=127.0.0.1 port=5432 dbname=project1 user=postgres password=1234") or die('Could not connect: ' . pg_last_error()); 
 
     $insertQuery = "SELECT email, pword, firstname, isAdmin, isStaff FROM Taskers WHERE email='$email'";
@@ -22,7 +24,11 @@
 
       if (password_verify($password, $hash)) {
         login($firstName, 'tasker', $email, $row[3], $row[4]);
-        header('Location: /demo/taskerdashboard.php');      
+        if($row[3] == 't') {
+          header('Location: /demo/admin.php');  
+        } else {
+          header('Location: /demo/taskerdashboard.php');      
+        }
       } else {        
         echo '<script language="javascript">';
         echo 'alert("Login failed. Please re-enter your details.")';   

@@ -1,32 +1,26 @@
 
-<!DOCTYPE html>
+<!DOCTYPE html>  
 
-<?php
+<?php 
   require('debugging.php');
   require('session.php');
 
   if ($_GET["argument"]=='signOut'){
     logout();
-    consoleLog('hi');
   }
 
-  redirectIfNot('tasker');
-  
   function showUser() {
     if (isLoggedIn()) {
       echo '
       <div class="ui dropdown inverted button" id="editProfile">Hello, '. $_SESSION['userName'] . '</div>
-      <div class="ui dropdown inverted button" id="signOut">Sign Out</div>
+      <div class="ui dropdown inverted button" id="signOut" formaction="/demo/signup.php">Sign Out</div>
       ';
-      consoleLog($_SESSION['userEmail']);
-      consoleLog($_SESSION['userType']);
-      consoleLog($_SESSION['isAdmin']);
     } else {
-      echo "<a class='ui inverted button' href='/demo/taskeelogin.php'>Log in</a>
-      <a class='ui inverted button' href='/demo/taskersignup.php'>Become a Tasker</a>";
+      echo "<a class='ui inverted button' href='/demo/login.php'>Log in</a>
+      <a class='ui inverted button' href='/demo/signup.php'>Sign Up</a>";
     }
   }
-  
+
 ?>
 
 <html>
@@ -37,7 +31,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
   <!-- Site Properties -->
-  <title>Homepage - Tasker</title>
+  <title>View Tasks - Semantic</title>
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/reset.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/site.css">
 
@@ -56,6 +50,8 @@
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/sidebar.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/transition.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/label.css">
+  <link rel="stylesheet" type="text/css" href="semantic/dist/components/item.css">
+  <link rel="stylesheet" type="text/css" href="semantic/dist/components/form.css">
 
   <script src="assets/jquery-3.3.1.min"></script>
   <script src="semantic/dist/components/transition.js"></script>
@@ -66,28 +62,64 @@
     $(document).ready(function() {
       $('#signOut').click(function() {
         $.ajax({
-          url: '/demo/taskerdashboard.php?argument=signOut',
+          url: '/demo/viewtasks.php?argument=signOut',
           success: function(html){
-            location.reload();
+            window.location.replace("/demo/index.php");
           }
         });
       });
-      
+
       $('#editProfile').click(function() {
         window.location.replace('/demo/edittaskerprofile.php');
       });
     })
   </script>
 
+  <script>
+    var allTaskid= new Array();
+
+    $(document).ready(function(){
+      $('#adminBtn').click(function() {
+        var taskeremail;
+        var taskeremailJSON;
+
+        var taskeremailflag = false;
+
+        taskeremail = $('#taskerEmail').val();
+
+       if (taskeremail == undefined || taskeremail == '') {
+        alert('Please enter taskerEmail');
+        taskeremailflag = true;
+        } else {
+         taskeremailflag = false;
+        }
+        if(!taskeremailflag){
+          $('#taskerEmail').val('');
+          taskeremailJSON = JSON.stringify(taskeremail);
+
+        $.ajax({
+          url:'/demo/storetaskid.php',
+          type: 'POST',
+          dataType: 'json',
+          data: {taskeremail: taskeremailJSON},
+          success: function(data){
+            window.location.replace("/demo/bidtasks.php");
+          }
+        });
+        }
+      });
+    })
+  </script>
+  
 
   <style type="text/css">
 
-    .hidden.menu {
-      display: none;
+    .my_container {
+      margin: 50px;
     }
 
     .masthead.segment {
-      min-height: 700px;
+      min-height: 200px;
       padding: 1em 0em;
     }
     .masthead .logo.item img {
@@ -137,6 +169,9 @@
 
     .footer.segment {
       padding: 5em 0em;
+      position: absolute;
+      bottom: 0;
+      width: 100%;
     }
 
     .secondary.pointing.menu .toc.item {
@@ -167,13 +202,15 @@
       }
     }
 
-
   </style>
 </head>
+
+
+
 <body>
 
-<!-- Page Contents -->
-<div class="pusher">
+  <!-- Top menu -->
+ <div class="pusher">
   <div class="ui inverted vertical masthead center aligned segment">
 
     <div class="ui container">
@@ -181,69 +218,33 @@
         <a class="toc item">
           <i class="sidebar icon"></i>
         </a>
-        <a class="active item">Home</a>        
-        <a class="item" href="/demo/bidtasks.php">View Available Tasks to Bid</a>
-        <a class="item" href="/demo/viewrunningtasks.php">View Tasks I Am Running</a>
+        <a class="item" href="/demo/index.php">Home</a>
+          <a class="item" href="/demo/bidtasks.php">View Available Tasks to Bid</a>
+          <a class="item" href="/demo/viewrunningtasks.php">View Tasks I Am Running</a>
         <div class="right item">
           <?php showUser(); ?> 
         </div>
       </div>
     </div>
-
-    <div class="ui text container">
-      <h1 class="ui inverted header">
-        Task Sourcing
-      </h1>
-      <h2>Do whatever you want when you want to.</h2>
-      <a href="/demo/viewtasks.php"><div class="ui huge primary button">Get Started <i class="right arrow icon"></i></div></a>
-    </div>
-
   </div>
 
-  <div class="ui vertical stripe segment">
-    <div class="ui left aligned stackable fourteen column grid container">
-      
-      <div class="two wide column"></div>
-      <div class="five wide column">
-        <h3 class="ui header" style="color: grey;">How to Get Started</h3>          
-      </div>            
-      
-      <div class="seven wide column">         
-        <h2>
-          <div class="ui big grey circular label">1</div> 
-          Bid for a Task
-        </h2>       
-        <p> View a list of Tasks and select one to bid for </p> <br>       
-        <h2>      
-          <div class="ui big grey circular label aligned left ">2</div> 
-          Wait to be Matched
-        </h2>
-        <p> A Taskee will match you for the task if your skills are deemed fit </p> <br>
-        <h2> 
-          <div class="ui big grey circular label">3</div> 
-          Get it Done 
-        </h2>         
-        <p> You complete the job for your Taskee and get paid </p> <br>
-
-        <div class="row">
-          <div class="center aligned column">
-            <a class="ui huge button" href='/demo/addtasks.php'>Create a Task</a>
-          </div>
+  <div class='ui middle aligned center aligned grid inverted'>
+    <div class = 'ui container'> </div> <br>
+      <div class='six wide column'>
+      <h2 class = 'ui diving header'> Query for Tasker </h2>
+        <div class = 'ui form'>
+          <div class = 'field'>
+            <label> Tasker Email </label>
+            <input type = 'text' id='taskerEmail' placeholder = 'Tasker Email'>
+          </div>      
+          <div class='ui primary button' id=adminBtn>Get Records</div>       
         </div>
       </div>
-              
-    </div>
-  </div>
-
-  <div class="ui vertical stripe segment">  
-    <div class="ui text container">
-      <h3 class="ui header">Need to find a way to pass time?</h3>
-      <p>How about make use of your skills and earn extra cash by completing tasks! Select a task at any time of your preference to bid for!</p>
-      <a class="ui large button" href='/demo/bidtasks.php'>Bid for tasks now!</a>
-    </div>    
-  </div>
+   </div>
 
 
+
+  <!-- Footer -->
   <div class="ui inverted vertical footer segment">
     <div class="ui container">
       <div class="ui stackable inverted divided equal height stackable grid">
@@ -266,8 +267,6 @@
       </div>
     </div>
   </div>
-</div>
 
 </body>
-
 </html>
