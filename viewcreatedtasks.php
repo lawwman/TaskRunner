@@ -205,11 +205,11 @@
   <style type="text/css">
 
     .my_container {
-      margin: 50px;
+      margin: 86px;
     }
 
     .masthead.segment {
-      min-height: 200px;
+      min-height: 100px;
       padding: 1em 0em;
     }
     .masthead .logo.item img {
@@ -257,8 +257,8 @@
       padding-bottom: 5em;
     }
 
-    .footer.segment {
-      padding: 5em 0em;
+    .footer.segment {            
+      position: relative;      
     }
 
     .secondary.pointing.menu .toc.item {

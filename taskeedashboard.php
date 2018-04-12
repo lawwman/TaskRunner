@@ -191,7 +191,7 @@
         Task Sourcing
       </h1>
       <h2>Do whatever you want when you want to.</h2>
-      <a href="/demo/viewtasks.php"><div class="ui huge primary button">Get Started <i class="right arrow icon"></i></div></a>
+      <a href="/demo/addtasks.php"><div class="ui huge primary button">Get Started <i class="right arrow icon"></i></div></a>
     </div>
 
   </div>

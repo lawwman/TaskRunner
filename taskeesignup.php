@@ -113,17 +113,22 @@
   
   $(document).ready(function() {
     $('.ui.form').form({
-      fields: {
-        username: {
-          identifier  : 'username',
+      fields: {        
+        
+        email: {
+          identifier  : 'email',
           rules: [
             {
               type   : 'empty',
-              prompt : 'Please enter a valid username'
+              prompt : 'Please enter your e-mail'
             },
+            {
+              type   : 'email',
+              prompt : 'Please enter a valid e-mail'
+            }
           ]
         },
-        
+
         password: {
           identifier  : 'password',
           rules: [
@@ -145,7 +150,7 @@
             {
               type   : 'empty',
               prompt : 'Please enter your first name'
-            },
+            }
           ]
         }, 
 
@@ -159,24 +164,47 @@
           ]
         },
 
-        email: {
-          identifier  : 'email',
+        zipcode: {
+          identifier  : 'zipcode',
           rules: [
             {
               type   : 'empty',
-              prompt : 'Please enter your e-mail'
+              prompt : 'Please enter your zipcode'
             },
             {
-              type   : 'email',
-              prompt : 'Please enter a valid e-mail'
+              type   : 'length[6]',
+              prompt : 'Your zipcode must be 6 characters'
             }
           ]
         },
 
-        date: {
-          identifier  : 'birthdate',
-          rules: []
-        }, 
+        creditNum: {
+          identifier  : 'creditNum',
+          rules: [
+            {
+              type   : 'empty',
+              prompt : 'Please enter your card number'
+            },
+            {
+              type   : 'length[16]',
+              prompt : 'Your card number must be 16 characters'
+            }
+          ]
+        },
+
+        creditSecurity: {
+          identifier  : 'creditSecurity',
+          rules: [
+            {
+              type   : 'empty',
+              prompt : 'Please enter your CVC'
+            },
+            {
+              type   : 'length[3]',
+              prompt : 'Your CVC must be 3 characters'
+            }
+          ]
+        },
 
         contact: {
           identifier  : 'contact',
@@ -184,7 +212,27 @@
             {
               type   : 'empty',
               prompt : 'Please enter your contact number'
-            },
+            }
+          ]
+        }, 
+
+        expiryYear: {
+          identifier  : 'expiryYear',
+          rules: [
+            {
+              type   : 'empty',
+              prompt : 'Please enter your Expiry Year'
+            }
+          ]
+        }, 
+
+        expiryMonth: {
+          identifier  : 'expiryMonth',
+          rules: [
+            {
+              type   : 'empty',
+              prompt : 'Please select Expiry Month'
+            }
           ]
         }, 
 
@@ -204,7 +252,7 @@
             {
               type   : 'checked',
               prompt : 'Please accept the Terms and Conditions'
-            },
+            }
           ]
         }
       
@@ -218,9 +266,9 @@
 <body class='ui'>
 
 <div class="ui middle aligned center aligned grid inverted">
+  <div class="ui container"></div> <br>
   <div class="six wide column">
     <form class="ui form" action="/demo/taskeesignup.php" method="POST" >
-      </br></br>
       <h2 class="ui dividing header">Sign Up To Create Tasks!</h2>
 
       <div class="two field">
@@ -257,7 +305,7 @@
           </div>        
       
           <div class="eight wide field">
-            <input type="text" name="zipcode" placeholder="Address Zipcode" value='<?php echo isset($_POST['zipcode']) ? $_POST['zipcode'] : ''; ?>'>
+            <input type="text" name="zipcode" maxlength="6" placeholder="Address Zipcode" value='<?php echo isset($_POST['zipcode']) ? $_POST['zipcode'] : ''; ?>'>
           </div>  
         </div>                                        
       </div>      

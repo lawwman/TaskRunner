@@ -195,7 +195,7 @@
         Task Sourcing
       </h1>
       <h2>Do whatever you want when you want to.</h2>
-      <a href="/demo/viewtasks.php"><div class="ui huge primary button">Get Started <i class="right arrow icon"></i></div></a>
+      <a href="/demo/bidtasks.php"><div class="ui huge primary button">Get Started <i class="right arrow icon"></i></div></a>
     </div>
 
   </div>
@@ -227,7 +227,7 @@
 
         <div class="row">
           <div class="center aligned column">
-            <a class="ui huge button" href='/demo/addtasks.php'>Create a Task</a>
+            <a class="ui huge button" href='/demo/bidtasks.php'>Bid for Tasks</a>
           </div>
         </div>
       </div>

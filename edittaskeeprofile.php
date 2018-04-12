@@ -136,6 +136,24 @@
     .image {
       margin-top: -100px;
     }
+    
+    .ui.container {
+      min-height: 87px;
+    }
+    .masthead.segment {
+      min-height: 100px;
+      padding: 1em 0em;
+    }    
+
+    @media only screen and (max-width: 700px) {
+      .masthead.segment {
+        min-height: 350px;
+      }
+    }
+    .footer.segment {
+      position: relative;
+      padding: 2em 0em;      
+    }
   </style>
   
   <script>
@@ -285,9 +303,6 @@
 
     <div class="ui container">
       <div class="ui large secondary inverted pointing menu">
-        <a class="toc item">
-          <i class="sidebar icon"></i>
-        </a>
         <a class="item" href="/demo/index.php">Home</a>
         <a class="item" href="/demo/viewcreatedtasks.php">View Created Tasks</a>
         <a class="item" href="/demo/addtasks.php">Add Task</a>        
@@ -312,9 +327,11 @@
       <form class="ui form contact" action="/demo/edittaskeeprofile.php" method="POST" >
         <div class="fields">                                 
           <div class="four wide field">
+            Contact Number
             <input type="text" name="phone" placeholder="Phone" value='<?php echo $displayPhone; ?>'>
-          </div>        
+          </div> 
           <div class="four wide field">
+            Zipcode
             <input type="text" name="zipcode" placeholder="Zipcode" value='<?php echo $displayZipcode; ?>'>
           </div>  
         </div>
@@ -381,6 +398,34 @@
       </form>
     </div>
     <div id="addBackToAdminPage">
+    </div>
+  </div>
+
+
+<!-- Footer -->
+  <div class="ui inverted vertical footer segment">
+    <div class="ui container">
+      <div class="ui stackable inverted divided equal height stackable grid">
+        <div class="three wide column">
+          <h4 class="ui inverted header">Discover</h4>
+          <div class="ui inverted link list">
+            <a href='/demo/taskersignup.php' class="item">Become a Tasker</a>            
+          </div>
+        </div>
+        <div class="three wide column"></div>
+        <div class="seven wide column">          
+          <h4 class="ui inverted header">Navigate</h4>
+          <div class="ui inverted link list">
+            <a href='/demo/viewcreatedtasks.php' class="item">My Created Tasks</a>            
+            <a href='/demo/addtasks.php' class="item">Create a Task</a>            
+          </div>
+        </div>
+        <br>
+        <div class = "row">        
+          &copy; 2018&nbsp;<b>Task Sourcing</b>&nbsp;| Created by &nbsp;<b>Jonathan Kennard Lawrence Wei Ping</b>        
+        </div>
+        
+      </div>
     </div>
   </div>
 </body>

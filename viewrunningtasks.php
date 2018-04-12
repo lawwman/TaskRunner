@@ -362,7 +362,7 @@
         </a>
         <a class="item" href="/demo/index.php">Home</a>
           <a class ="item" href="/demo/bidtasks.php"> View Available Tasks to Bid</a>
-          <a class ="item" href="/demo/viewrunningtasks.php"> View Tasks I Am Running</a>
+          <a class ="active item" href="/demo/viewrunningtasks.php"> View Tasks I Am Running</a>
         <div class="right item">
           <?php showUser(); ?> 
         </div>
