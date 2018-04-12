@@ -5,6 +5,8 @@
   require('debugging.php');
   require('session.php');
 
+  redirectIfNot("admin");
+
   if ($_GET["argument"]=='signOut'){
     logout();
   }
@@ -16,8 +18,8 @@
       <div class="ui dropdown inverted button" id="signOut" formaction="/demo/signup.php">Sign Out</div>
       ';
     } else {
-      echo "<a class='ui inverted button' href='/demo/login.php'>Log in</a>
-      <a class='ui inverted button' href='/demo/signup.php'>Sign Up</a>";
+      echo "<a class='ui inverted button' href='/demo/taskerlogin.php'>Log in</a>
+      <a class='ui inverted button' href='/demo/taskersignup.php'>Sign Up</a>";
     }
   }
 ?>
