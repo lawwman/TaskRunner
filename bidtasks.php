@@ -23,7 +23,11 @@
 
   function showTasks() {
       // Connect to the database. Please change the password in the following line accordingly
-    $taskerEmail = $_SESSION['userEmail'];
+    if($_SESSION['isAdmin'] == 't'){
+      $taskerEmail = $_SESSION['taskeremail'];
+    } else {
+      $taskerEmail = $_SESSION['userEmail'];
+    }
     $db     = pg_connect("host=127.0.0.1 port=5432 dbname=project1 user=postgres password=1234"); 
     $result = pg_query($db, "
       SELECT * FROM tasks t1 WHERE (t1.status = 'not bidded' OR t1.status = 'bidded') AND 
@@ -84,7 +88,8 @@
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/modal.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/dimmer.css">
   <link rel="stylesheet" type="text/css" href="semantic/dist/components/table.css">  
-  <!-- <link rel="stylesheet" type="text/css" href="semantic/dist/components/checkbox.css">  --> 
+  <link rel="stylesheet" type="text/css" href="semantic/dist/components/label.css"> 
+  <link rel="stylesheet" type="text/css" href="semantic/dist/components/input.css"> 
 
   <script src="assets/jquery-3.3.1.min"></script>
   <script src="semantic/dist/components/transition.js"></script>
@@ -133,9 +138,28 @@
           }
         });
       });
+
+      $('#admin_submit').click(function() {
+        
+        $('input:checkbox[name="checked"]:checked').each(function(){
+            allTaskid.push(this.value);
+          });
+
+        var taskidJSON = JSON.stringify(allTaskid);
+
+        $.ajax({
+          url:'/demo/taskerbid.php',
+          type: 'POST',
+          dataType: 'json',
+          data: {taskid: taskidJSON},
+          success: function(data){
+            window.location.replace("/demo/admin.php");
+          }
+        });
+      });
     })
-  </script>
-  
+</script>
+
 
   <style type="text/css">
 
@@ -194,9 +218,6 @@
 
     .footer.segment {
       padding: 5em 0em;
-      position: absolute;
-      bottom: 0;
-      width: 100%;
     }
 
     .secondary.pointing.menu .toc.item {
@@ -255,7 +276,7 @@
 
   <div class="my_container">
     <form method ="post">  
-      <table class="ui celled table">
+      <table class="ui fixed single line celled table">
         <thead>
           <th> Bid </th>
           <th> Task Type </th>
@@ -268,12 +289,23 @@
           <th> Location </th>
         </thead>
         <tbody>
-          <?php showTasks(); ?> 
+          <?php showTasks(); ?>
         </tbody>
       </table>
-        <button class ="ui right floated large teal button" id = "bid_submit" > Bid! </button>
+
+      <?php 
+      if($_SESSION['isAdmin'] == 't'){
+        echo '
+        <button class ="ui right floated large teal button" id = "admin_submit" > Bid! </button>
+        ';
+      } else {
+        echo '
+          <button class ="ui right floated large teal button" id = "bid_submit" > Bid! </button>
+        ';
+      }
+      ?>
         </br>
-    </form>
+      </form>
   </div>
 </div>
 

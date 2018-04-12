@@ -28,6 +28,38 @@
     echo '</script>';
     echo '<script type="text/javascript">location.href = "/demo/addtasks.php";</script>';
   }
+
+  function adminField() {
+    if($_SESSION['isAdmin'] == 't'){
+      echo "
+      <h2 class = 'ui center aligned dividing header'> Enter Desired Taskee Email </h2>
+      <div class='fourteen wide field'>
+        <input type='text' id = 'taskeeEmail' placeholder='Taskee Email'>
+      </div>
+      <div id='emailVTag'></div>
+
+      ";
+    }
+  }
+
+  function adminButton(){
+    if($_SESSION['isAdmin'] == 't'){
+      echo "
+        <button id='adminButton' class='ui right floated black button'> 
+        Submit </button>
+      ";
+    } else {
+      echo "
+        <button id='autoButton' class='ui right floated red button' >
+          Select for me!
+        </button>
+        <button id='manualButton' class='ui right floated blue button' >
+          Manual
+        </button>
+      ";
+    }
+  }
+
 ?>
 
 <html>
@@ -95,6 +127,8 @@
     var dateEndInput;
     var dateInputJSON;
     var dateEndInputJSON;
+    var emailInputJSON;
+    var email;
 
     var startDay = 0;
     var startMnth = 0;
@@ -130,6 +164,7 @@
         endNotValidFlag = false;
       }
     }
+    
     //check if start date is before end date
     function compareDateValidation() {
       //check the year
@@ -199,6 +234,10 @@
       if (!compareFlag && compareErrorShowing) {
         compareErrorShowing = false;
         $('#compareVTag').remove();
+      }
+
+      if($('#taskeeEmail').val() === "") {
+        $('#emailVTag').append('<div class="ui pointing red basic label"><p>Please fill in Taskee Email</p></div>');
       }
     }
 
@@ -320,6 +359,33 @@
         }
       });
     
+      $('#adminButton').click(function() {
+        checkStartValidation();
+        checkEndValidation();
+        compareDateValidation();
+        createValidationMsg();
+        if (!startNotValidFlag && !endNotValidFlag && !compareFlag ) {
+          var seconds = ":00";
+          dateInput = startYear + '-' + startMnth + '-' + startDay + " " + startTime + seconds;
+          dateEndInput = endYear + '-' + endMnth + '-' + endDay + " " + endTime + seconds;
+          dateInputJSON = JSON.stringify(dateInput);
+          dateEndInputJSON = JSON.stringify(dateEndInput);
+          emailInputJSON = JSON.stringify(document.getElementById('taskeeEmail').value);
+           $.ajax({
+            url: '/demo/submitquery.php',
+            type: 'POST',
+            dataType: 'json',
+            data: {date: dateInputJSON, endDate: dateEndInputJSON, taskeeemail: emailInputJSON},
+            success: function(data){
+              console.log(data);
+              window.location.replace("/demo/admin.php");
+            }
+          });
+        }
+        if (startNotValidFlag || endNotValidFlag || compareFlag ) {
+          console.log("dates are not valid");
+        }
+      });
     });
   </script>
 
@@ -427,7 +493,7 @@
       <a class="toc item">
         <i class="sidebar icon"></i>
       </a>
-      <a class="active item">Home</a>
+      <a class="item" href="/demo/index.php">Home</a>
       <a class="item" href="/demo/viewcreatedtasks.php">View Created Tasks</a>
       <a class="item" href="/demo/addtasks.php">Add Task</a>        
       <div class="right item">
@@ -487,18 +553,17 @@
       <div id="endValidationTag"></div>
     </div>
 
+      <div>
+        <?php adminField() ?>
+      </div>
+
     <br>
   </div>
   <div class="ui error message"></div>
 </form> 
+</div>
 
-
-<button id="autoButton" class="ui right floated red button" >
-  Select for me!
-</button>
-<button id="manualButton" class="ui right floated blue button" >
-  Manual
-</button>
+    <?php adminButton() ?>
 
 <br><br><br><br><br>
 

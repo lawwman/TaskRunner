@@ -194,8 +194,23 @@
       }
     }
 
-
-
+    function addData(tableName){
+      if(tableName == "tasks") {
+        window.location.replace("/demo/addtasks.php");
+      }
+      else if (tableName == "taskers"){
+        window.location.replace("/demo/taskersignup.php");
+      }
+      else if(tableName == "taskees"){
+        window.location.replace("/demo/taskeesignup.php");
+      }
+      else if(tableName== "bids") {
+        window.location.replace("/demo/adminbidder.php");
+      }
+      else if(tableName == "skills") {
+        window.location.replace("/demo/addnewskills.php");
+      }
+    }
 
     function updateTable(tableName, direction) {
       clearTable(tableName);
@@ -284,7 +299,6 @@
         }
       });
 
-
       $('.edit-btn').click(function() {
         let idArr = this.id.split("-");
         editData(idArr[0]);
@@ -292,6 +306,16 @@
           refreshTable(idArr[0]);
         } else {
           alert("edit failed");
+        }
+      });
+
+      $('.add-btn').click(function() {
+        let idArr = this.id.split("-");
+        addData(idArr[0]);
+        if (addData) {
+          refreshTable(idArr[0]);
+        } else {
+          alert("added failed");
         }
       });
 
@@ -573,7 +597,6 @@
     <br>
 
     <h2>View/Manage Skills
-      <button class ="ui right floated tiny teal button edit-btn" id="skills-edit"> Edit Skill </button>
       <button class ="ui right floated tiny teal button delete-btn" id="skills-delete"> – </button>          
       <button class ="ui right floated tiny teal button add-btn" id="skills-add"> + </button>   
     </h2>
