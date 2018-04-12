@@ -85,18 +85,19 @@
     pg_close($db);
     return $success;
   }
+  
   function main() {
-    if ($_SESSION['isAdmin'] == "t" || $_SESSION['isStaff'] == "t") {
-      if ($_GET['func'] == "retrieve-data") {
-        echo json_encode(retrieveData($_GET['table'], $_GET['dir'], $_GET['off']));
-      } else if ($_GET['func'] == 'get-max-pages') {
-        echo json_encode(getNumPages($_GET['table']));
-      } else if ($_GET['func'] == 'delete-records') {
-        $records = $_GET['arguments'];
-        $table = $_GET['table'];
-        $success = deleteRecords($table, $records);
-        echo json_encode($success);
-      }
+    if ($_GET['func'] == "retrieve-data") {
+      echo json_encode(retrieveData($_GET['table'], $_GET['dir'], $_GET['off']));
+    } else if ($_GET['func'] == 'get-max-pages') {
+      echo json_encode(getNumPages($_GET['table']));
+    } else if ($_GET['func'] == 'delete-records') {
+      $records = $_GET['arguments'];
+      $table = $_GET['table'];
+      $success = deleteRecords($table, $records);
+      echo json_encode($success);
     }
   }
+
+  main();
 ?>
