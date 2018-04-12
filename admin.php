@@ -597,7 +597,6 @@
     <br>
 
     <h2>View/Manage Skills
-      <button class ="ui right floated tiny teal button edit-btn" id="skills-edit"> Edit Skill </button>
       <button class ="ui right floated tiny teal button delete-btn" id="skills-delete"> – </button>          
       <button class ="ui right floated tiny teal button add-btn" id="skills-add"> + </button>   
     </h2>
