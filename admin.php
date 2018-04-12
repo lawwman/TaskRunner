@@ -157,7 +157,7 @@
           data: { func: "delete-records", table: tableName, arguments: records}, 
           dataType: 'json',
           success: function (data) {
-            console.log(data);
+            refreshTable(tableName);
           }
         });
       }
@@ -277,11 +277,6 @@
       $('.delete-btn').click(function() {
         let idArr = this.id.split("-");
         deleteData(idArr[0]);
-        if (deleteData) {
-          refreshTable(idArr[0]);
-        } else {
-          alert("deletion failed");
-        }
       });
 
 
