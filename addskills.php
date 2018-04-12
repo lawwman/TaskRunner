@@ -75,9 +75,6 @@
   <script src="assets/jquery-ui/jquery.js"></script>
   <script src="assets/jquery-ui/jquery-ui.min.js"></script>
 
-  <!-- list.js is a js file that stores a list of suggestions for the autocomplete function. Needed only if suggestions are from a local source-->
-  <script src="list.js"></script>
-
   <style>
     .ui-autocomplete {
       max-height: 200px;
@@ -128,7 +125,6 @@
 
     <!-- Following script block shows how to get implement autocomplete with suggestions from a local js file-->
   <script>
-    var availableTags = getList(); //getList() function is a function from "list.js". Returns an array of string
     var selectedSkill;
     var skillPitch;
     var profLevel;
@@ -345,7 +341,7 @@
         <a class="toc item">
           <i class="sidebar icon"></i>
         </a>
-        <a class="active item">Home</a>        
+        <a class="item" href="/demo/index.php">Home</a>        
         <a class="item" href="/demo/bidtasks.php">View Available Tasks to Bid</a>
         <a class="item" href="/demo/viewrunningtasks.php">View Tasks I Am Running</a>
         <div class="right item">
