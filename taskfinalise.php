@@ -33,7 +33,7 @@
     if($_SESSION['isAdmin'] == 't'){
       echo "
       <h2 class = 'ui center aligned dividing header'> Enter Desired Taskee Email </h2>
-      <div class='sixteen wide field'>
+      <div class='fourteen wide field'>
         <input type='text' id = 'taskeeEmail' placeholder='Taskee Email'>
       </div>
       <div id='emailVTag'></div>
@@ -234,6 +234,10 @@
       if (!compareFlag && compareErrorShowing) {
         compareErrorShowing = false;
         $('#compareVTag').remove();
+      }
+
+      if($('#taskeeEmail').val() === "") {
+        $('#emailVTag').append('<div class="ui pointing red basic label"><p>Please fill in Taskee Email</p></div>');
       }
     }
 

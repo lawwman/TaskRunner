@@ -20,6 +20,7 @@
       ';
       consoleLog($_SESSION['userEmail']);
       consoleLog($_SESSION['userType']);
+      consoleLog($_SESSION['isAdmin']);
     } else {
       echo "<a class='ui inverted button' href='/demo/taskeelogin.php'>Log in</a>
       <a class='ui inverted button' href='/demo/taskersignup.php'>Become a Tasker</a>";
