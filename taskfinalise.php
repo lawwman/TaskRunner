@@ -553,15 +553,13 @@
         <?php adminField() ?>
       </div>
 
-      <div>
-        <?php adminButton() ?>
-      </div>
-
     <br>
   </div>
   <div class="ui error message"></div>
 </form> 
 </div>
+
+    <?php adminButton() ?>
 
 <br><br><br><br><br>
 
